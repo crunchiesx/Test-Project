@@ -1,0 +1,102 @@
+// ============================================================
+// Script: "QuestUI.cs"
+// ============================================================
+// Quest tracker panel. Spawns and refreshes QuestEntryUI
+// prefabs in response to quest lifecycle events.
+// ============================================================
+// Inspector wiring:
+//   questLogParent   → ScrollRect content transform
+//   questEntryPrefab → prefab with QuestEntryUI component
+//   noQuestsLabel    → optional "No active quests" label GameObject
+// ============================================================
+using System.Collections.Generic;
+using Crunchies.UI;
+using UnityEngine;
+
+namespace Crunchies.QuestSystem
+{
+    public class QuestUI : UIPanel
+    {
+        [Header("References")]
+        [SerializeField] private Transform questLogParent;
+        [SerializeField] private GameObject questEntryPrefab;
+        [SerializeField] private GameObject noQuestLabel;
+
+        public bool IsOpen => gameObject.activeSelf;
+
+        private readonly Dictionary<string, QuestEntryUI> _entries = new();
+
+        private void Awake()
+        {
+            if (IsOpen)
+            {
+                Close();
+            }
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+
+            QuestEvents.OnQuestStarted += OnQuestStarted;
+            QuestEvents.OnQuestCompleted += OnQuestChanged;
+            QuestEvents.OnQuestFailed += OnQuestChanged;
+            QuestEvents.OnObjectiveUpdated += OnObjectiveUpdated;
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+
+            QuestEvents.OnQuestStarted -= OnQuestStarted;
+            QuestEvents.OnQuestCompleted -= OnQuestChanged;
+            QuestEvents.OnQuestFailed -= OnQuestChanged;
+            QuestEvents.OnObjectiveUpdated -= OnObjectiveUpdated;
+        }
+
+        private void OnQuestStarted(Quest quest)
+        {
+            if (_entries.ContainsKey(quest.questId)) return;
+
+            GameObject go = Instantiate(questEntryPrefab, questLogParent);
+            QuestEntryUI entry = go.GetComponent<QuestEntryUI>();
+            entry.Populate(quest);
+            _entries.Add(quest.questId, entry);
+
+            RefreshNoQuestLabel();
+        }
+
+        private void OnQuestChanged(Quest quest)
+        {
+            if (_entries.TryGetValue(quest.questId, out var entry))
+            {
+                entry.Refresh(quest);
+            }
+
+            RefreshNoQuestLabel();
+        }
+
+        private void OnObjectiveUpdated(QuestObjective objective)
+        {
+            foreach (Quest quest in QuestManager.Instance.ActiveQuest)
+            {
+                if (!quest.objectives.Contains(objective)) continue;
+
+                if (_entries.TryGetValue(quest.questId, out var entry))
+                {
+                    entry.Refresh(quest);
+                }
+
+                break;
+            }
+        }
+
+        private void RefreshNoQuestLabel()
+        {
+            if (noQuestLabel != null)
+            {
+                noQuestLabel.SetActive(QuestManager.Instance.ActiveQuest.Count == 0);
+            }
+        }
+    }
+}
