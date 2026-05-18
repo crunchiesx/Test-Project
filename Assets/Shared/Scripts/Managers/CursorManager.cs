@@ -22,7 +22,7 @@ namespace Crunchies.Managers
         private void OnEnable() => UIPanel.OnPanelChange += OnPanelChange;
         private void OnDisable() => UIPanel.OnPanelChange -= OnPanelChange;
 
-        private void Start() => SetGameplayCursor();
+        private void Start() => OnPanelChange();
 
         public void SetGameplayCursor()
         {

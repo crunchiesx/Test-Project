@@ -7,7 +7,7 @@ namespace Crunchies.UI
 {
     public abstract class UIPanel : MonoBehaviour
     {
-        public static List<UIPanel> ActivePanels = new();
+        private static readonly List<UIPanel> ActivePanels = new();
 
         public static event Action OnPanelChange;
 

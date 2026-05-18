@@ -43,6 +43,8 @@ namespace Crunchies.PlayerSystem
         private void OnEnable() => UIPanel.OnPanelChange += OnPanelChange;
         private void OnDisable() => UIPanel.OnPanelChange -= OnPanelChange;
 
+        private void Start() => OnPanelChange();
+
         private void Update()
         {
             if (_currentCameraSensitivity != cameraSensitivity)
