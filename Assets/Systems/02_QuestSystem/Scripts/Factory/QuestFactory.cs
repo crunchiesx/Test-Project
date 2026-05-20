@@ -93,5 +93,22 @@ namespace Crunchies.QuestSystem
             quest.objectives.Add(new ReachLocationObjective("outpost_north", "Northern Outpost"));
             return quest;
         }
+
+#if UNITY_EDITOR
+        public static Quest GetRandomQuest(int id)
+        {
+            return id switch
+            {
+                1 => CreateGatherQuest("gather_wood", "wood", "Wood", 5),
+                2 => CreateKillQuest("kill_slimes", "slime", "Slimes", 8),
+                3 => CreateWalkQuest("walk_forest", 500f),
+                4 => CreateEscortQuest("escort_farmer", "farmer_john", "Farmer John", "farmhouse", "Farmhouse"),
+                5 => CreateSurvivalQuest("survive_night", 60f),
+                6 => CreateCraftQuest("craft_potion", "potion_health", "Health Potion", 5),
+                7 => CreateRangersErrand(),
+                _ => null
+            };
+        }
+#endif
     }
 }

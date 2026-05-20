@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Crunchies.Utility;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Crunchies.QuestSystem
 {
@@ -24,11 +25,7 @@ namespace Crunchies.QuestSystem
         public IReadOnlyList<Quest> CompletedQuest => _completedQuest;
         public IReadOnlyList<Quest> FailedQuest => _failedQuest;
 
-        [Header("Debug")]
-        [SerializeField] private bool showDebugInfo = true;
-        [SerializeField] private List<DebugQuestInfo> debugActiveQuest = new();
-        [SerializeField] private List<DebugQuestInfo> debugCompletedQuest = new();
-        [SerializeField] private List<DebugQuestInfo> debugFailedQuest = new();
+        public int TotalQuestCount => _activeQuest.Count + _completedQuest.Count + _failedQuest.Count;
 
         // ------------------------------------------------------------------
         // Unity Lifecycle
@@ -65,7 +62,9 @@ namespace Crunchies.QuestSystem
                 _activeQuest[i].Tick();
             }
 
-            SyncDebugInfo();
+#if UNITY_EDITOR
+            DebugUpdate();
+#endif
         }
 
         // ------------------------------------------------------------------
@@ -124,6 +123,35 @@ namespace Crunchies.QuestSystem
         {
             _activeQuest.Remove(quest);
             _failedQuest.Add(quest);
+        }
+
+#if UNITY_EDITOR
+        // ------------------------------------------------------------------
+        // Debug
+        // ------------------------------------------------------------------
+
+        [Header("Debug")]
+        [SerializeField] private bool showDebugInfo = true;
+        [SerializeField] private List<DebugQuestInfo> debugActiveQuest = new();
+        [SerializeField] private List<DebugQuestInfo> debugCompletedQuest = new();
+        [SerializeField] private List<DebugQuestInfo> debugFailedQuest = new();
+
+        [Space]
+        [Tooltip("For testing: set a specific quest type to spawn on Q press, or 0 for random.")]
+        [Range(0, 7)][SerializeField] private int debugQuestType = 0;
+
+        private void DebugUpdate()
+        {
+            if (Keyboard.current.qKey.wasPressedThisFrame)
+            {
+                Quest quest = QuestFactory.GetRandomQuest(debugQuestType == 0 ? UnityEngine.Random.Range(1, 8) : debugQuestType);
+                if (quest != null)
+                {
+                    AcceptQuest(quest);
+                }
+            }
+
+            SyncDebugInfo();
         }
 
         private void SyncDebugInfo()
@@ -213,4 +241,5 @@ namespace Crunchies.QuestSystem
             this.progress = progress;
         }
     }
+#endif
 }

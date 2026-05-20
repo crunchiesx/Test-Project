@@ -42,6 +42,8 @@ namespace Crunchies.QuestSystem
             QuestEvents.OnQuestCompleted += OnQuestChanged;
             QuestEvents.OnQuestFailed += OnQuestChanged;
             QuestEvents.OnObjectiveUpdated += OnObjectiveUpdated;
+
+            RefreshNoQuestLabel();
         }
 
         protected override void OnDisable()
@@ -95,7 +97,7 @@ namespace Crunchies.QuestSystem
         {
             if (noQuestLabel != null)
             {
-                noQuestLabel.SetActive(QuestManager.Instance.ActiveQuest.Count == 0);
+                noQuestLabel.SetActive(QuestManager.Instance.TotalQuestCount == 0);
             }
         }
     }
