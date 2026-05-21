@@ -77,6 +77,17 @@ namespace Crunchies.QuestSystem
             return quest;
         }
 
+        public static Quest CreateReachLocationQuest(string id, string locationId, string locationName)
+        {
+            Quest quest = ScriptableObject.CreateInstance<Quest>();
+            quest.questId = id;
+            quest.questName = $"Reach {locationName}";
+            quest.description = $"Travel to {locationName}.";
+            quest.xpReward = 150;
+            quest.objectives.Add(new ReachLocationObjective(locationId, locationName));
+            return quest;
+        }
+
         /// <summary>
         /// Multi-objective: kill + gather + reach location.
         /// </summary>
@@ -85,11 +96,11 @@ namespace Crunchies.QuestSystem
             Quest quest = ScriptableObject.CreateInstance<Quest>();
             quest.questId = "compound_rangers_errand";
             quest.questName = "Ranger's Errand";
-            quest.description = "Hunt wolves, gather herbs, and report to the outpost";
+            quest.description = "Hunt wolves, gather wood, and report to the outpost";
             quest.xpReward = 500;
             quest.goldReward = 50;
             quest.objectives.Add(new KillObjective("wolf", "Wolves", 5));
-            quest.objectives.Add(new GatherObjective("herb_red", "Red Herbs", 3));
+            quest.objectives.Add(new GatherObjective("gather_wood", "Wood", 5));
             quest.objectives.Add(new ReachLocationObjective("outpost_north", "Northern Outpost"));
             return quest;
         }
@@ -100,12 +111,13 @@ namespace Crunchies.QuestSystem
             return id switch
             {
                 1 => CreateGatherQuest("gather_wood", "wood", "Wood", 5),
-                2 => CreateKillQuest("kill_slimes", "slime", "Slimes", 8),
-                3 => CreateWalkQuest("walk_forest", 500f),
+                2 => CreateKillQuest("kill_wolf", "wolf", "Wolves", 8),
+                3 => CreateWalkQuest("walk_around", 100f),
                 4 => CreateEscortQuest("escort_farmer", "farmer_john", "Farmer John", "farmhouse", "Farmhouse"),
                 5 => CreateSurvivalQuest("survive_night", 60f),
                 6 => CreateCraftQuest("craft_potion", "potion_health", "Health Potion", 5),
-                7 => CreateRangersErrand(),
+                7 => CreateReachLocationQuest("reach_outpost", "outpost_north", "Northern Outpost"),
+                8 => CreateRangersErrand(),
                 _ => null
             };
         }

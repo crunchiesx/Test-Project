@@ -137,21 +137,27 @@ namespace Crunchies.QuestSystem
         [SerializeField] private List<DebugQuestInfo> debugFailedQuest = new();
 
         [Space]
+
         [Tooltip("For testing: set a specific quest type to spawn on Q press, or 0 for random.")]
-        [Range(0, 7)][SerializeField] private int debugQuestType = 0;
+        [Range(0, 8)][SerializeField] private int debugQuestType = 0;
 
         private void DebugUpdate()
         {
             if (Keyboard.current.qKey.wasPressedThisFrame)
             {
-                Quest quest = QuestFactory.GetRandomQuest(debugQuestType == 0 ? UnityEngine.Random.Range(1, 8) : debugQuestType);
-                if (quest != null)
-                {
-                    AcceptQuest(quest);
-                }
+                DebugStartQuest();
             }
 
             SyncDebugInfo();
+        }
+
+        private void DebugStartQuest()
+        {
+            Quest quest = QuestFactory.GetRandomQuest(debugQuestType == 0 ? UnityEngine.Random.Range(1, 9) : debugQuestType);
+            if (quest != null)
+            {
+                AcceptQuest(quest);
+            }
         }
 
         private void SyncDebugInfo()
