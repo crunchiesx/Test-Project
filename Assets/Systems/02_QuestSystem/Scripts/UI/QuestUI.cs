@@ -22,8 +22,6 @@ namespace Crunchies.QuestSystem
         [SerializeField] private GameObject questEntryPrefab;
         [SerializeField] private GameObject noQuestLabel;
 
-        public bool IsOpen => gameObject.activeSelf;
-
         private readonly Dictionary<string, QuestEntryUI> _entries = new();
 
         private void Awake()
@@ -34,22 +32,16 @@ namespace Crunchies.QuestSystem
             }
         }
 
-        protected override void OnEnable()
+        private void OnEnable()
         {
-            base.OnEnable();
-
             QuestEvents.OnQuestStarted += OnQuestStarted;
             QuestEvents.OnQuestCompleted += OnQuestChanged;
             QuestEvents.OnQuestFailed += OnQuestChanged;
             QuestEvents.OnObjectiveUpdated += OnObjectiveUpdated;
-
-            RefreshNoQuestLabel();
         }
 
-        protected override void OnDisable()
+        private void OnDisable()
         {
-            base.OnDisable();
-
             QuestEvents.OnQuestStarted -= OnQuestStarted;
             QuestEvents.OnQuestCompleted -= OnQuestChanged;
             QuestEvents.OnQuestFailed -= OnQuestChanged;
@@ -99,6 +91,12 @@ namespace Crunchies.QuestSystem
             {
                 noQuestLabel.SetActive(QuestManager.Instance.TotalQuestCount == 0);
             }
+        }
+
+        public override void Open()
+        {
+            base.Open();
+            RefreshNoQuestLabel();
         }
     }
 }

@@ -36,8 +36,8 @@ namespace Crunchies.QuestSystem
                 quest.status switch
                 {
                     QuestStatus.Active => "In Progress",
-                    QuestStatus.Completed => "✓ Completed",
-                    QuestStatus.Failed => "✗ Failed",
+                    QuestStatus.Completed => "^ Completed",
+                    QuestStatus.Failed => "! Failed",
                     _ => string.Empty
                 }
             );
@@ -47,7 +47,7 @@ namespace Crunchies.QuestSystem
                 QuestObjective obj = quest.objectives[i];
                 TextMeshProUGUI line = _lines[i];
 
-                string prefix = obj.IsCompleted ? "✓ " : obj.IsFailed ? "✗ " : "• ";
+                string prefix = obj.IsCompleted ? "^ " : obj.IsFailed ? "! " : "* ";
                 line.text = prefix + obj.GetProgressText();
                 line.color = obj.IsCompleted ? Color.green : obj.IsFailed ? Color.red : Color.white;
             }

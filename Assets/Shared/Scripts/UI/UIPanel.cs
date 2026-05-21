@@ -10,10 +10,14 @@ namespace Crunchies.UI
         private static readonly List<UIPanel> ActivePanels = new();
 
         public static event Action OnPanelChange;
-
         public static bool IsAnyPanelActive => ActivePanels.Count > 0;
 
-        protected virtual void OnEnable()
+        [Header("Base")]
+        [SerializeField] private GameObject panel;
+
+        public bool IsOpen => panel.activeSelf;
+
+        public virtual void Open()
         {
             if (!ActivePanels.Contains(this))
             {
@@ -21,9 +25,11 @@ namespace Crunchies.UI
                 ActivePanels.Add(this);
                 OnPanelChange?.Invoke();
             }
+
+            panel.SetActive(true);
         }
 
-        protected virtual void OnDisable()
+        public virtual void Close()
         {
             if (ActivePanels.Contains(this))
             {
@@ -32,17 +38,9 @@ namespace Crunchies.UI
                 OnPanelChange?.Invoke();
             }
 
+            panel.SetActive(false);
+
             ActivePanels.RemoveAll(panel => panel == null);
-        }
-
-        public virtual void Open()
-        {
-            gameObject.SetActive(true);
-        }
-
-        public virtual void Close()
-        {
-            gameObject.SetActive(false);
         }
     }
 }

@@ -116,7 +116,7 @@ namespace Crunchies.QuestSystem
                 4 => CreateEscortQuest("escort_farmer", "farmer_john", "Farmer John", "farmhouse", "Farmhouse"),
                 5 => CreateSurvivalQuest("survive_night", 60f),
                 6 => CreateCraftQuest("craft_potion", "potion_health", "Health Potion", 5),
-                7 => CreateReachLocationQuest("reach_outpost", "outpost_north", "Northern Outpost"),
+                7 => CreateReachLocationQuest("reach_village", "village_gate", "Village Gate"),
                 8 => CreateRangersErrand(),
                 _ => null
             };
