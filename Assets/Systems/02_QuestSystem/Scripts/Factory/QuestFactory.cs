@@ -99,7 +99,7 @@ namespace Crunchies.QuestSystem
             quest.description = "Hunt wolves, gather wood, and report to the outpost";
             quest.xpReward = 500;
             quest.goldReward = 50;
-            quest.objectives.Add(new KillObjective("wolf", "Wolves", 5));
+            quest.objectives.Add(new KillObjective("wolf", "Wolves", 3));
             quest.objectives.Add(new GatherObjective("gather_wood", "Wood", 5));
             quest.objectives.Add(new ReachLocationObjective("outpost_north", "Northern Outpost"));
             return quest;
@@ -111,7 +111,7 @@ namespace Crunchies.QuestSystem
             return id switch
             {
                 1 => CreateGatherQuest("gather_wood", "wood", "Wood", 5),
-                2 => CreateKillQuest("kill_wolf", "wolf", "Wolves", 8),
+                2 => CreateKillQuest("kill_wolf", "wolf", "Wolves", 3),
                 3 => CreateWalkQuest("walk_around", 100f),
                 4 => CreateEscortQuest("escort_farmer", "farmer_john", "Farmer John", "farmhouse", "Farmhouse"),
                 5 => CreateSurvivalQuest("survive_night", 60f),

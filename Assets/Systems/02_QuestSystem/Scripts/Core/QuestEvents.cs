@@ -87,7 +87,7 @@ namespace Crunchies.QuestSystem
         public static event Action<float> OnDistanceTraveled;
         public static void DistanceTraveled(float delta)
         {
-            Log.Info("[EVENT] Distance Traveled: " + delta);
+            // Log.Info("[EVENT] Distance Traveled: " + delta);
             OnDistanceTraveled?.Invoke(delta);
         }
 

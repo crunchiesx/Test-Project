@@ -151,6 +151,7 @@ namespace Crunchies.QuestSystem
             SyncDebugInfo();
         }
 
+        [ContextMenu("Debug Start Quest")]
         private void DebugStartQuest()
         {
             Quest quest = QuestFactory.GetRandomQuest(debugQuestType == 0 ? UnityEngine.Random.Range(1, 9) : debugQuestType);
