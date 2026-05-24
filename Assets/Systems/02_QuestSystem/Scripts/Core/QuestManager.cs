@@ -30,11 +30,7 @@ namespace Crunchies.QuestSystem
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetInstance()
         {
-            if (Instance != null)
-            {
-                Instance = null;
-                Log.Info("Statics reset for Play Mode.");
-            }
+            Instance = null;
         }
 
         // ------------------------------------------------------------------
