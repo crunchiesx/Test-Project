@@ -25,9 +25,7 @@ namespace Crunchies.QuestSystem
             description = $"Kill {count} {displayName}";
         }
 
-#pragma warning disable UDR0004
         public override void RegisterListeners() => QuestEvents.OnEnemyKilled += OnEnemyKilled;
-#pragma warning restore UDR0004
         public override void UnregisterListeners() => QuestEvents.OnEnemyKilled -= OnEnemyKilled;
 
         private void OnEnemyKilled(string id)

@@ -20,9 +20,7 @@ namespace Crunchies.QuestSystem
             description = $"Survive for {seconds:0}s";
         }
 
-#pragma warning disable UDR0004
         public override void RegisterListeners() => QuestEvents.OnTimeSurvived += OnTimeSurvived;
-#pragma warning restore UDR0004
         public override void UnregisterListeners() => QuestEvents.OnTimeSurvived -= OnTimeSurvived;
 
         private void OnTimeSurvived(float delta) => AddProgress(delta);

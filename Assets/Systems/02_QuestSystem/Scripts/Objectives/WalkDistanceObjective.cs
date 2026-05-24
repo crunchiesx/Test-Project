@@ -23,9 +23,7 @@ namespace Crunchies.QuestSystem
             description = $"Travel {distance}{unitLabel}";
         }
 
-#pragma warning disable UDR0004
         public override void RegisterListeners() => QuestEvents.OnDistanceTraveled += OnDistanceTraveled;
-#pragma warning restore UDR0004
         public override void UnregisterListeners() => QuestEvents.OnDistanceTraveled -= OnDistanceTraveled;
 
         private void OnDistanceTraveled(float delta) => AddProgress(delta);

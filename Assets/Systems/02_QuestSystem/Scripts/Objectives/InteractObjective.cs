@@ -34,9 +34,7 @@ namespace Crunchies.QuestSystem
             description = $"Interact with {displayName} ({count}x)";
         }
 
-#pragma warning disable UDR0004
         public override void RegisterListeners() => QuestEvents.OnObjectInteracted += OnObjectInteracted;
-#pragma warning restore UDR0004
         public override void UnregisterListeners() => QuestEvents.OnObjectInteracted -= OnObjectInteracted;
 
         private void OnObjectInteracted(string id)

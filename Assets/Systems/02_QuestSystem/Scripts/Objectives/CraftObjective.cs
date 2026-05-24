@@ -25,9 +25,7 @@ namespace Crunchies.QuestSystem
             description = $"Craft {count} {displayName}";
         }
 
-#pragma warning disable UDR0004
         public override void RegisterListeners() => QuestEvents.OnItemCrafted += OnItemCrafted;
-#pragma warning restore UDR0004
         public override void UnregisterListeners() => QuestEvents.OnItemCrafted -= OnItemCrafted;
 
         private void OnItemCrafted(string id, int amount)
