@@ -1,4 +1,5 @@
 using System;
+using Crunchies.Utility;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -26,6 +27,16 @@ namespace Crunchies.InputActions
         public bool AttackInput { get; private set; }
 
         private PlayerInputActions _playerInputActions;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetInstance()
+        {
+            if (Instance != null)
+            {
+                Instance = null;
+                Log.Info("Statics reset for Play Mode.");
+            }
+        }
 
         private void Awake()
         {

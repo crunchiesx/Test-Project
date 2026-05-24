@@ -1,5 +1,6 @@
 using System;
 using Crunchies.UI;
+using Crunchies.Utility;
 using UnityEngine;
 
 namespace Crunchies.Managers
@@ -7,6 +8,16 @@ namespace Crunchies.Managers
     public class CursorManager : MonoBehaviour
     {
         public static CursorManager Instance { get; private set; }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetInstance()
+        {
+            if (Instance != null)
+            {
+                Instance = null;
+                Log.Info("Statics reset for Play Mode.");
+            }
+        }
 
         private void Awake()
         {

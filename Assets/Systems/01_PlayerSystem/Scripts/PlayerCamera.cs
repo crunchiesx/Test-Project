@@ -21,6 +21,16 @@ namespace Crunchies.PlayerSystem
 
         private CinemachineInputAxisController _cineAxisController;
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetInstance()
+        {
+            if (Instance != null)
+            {
+                Instance = null;
+                Log.Info("Statics reset for Play Mode.");
+            }
+        }
+
         private void Awake()
         {
             if (Instance != null && Instance != this)

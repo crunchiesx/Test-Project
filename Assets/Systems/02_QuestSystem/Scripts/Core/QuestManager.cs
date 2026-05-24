@@ -27,6 +27,16 @@ namespace Crunchies.QuestSystem
 
         public int TotalQuestCount => _activeQuest.Count + _completedQuest.Count + _failedQuest.Count;
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetInstance()
+        {
+            if (Instance != null)
+            {
+                Instance = null;
+                Log.Info("Statics reset for Play Mode.");
+            }
+        }
+
         // ------------------------------------------------------------------
         // Unity Lifecycle
         // ------------------------------------------------------------------
