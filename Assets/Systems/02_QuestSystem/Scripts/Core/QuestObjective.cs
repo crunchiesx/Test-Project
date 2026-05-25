@@ -23,6 +23,7 @@ namespace Crunchies.QuestSystem
         [SerializeField] private bool isFailed;
 
         [NonSerialized] private bool listenersRegistered;
+        public bool ListenersRegistered => listenersRegistered;
 
         public bool IsCompleted => isCompleted;
         public bool IsFailed => isFailed;

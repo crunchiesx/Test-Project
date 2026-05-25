@@ -5,6 +5,7 @@
 // Use for quick prototyping, tutorials, or procedural quests.
 // For hand-authored content, prefer ScriptableObject assets assigned directly to QuestGiver in the Inspector.
 // ============================================================
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Crunchies.QuestSystem
@@ -100,7 +101,7 @@ namespace Crunchies.QuestSystem
             quest.xpReward = 500;
             quest.goldReward = 50;
             quest.objectives.Add(new KillObjective("wolf", "Wolves", 3));
-            quest.objectives.Add(new GatherObjective("gather_wood", "Wood", 5));
+            quest.objectives.Add(new GatherObjective("wood", "Wood", 5));
             quest.objectives.Add(new ReachLocationObjective("outpost_north", "Northern Outpost"));
             return quest;
         }
@@ -120,6 +121,22 @@ namespace Crunchies.QuestSystem
                 8 => CreateRangersErrand(),
                 _ => null
             };
+        }
+
+        public static List<Quest> GetAllQuest()
+        {
+            List<Quest> quests = new()
+            {
+                CreateGatherQuest("gather_wood", "wood", "Wood", 5),
+                CreateKillQuest("kill_wolf", "wolf", "Wolves", 3),
+                CreateWalkQuest("walk_around", 100f),
+                CreateEscortQuest("escort_farmer", "farmer_john", "Farmer John", "farmhouse", "Farmhouse"),
+                CreateSurvivalQuest("survive_night", 60f),
+                CreateCraftQuest("craft_potion", "potion_health", "Health Potion", 5),
+                CreateReachLocationQuest("reach_village", "village_gate", "Village Gate"),
+                CreateRangersErrand(),
+            };
+            return quests;
         }
 #endif
     }

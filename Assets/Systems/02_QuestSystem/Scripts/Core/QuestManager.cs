@@ -4,12 +4,16 @@
 // Singleton class.
 // Accepts quests, ticks active once every frame, and moves them to completed or failed list when done.
 // ============================================================
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Crunchies.Utility;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using System;
+using System.Diagnostics;
 using UnityEngine.InputSystem;
+#endif
 
 namespace Crunchies.QuestSystem
 {
@@ -58,6 +62,10 @@ namespace Crunchies.QuestSystem
             {
                 quest.RegisterObjectiveListeners();
             }
+
+#if UNITY_EDITOR
+            SyncDebugInfo(true);
+#endif
         }
 
         private void OnDisable()
@@ -69,6 +77,10 @@ namespace Crunchies.QuestSystem
             {
                 quest.UnregisterObjectiveListeners();
             }
+
+#if UNITY_EDITOR
+            SyncDebugInfo(true);
+#endif
         }
 
         private void Update()
@@ -147,15 +159,21 @@ namespace Crunchies.QuestSystem
         // ------------------------------------------------------------------
 
         [Header("Debug")]
+
+        [Tooltip("For testing: Set a specific quest type to spawn on Q press, or 0 for random.")]
+        [Range(0, 8)][SerializeField] private int debugQuestType = 0;
+
+        [Tooltip("For testing: Get all quest on Q press. This will bypass 'debugQuestType'.")]
+        [SerializeField] private bool debugGetAllQuest;
+
+        [Space]
+
         [SerializeField] private bool showDebugInfo = true;
         [SerializeField] private List<DebugQuestInfo> debugActiveQuest = new();
         [SerializeField] private List<DebugQuestInfo> debugCompletedQuest = new();
         [SerializeField] private List<DebugQuestInfo> debugFailedQuest = new();
 
-        [Space]
-
-        [Tooltip("For testing: set a specific quest type to spawn on Q press, or 0 for random.")]
-        [Range(0, 8)][SerializeField] private int debugQuestType = 0;
+        private readonly Stopwatch sw = new();
 
         private void DebugUpdate()
         {
@@ -170,6 +188,18 @@ namespace Crunchies.QuestSystem
         [ContextMenu("Debug Start Quest")]
         private void DebugStartQuest()
         {
+            if (debugGetAllQuest)
+            {
+                List<Quest> quests = QuestFactory.GetAllQuest();
+
+                foreach (Quest q in quests)
+                {
+                    AcceptQuest(q);
+                }
+
+                return;
+            }
+
             Quest quest = QuestFactory.GetRandomQuest(debugQuestType == 0 ? UnityEngine.Random.Range(1, 9) : debugQuestType);
             if (quest != null)
             {
@@ -177,13 +207,26 @@ namespace Crunchies.QuestSystem
             }
         }
 
-        private void SyncDebugInfo()
+        private void SyncDebugInfo(bool enableStopWatch = false)
         {
+            if (enableStopWatch)
+            {
+                sw.Reset();
+                sw.Start();
+            }
+
             if (!showDebugInfo)
             {
                 debugActiveQuest.Clear();
                 debugCompletedQuest.Clear();
                 debugFailedQuest.Clear();
+
+                if (enableStopWatch)
+                {
+                    sw.Stop();
+                    Log.Info($"SyncDebugInfo: {sw.ElapsedMilliseconds}s ({sw.Elapsed.TotalMilliseconds}ms accurate)");
+                }
+
                 return;
             }
 
@@ -196,7 +239,8 @@ namespace Crunchies.QuestSystem
                     info.objectiveDebugEntries.Add(new DebugObjectiveInfo
                     (
                         obj.GetType().Name,
-                        obj.GetProgressText()
+                        obj.GetProgressText(),
+                        obj.ListenersRegistered
                     ));
                 }
 
@@ -212,7 +256,8 @@ namespace Crunchies.QuestSystem
                     info.objectiveDebugEntries.Add(new DebugObjectiveInfo
                     (
                         obj.GetType().Name,
-                        obj.GetProgressText()
+                        obj.GetProgressText(),
+                        obj.ListenersRegistered
                     ));
                 }
 
@@ -228,11 +273,18 @@ namespace Crunchies.QuestSystem
                     info.objectiveDebugEntries.Add(new DebugObjectiveInfo
                     (
                         obj.GetType().Name,
-                        obj.GetProgressText()
+                        obj.GetProgressText(),
+                        obj.ListenersRegistered
                     ));
                 }
 
                 debugFailedQuest.Add(info);
+            }
+
+            if (enableStopWatch)
+            {
+                sw.Stop();
+                Log.Info($"SyncDebugInfo: {sw.ElapsedMilliseconds}s ({sw.Elapsed.TotalMilliseconds:0.00000}ms accurate)");
             }
         }
     }
@@ -251,17 +303,18 @@ namespace Crunchies.QuestSystem
         }
     }
 
-
     [Serializable]
     public class DebugObjectiveInfo
     {
         public string description;
         public string progress;
+        public bool isListening;
 
-        public DebugObjectiveInfo(string description, string progress)
+        public DebugObjectiveInfo(string description, string progress, bool isListening)
         {
             this.description = description;
             this.progress = progress;
+            this.isListening = isListening;
         }
     }
 #endif
