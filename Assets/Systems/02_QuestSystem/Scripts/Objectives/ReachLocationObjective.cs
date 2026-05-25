@@ -25,8 +25,8 @@ namespace Crunchies.QuestSystem
             description = $"Reach: {displayName}";
         }
 
-        public override void RegisterListeners() => QuestEvents.OnLocationReached += OnLocationReached;
-        public override void UnregisterListeners() => QuestEvents.OnLocationReached -= OnLocationReached;
+        protected override void OnRegisterListeners() => QuestEvents.OnLocationReached += OnLocationReached;
+        protected override void OnUnregisterListeners() => QuestEvents.OnLocationReached -= OnLocationReached;
 
         private void OnLocationReached(string id)
         {

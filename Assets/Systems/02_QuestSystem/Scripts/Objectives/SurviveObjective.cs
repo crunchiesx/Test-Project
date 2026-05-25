@@ -20,8 +20,8 @@ namespace Crunchies.QuestSystem
             description = $"Survive for {seconds:0}s";
         }
 
-        public override void RegisterListeners() => QuestEvents.OnTimeSurvived += OnTimeSurvived;
-        public override void UnregisterListeners() => QuestEvents.OnTimeSurvived -= OnTimeSurvived;
+        protected override void OnRegisterListeners() => QuestEvents.OnTimeSurvived += OnTimeSurvived;
+        protected override void OnUnregisterListeners() => QuestEvents.OnTimeSurvived -= OnTimeSurvived;
 
         private void OnTimeSurvived(float delta) => AddProgress(delta);
 

@@ -25,8 +25,8 @@ namespace Crunchies.QuestSystem
             description = $"Kill {count} {displayName}";
         }
 
-        public override void RegisterListeners() => QuestEvents.OnEnemyKilled += OnEnemyKilled;
-        public override void UnregisterListeners() => QuestEvents.OnEnemyKilled -= OnEnemyKilled;
+        protected override void OnRegisterListeners() => QuestEvents.OnEnemyKilled += OnEnemyKilled;
+        protected override void OnUnregisterListeners() => QuestEvents.OnEnemyKilled -= OnEnemyKilled;
 
         private void OnEnemyKilled(string id)
         {

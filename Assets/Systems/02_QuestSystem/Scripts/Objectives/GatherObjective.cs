@@ -25,8 +25,8 @@ namespace Crunchies.QuestSystem
             description = $"Collect {amount} {displayName}";
         }
 
-        public override void RegisterListeners() => QuestEvents.OnItemCollected += OnItemCollected;
-        public override void UnregisterListeners() => QuestEvents.OnItemCollected -= OnItemCollected;
+        protected override void OnRegisterListeners() => QuestEvents.OnItemCollected += OnItemCollected;
+        protected override void OnUnregisterListeners() => QuestEvents.OnItemCollected -= OnItemCollected;
 
         private void OnItemCollected(string id, int amount)
         {

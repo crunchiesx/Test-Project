@@ -59,10 +59,7 @@ namespace Crunchies.QuestSystem
             if (status != QuestStatus.NotStarted) return;
             status = QuestStatus.Active;
 
-            foreach (QuestObjective obj in objectives)
-            {
-                obj.RegisterListeners();
-            }
+            RegisterObjectiveListeners();
 
             QuestEvents.QuestStarted(this);
         }
@@ -100,10 +97,7 @@ namespace Crunchies.QuestSystem
         {
             status = QuestStatus.Completed;
 
-            foreach (QuestObjective obj in objectives)
-            {
-                obj.UnregisterListeners();
-            }
+            UnregisterObjectiveListeners();
 
             QuestEvents.QuestCompleted(this);
         }
@@ -125,11 +119,28 @@ namespace Crunchies.QuestSystem
         /// </summary>
         public void ResetRuntime()
         {
+            UnregisterObjectiveListeners();
             status = QuestStatus.NotStarted;
 
             foreach (QuestObjective obj in objectives)
             {
                 obj.Reset();
+            }
+        }
+
+        public void RegisterObjectiveListeners()
+        {
+            foreach (QuestObjective obj in objectives)
+            {
+                obj.RegisterListeners();
+            }
+        }
+
+        public void UnregisterObjectiveListeners()
+        {
+            foreach (QuestObjective obj in objectives)
+            {
+                obj.UnregisterListeners();
             }
         }
     }

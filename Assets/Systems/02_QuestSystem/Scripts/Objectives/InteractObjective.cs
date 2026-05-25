@@ -34,8 +34,8 @@ namespace Crunchies.QuestSystem
             description = $"Interact with {displayName} ({count}x)";
         }
 
-        public override void RegisterListeners() => QuestEvents.OnObjectInteracted += OnObjectInteracted;
-        public override void UnregisterListeners() => QuestEvents.OnObjectInteracted -= OnObjectInteracted;
+        protected override void OnRegisterListeners() => QuestEvents.OnObjectInteracted += OnObjectInteracted;
+        protected override void OnUnregisterListeners() => QuestEvents.OnObjectInteracted -= OnObjectInteracted;
 
         private void OnObjectInteracted(string id)
         {
@@ -44,6 +44,8 @@ namespace Crunchies.QuestSystem
             _uniqueCount++;
             AddProgress(1);
         }
+
+        protected override void OnReset() => _uniqueCount = 0;
 
         public override string GetProgressText() => $"{objectDisplayName}: {currentAmount:0} / {requiredAmount:0}";
     }

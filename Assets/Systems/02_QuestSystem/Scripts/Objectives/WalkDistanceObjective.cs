@@ -23,8 +23,8 @@ namespace Crunchies.QuestSystem
             description = $"Travel {distance}{unitLabel}";
         }
 
-        public override void RegisterListeners() => QuestEvents.OnDistanceTraveled += OnDistanceTraveled;
-        public override void UnregisterListeners() => QuestEvents.OnDistanceTraveled -= OnDistanceTraveled;
+        protected override void OnRegisterListeners() => QuestEvents.OnDistanceTraveled += OnDistanceTraveled;
+        protected override void OnUnregisterListeners() => QuestEvents.OnDistanceTraveled -= OnDistanceTraveled;
 
         private void OnDistanceTraveled(float delta) => AddProgress(delta);
 

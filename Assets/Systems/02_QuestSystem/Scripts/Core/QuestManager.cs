@@ -53,12 +53,22 @@ namespace Crunchies.QuestSystem
         {
             QuestEvents.OnQuestCompleted += MoveToCompleted;
             QuestEvents.OnQuestFailed += MoveToFailed;
+
+            foreach (Quest quest in _activeQuest)
+            {
+                quest.RegisterObjectiveListeners();
+            }
         }
 
         private void OnDisable()
         {
             QuestEvents.OnQuestCompleted -= MoveToCompleted;
             QuestEvents.OnQuestFailed -= MoveToFailed;
+
+            foreach (Quest quest in _activeQuest)
+            {
+                quest.UnregisterObjectiveListeners();
+            }
         }
 
         private void Update()

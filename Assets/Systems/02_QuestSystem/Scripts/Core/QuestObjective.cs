@@ -22,6 +22,8 @@ namespace Crunchies.QuestSystem
         [SerializeField] private bool isCompleted;
         [SerializeField] private bool isFailed;
 
+        [NonSerialized] private bool listenersRegistered;
+
         public bool IsCompleted => isCompleted;
         public bool IsFailed => isFailed;
         public float Current => currentAmount;
@@ -31,12 +33,27 @@ namespace Crunchies.QuestSystem
         /// <summary>
         /// Subscribe to QuestEvents here.
         /// </summary>
-        public abstract void RegisterListeners();
+        public void RegisterListeners()
+        {
+            if (listenersRegistered) return;
+
+            OnRegisterListeners();
+            listenersRegistered = true;
+        }
 
         /// <summary>
         /// Unsubscribe to QuestEvents here.
         /// </summary>
-        public abstract void UnregisterListeners();
+        public void UnregisterListeners()
+        {
+            if (!listenersRegistered) return;
+
+            OnUnregisterListeners();
+            listenersRegistered = false;
+        }
+
+        protected abstract void OnRegisterListeners();
+        protected abstract void OnUnregisterListeners();
 
         /// <summary>
         /// Human-readable progress string down in the UI.
@@ -69,9 +86,13 @@ namespace Crunchies.QuestSystem
 
         public void Reset()
         {
+            UnregisterListeners();
             currentAmount = 0;
             isCompleted = false;
             isFailed = false;
+            OnReset();
         }
+
+        protected virtual void OnReset() { }
     }
 }

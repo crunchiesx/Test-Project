@@ -25,8 +25,8 @@ namespace Crunchies.QuestSystem
             description = $"Escort {displayName} to safety";
         }
 
-        public override void RegisterListeners() => QuestEvents.OnNpcReachedDestination += OnNpcArrived;
-        public override void UnregisterListeners() => QuestEvents.OnNpcReachedDestination -= OnNpcArrived;
+        protected override void OnRegisterListeners() => QuestEvents.OnNpcReachedDestination += OnNpcArrived;
+        protected override void OnUnregisterListeners() => QuestEvents.OnNpcReachedDestination -= OnNpcArrived;
 
         private void OnNpcArrived(string id)
         {

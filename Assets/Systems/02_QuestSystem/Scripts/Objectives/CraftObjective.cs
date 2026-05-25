@@ -25,8 +25,8 @@ namespace Crunchies.QuestSystem
             description = $"Craft {count} {displayName}";
         }
 
-        public override void RegisterListeners() => QuestEvents.OnItemCrafted += OnItemCrafted;
-        public override void UnregisterListeners() => QuestEvents.OnItemCrafted -= OnItemCrafted;
+        protected override void OnRegisterListeners() => QuestEvents.OnItemCrafted += OnItemCrafted;
+        protected override void OnUnregisterListeners() => QuestEvents.OnItemCrafted -= OnItemCrafted;
 
         private void OnItemCrafted(string id, int amount)
         {
