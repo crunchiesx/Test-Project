@@ -16,13 +16,15 @@ namespace Crunchies.QuestSystem
         [Header("Display")]
         public string description = "Complete the Objective";
 
-        [Header("Runtime State - Do not edit in Inspector")]
-        [SerializeField] protected float currentAmount;
+        [Header("Requirements")]
+        [Min(1f)]
         [SerializeField] protected float requiredAmount = 1f;
-        [SerializeField] private bool isCompleted;
-        [SerializeField] private bool isFailed;
 
+        [NonSerialized] protected float currentAmount;
+        [NonSerialized] private bool isCompleted;
+        [NonSerialized] private bool isFailed;
         [NonSerialized] private bool listenersRegistered;
+
         public bool ListenersRegistered => listenersRegistered;
 
         public bool IsCompleted => isCompleted;
@@ -30,6 +32,13 @@ namespace Crunchies.QuestSystem
         public float Current => currentAmount;
         public float Required => requiredAmount;
         public float Progress => requiredAmount > 0 ? Mathf.Clamp01(currentAmount / requiredAmount) : 0f;
+
+        public virtual QuestObjective Clone()
+        {
+            QuestObjective clone = (QuestObjective)MemberwiseClone();
+            clone.ResetRuntimeState();
+            return clone;
+        }
 
         /// <summary>
         /// Subscribe to QuestEvents here.
@@ -88,12 +97,18 @@ namespace Crunchies.QuestSystem
         public void Reset()
         {
             UnregisterListeners();
-            currentAmount = 0;
-            isCompleted = false;
-            isFailed = false;
+            ResetRuntimeState();
             OnReset();
         }
 
         protected virtual void OnReset() { }
+
+        protected void ResetRuntimeState()
+        {
+            currentAmount = 0;
+            isCompleted = false;
+            isFailed = false;
+            listenersRegistered = false;
+        }
     }
 }

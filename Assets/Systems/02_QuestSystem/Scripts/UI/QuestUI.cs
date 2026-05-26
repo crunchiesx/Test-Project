@@ -48,21 +48,21 @@ namespace Crunchies.QuestSystem
             QuestEvents.OnObjectiveUpdated -= OnObjectiveUpdated;
         }
 
-        private void OnQuestStarted(QuestSO quest)
+        private void OnQuestStarted(QuestInstance quest)
         {
-            if (_entries.ContainsKey(quest.questId)) return;
+            if (_entries.ContainsKey(quest.QuestId)) return;
 
             GameObject go = Instantiate(questEntryPrefab, questLogParent);
             QuestEntryUI entry = go.GetComponent<QuestEntryUI>();
             entry.Populate(quest);
-            _entries.Add(quest.questId, entry);
+            _entries.Add(quest.QuestId, entry);
 
             RefreshNoQuestLabel();
         }
 
-        private void OnQuestChanged(QuestSO quest)
+        private void OnQuestChanged(QuestInstance quest)
         {
-            if (_entries.TryGetValue(quest.questId, out var entry))
+            if (_entries.TryGetValue(quest.QuestId, out var entry))
             {
                 entry.Refresh(quest);
             }
@@ -72,11 +72,11 @@ namespace Crunchies.QuestSystem
 
         private void OnObjectiveUpdated(QuestObjective objective)
         {
-            foreach (QuestSO quest in QuestManager.Instance.ActiveQuest)
+            foreach (QuestInstance quest in QuestManager.Instance.ActiveQuest)
             {
-                if (!quest.objectives.Contains(objective)) continue;
+                if (!quest.Objectives.Contains(objective)) continue;
 
-                if (_entries.TryGetValue(quest.questId, out var entry))
+                if (_entries.TryGetValue(quest.QuestId, out var entry))
                 {
                     entry.Refresh(quest);
                 }

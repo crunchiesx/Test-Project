@@ -22,18 +22,18 @@ namespace Crunchies.QuestSystem
 
         private readonly List<TextMeshProUGUI> _lines = new();
 
-        public void Populate(QuestSO quest)
+        public void Populate(QuestInstance quest)
         {
-            titleText.SetText(quest.questName);
+            titleText.SetText(quest.QuestName);
             BuildLines(quest);
             Refresh(quest);
         }
 
-        public void Refresh(QuestSO quest)
+        public void Refresh(QuestInstance quest)
         {
             statusText.SetText
             (
-                quest.status switch
+                quest.Status switch
                 {
                     QuestStatus.Active => "In Progress",
                     QuestStatus.Completed => "^ Completed",
@@ -42,9 +42,9 @@ namespace Crunchies.QuestSystem
                 }
             );
 
-            for (int i = 0; i < quest.objectives.Count && i < _lines.Count; i++)
+            for (int i = 0; i < quest.Objectives.Count && i < _lines.Count; i++)
             {
-                QuestObjective obj = quest.objectives[i];
+                QuestObjective obj = quest.Objectives[i];
                 TextMeshProUGUI line = _lines[i];
 
                 string prefix = obj.IsCompleted ? "^ " : obj.IsFailed ? "! " : "* ";
@@ -53,7 +53,7 @@ namespace Crunchies.QuestSystem
             }
         }
 
-        private void BuildLines(QuestSO quest)
+        private void BuildLines(QuestInstance quest)
         {
             foreach (Transform child in objectivesParent)
             {
@@ -61,7 +61,7 @@ namespace Crunchies.QuestSystem
             }
             _lines.Clear();
 
-            foreach (QuestObjective _ in quest.objectives)
+            foreach (QuestObjective _ in quest.Objectives)
             {
                 GameObject go = Instantiate(objectiveLinePrefab, objectivesParent);
                 TextMeshProUGUI tmp = go.GetComponentInChildren<TextMeshProUGUI>();

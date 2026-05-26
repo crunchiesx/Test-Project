@@ -21,13 +21,13 @@ namespace Crunchies.QuestSystem
     {
         public static QuestManager Instance { get; private set; }
 
-        private readonly List<QuestSO> _activeQuest = new();
-        private readonly List<QuestSO> _completedQuest = new();
-        private readonly List<QuestSO> _failedQuest = new();
+        private readonly List<QuestInstance> _activeQuest = new();
+        private readonly List<QuestInstance> _completedQuest = new();
+        private readonly List<QuestInstance> _failedQuest = new();
 
-        public IReadOnlyList<QuestSO> ActiveQuest => _activeQuest;
-        public IReadOnlyList<QuestSO> CompletedQuest => _completedQuest;
-        public IReadOnlyList<QuestSO> FailedQuest => _failedQuest;
+        public IReadOnlyList<QuestInstance> ActiveQuest => _activeQuest;
+        public IReadOnlyList<QuestInstance> CompletedQuest => _completedQuest;
+        public IReadOnlyList<QuestInstance> FailedQuest => _failedQuest;
 
         public int TotalQuestCount => _activeQuest.Count + _completedQuest.Count + _failedQuest.Count;
 
@@ -58,7 +58,7 @@ namespace Crunchies.QuestSystem
             QuestEvents.OnQuestCompleted += MoveToCompleted;
             QuestEvents.OnQuestFailed += MoveToFailed;
 
-            foreach (QuestSO quest in _activeQuest)
+            foreach (QuestInstance quest in _activeQuest)
             {
                 quest.RegisterObjectiveListeners();
             }
@@ -73,7 +73,7 @@ namespace Crunchies.QuestSystem
             QuestEvents.OnQuestCompleted -= MoveToCompleted;
             QuestEvents.OnQuestFailed -= MoveToFailed;
 
-            foreach (QuestSO quest in _activeQuest)
+            foreach (QuestInstance quest in _activeQuest)
             {
                 quest.UnregisterObjectiveListeners();
             }
@@ -102,22 +102,23 @@ namespace Crunchies.QuestSystem
         /// <summary>
         /// Hand a quest to the manager. Returns false if already active or completed.
         /// </summary>
-        public bool AcceptQuest(QuestSO quest)
+        public bool AcceptQuest(QuestSO questDefinition)
         {
-            if (quest == null) return false;
+            if (questDefinition == null) return false;
 
-            if (_activeQuest.Any(q => q.questId == quest.questId))
+            if (_activeQuest.Any(q => q.QuestId == questDefinition.questId))
             {
-                Log.Warning($"[QuestManager] Already active: {quest.questName}");
+                Log.Warning($"[QuestManager] Already active: {questDefinition.questName}");
                 return false;
             }
 
-            if (_completedQuest.Any(q => q.questId == quest.questId))
+            if (_completedQuest.Any(q => q.QuestId == questDefinition.questId))
             {
-                Log.Warning($"[QuestManager] Already completed: {quest.questName}");
+                Log.Warning($"[QuestManager] Already completed: {questDefinition.questName}");
                 return false;
             }
 
+            QuestInstance quest = questDefinition.CreateInstance();
             quest.ResetRuntime();
             _activeQuest.Add(quest);
             quest.Begin();
@@ -129,25 +130,25 @@ namespace Crunchies.QuestSystem
         /// </summary>
         public void FailQuest(string questId)
         {
-            QuestSO quest = _activeQuest.FirstOrDefault(q => q.questId == questId);
-            quest.Fail();
+            QuestInstance quest = _activeQuest.FirstOrDefault(q => q.QuestId == questId);
+            quest?.Fail();
         }
 
-        public bool IsQuestActive(string questId) => _activeQuest.Any(q => q.questId == questId);
-        public bool IsQuestCompleted(string questId) => _completedQuest.Any(q => q.questId == questId);
-        public QuestSO GetActiveQuest(string questId) => _activeQuest.FirstOrDefault(q => q.questId == questId);
+        public bool IsQuestActive(string questId) => _activeQuest.Any(q => q.QuestId == questId);
+        public bool IsQuestCompleted(string questId) => _completedQuest.Any(q => q.QuestId == questId);
+        public QuestInstance GetActiveQuest(string questId) => _activeQuest.FirstOrDefault(q => q.QuestId == questId);
 
         // ------------------------------------------------------------------
         // Event handlers
         // ------------------------------------------------------------------
 
-        private void MoveToCompleted(QuestSO quest)
+        private void MoveToCompleted(QuestInstance quest)
         {
             _activeQuest.Remove(quest);
             _completedQuest.Add(quest);
         }
 
-        private void MoveToFailed(QuestSO quest)
+        private void MoveToFailed(QuestInstance quest)
         {
             _activeQuest.Remove(quest);
             _failedQuest.Add(quest);
@@ -231,10 +232,10 @@ namespace Crunchies.QuestSystem
             }
 
             debugActiveQuest.Clear();
-            foreach (QuestSO quest in _activeQuest)
+            foreach (QuestInstance quest in _activeQuest)
             {
-                DebugQuestInfo info = new(quest.questName, quest.questId);
-                foreach (QuestObjective obj in quest.objectives)
+                DebugQuestInfo info = new(quest.QuestName, quest.QuestId);
+                foreach (QuestObjective obj in quest.Objectives)
                 {
                     info.objectiveDebugEntries.Add(new DebugObjectiveInfo
                     (
@@ -248,10 +249,10 @@ namespace Crunchies.QuestSystem
             }
 
             debugCompletedQuest.Clear();
-            foreach (QuestSO quest in _completedQuest)
+            foreach (QuestInstance quest in _completedQuest)
             {
-                DebugQuestInfo info = new(quest.questName, quest.questId);
-                foreach (QuestObjective obj in quest.objectives)
+                DebugQuestInfo info = new(quest.QuestName, quest.QuestId);
+                foreach (QuestObjective obj in quest.Objectives)
                 {
                     info.objectiveDebugEntries.Add(new DebugObjectiveInfo
                     (
@@ -265,10 +266,10 @@ namespace Crunchies.QuestSystem
             }
 
             debugFailedQuest.Clear();
-            foreach (QuestSO quest in _failedQuest)
+            foreach (QuestInstance quest in _failedQuest)
             {
-                DebugQuestInfo info = new(quest.questName, quest.questId);
-                foreach (QuestObjective obj in quest.objectives)
+                DebugQuestInfo info = new(quest.QuestName, quest.QuestId);
+                foreach (QuestObjective obj in quest.Objectives)
                 {
                     info.objectiveDebugEntries.Add(new DebugObjectiveInfo
                     (

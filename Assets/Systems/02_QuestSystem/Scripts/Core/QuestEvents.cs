@@ -26,26 +26,26 @@ namespace Crunchies.QuestSystem
         // ==== QUEST LIFECYCLE ====
 
         // Quest Started
-        public static event Action<QuestSO> OnQuestStarted;
-        public static void QuestStarted(QuestSO quest)
+        public static event Action<QuestInstance> OnQuestStarted;
+        public static void QuestStarted(QuestInstance quest)
         {
-            Log.Info("[EVENT] Quest Started: " + quest.questName);
+            Log.Info("[EVENT] Quest Started: " + quest.QuestName);
             OnQuestStarted?.Invoke(quest);
         }
 
         // Quest Completed
-        public static event Action<QuestSO> OnQuestCompleted;
-        public static void QuestCompleted(QuestSO quest)
+        public static event Action<QuestInstance> OnQuestCompleted;
+        public static void QuestCompleted(QuestInstance quest)
         {
-            Log.Info("[EVENT] Quest Completed: " + quest.questName);
+            Log.Info("[EVENT] Quest Completed: " + quest.QuestName);
             OnQuestCompleted?.Invoke(quest);
         }
 
         // Quest Failed
-        public static event Action<QuestSO> OnQuestFailed;
-        public static void QuestFailed(QuestSO quest)
+        public static event Action<QuestInstance> OnQuestFailed;
+        public static void QuestFailed(QuestInstance quest)
         {
-            Log.Info("[EVENT] Quest Failed: " + quest.questName);
+            Log.Info("[EVENT] Quest Failed: " + quest.QuestName);
             OnQuestFailed?.Invoke(quest);
         }
 

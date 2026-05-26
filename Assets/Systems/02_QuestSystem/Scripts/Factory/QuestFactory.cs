@@ -1,8 +1,8 @@
 // ============================================================
 // Script: "QuestFactory.cs"
 // ============================================================
-// Builds ready-to-use Quest instances in code.
-// Use for quick prototyping, tutorials, or procedural quests.
+// Builds QuestSO definitions in code.
+// Use for quick prototyping, tutorials, or procedural quest templates.
 // For hand-authored content, prefer ScriptableObject assets assigned directly to QuestGiver in the Inspector.
 // ============================================================
 using System.Collections.Generic;
