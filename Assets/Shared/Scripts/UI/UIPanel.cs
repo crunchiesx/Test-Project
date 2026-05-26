@@ -17,14 +17,28 @@ namespace Crunchies.UI
 
         public bool IsOpen => panel.activeSelf;
 
+        public static void CloseRecentActivePanel()
+        {
+            ActivePanels.RemoveAll(panel => panel == null);
+
+            if (ActivePanels.Count == 0) return;
+
+            UIPanel recentPanel = ActivePanels[^1];
+            recentPanel.Close();
+        }
+
         public virtual void Open()
         {
-            if (!ActivePanels.Contains(this))
+            ActivePanels.RemoveAll(panel => panel == null);
+
+            if (ActivePanels.Contains(this))
             {
-                Log.Info("Panel Added!", this);
-                ActivePanels.Add(this);
-                OnPanelChange?.Invoke();
+                ActivePanels.Remove(this);
             }
+
+            Log.Info("Panel Added!", this);
+            ActivePanels.Add(this);
+            OnPanelChange?.Invoke();
 
             panel.SetActive(true);
         }

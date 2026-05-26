@@ -24,7 +24,7 @@ namespace Crunchies.PlayerSystem
         {
             if (PlayerInputHandler.Instance != null)
             {
-                PlayerInputHandler.Instance.OnAttackAction += HandleAttack;
+                PlayerInputHandler.Instance.OnPlayerAttackAction += HandleAttack;
             }
         }
 
@@ -32,7 +32,7 @@ namespace Crunchies.PlayerSystem
         {
             if (PlayerInputHandler.Instance != null)
             {
-                PlayerInputHandler.Instance.OnAttackAction -= HandleAttack;
+                PlayerInputHandler.Instance.OnPlayerAttackAction -= HandleAttack;
             }
         }
 

@@ -51,9 +51,9 @@ namespace Crunchies.PlayerSystem
         {
             if (PlayerInputHandler.Instance != null)
             {
-                PlayerInputHandler.Instance.OnMovementAction += HandleMovement;
-                PlayerInputHandler.Instance.OnJumpAction += HandleJump;
-                PlayerInputHandler.Instance.OnSprintAction += HandleSprint;
+                PlayerInputHandler.Instance.OnPlayerMovementAction += HandleMovement;
+                PlayerInputHandler.Instance.OnPlayerJumpAction += HandleJump;
+                PlayerInputHandler.Instance.OnPlayerSprintAction += HandleSprint;
             }
         }
 
@@ -61,9 +61,9 @@ namespace Crunchies.PlayerSystem
         {
             if (PlayerInputHandler.Instance != null)
             {
-                PlayerInputHandler.Instance.OnMovementAction -= HandleMovement;
-                PlayerInputHandler.Instance.OnJumpAction -= HandleJump;
-                PlayerInputHandler.Instance.OnSprintAction -= HandleSprint;
+                PlayerInputHandler.Instance.OnPlayerMovementAction -= HandleMovement;
+                PlayerInputHandler.Instance.OnPlayerJumpAction -= HandleJump;
+                PlayerInputHandler.Instance.OnPlayerSprintAction -= HandleSprint;
             }
         }
 

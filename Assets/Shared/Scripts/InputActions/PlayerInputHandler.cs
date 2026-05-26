@@ -9,15 +9,16 @@ namespace Crunchies.InputActions
     {
         public static PlayerInputHandler Instance { get; private set; }
 
-        public event Action OnQuestAction;
+        public event Action OnUIQuestAction;
+        public event Action OnUIEscapeAction;
 
-        public event Action<Vector2> OnMovementAction;
-        public event Action<Vector2> OnLookAction;
+        public event Action<Vector2> OnPlayerMovementAction;
+        public event Action<Vector2> OnPlayerLookAction;
 
-        public event Action<bool> OnJumpAction;
-        public event Action<bool> OnSprintAction;
-        public event Action<bool> OnInteractAction;
-        public event Action<bool> OnAttackAction;
+        public event Action<bool> OnPlayerJumpAction;
+        public event Action<bool> OnPlayerSprintAction;
+        public event Action<bool> OnPlayerInteractAction;
+        public event Action<bool> OnPlayerAttackAction;
 
         public Vector2 MoveInput { get; private set; }
         public Vector2 LookInput { get; private set; }
@@ -66,92 +67,95 @@ namespace Crunchies.InputActions
 
         private void SubscribePlayerEventActions()
         {
-            _playerInputActions.Player.Move.performed += HandleMovement;
-            _playerInputActions.Player.Move.canceled += HandleMovement;
+            _playerInputActions.Player.Move.performed += HandlePlayerMovement;
+            _playerInputActions.Player.Move.canceled += HandlePlayerMovement;
 
-            _playerInputActions.Player.Look.performed += HandleLook;
-            _playerInputActions.Player.Look.canceled += HandleLook;
+            _playerInputActions.Player.Look.performed += HandlePlayerLook;
+            _playerInputActions.Player.Look.canceled += HandlePlayerLook;
 
-            _playerInputActions.Player.Jump.performed += HandleJump;
-            _playerInputActions.Player.Jump.canceled += HandleJump;
+            _playerInputActions.Player.Jump.performed += HandlePlayerJump;
+            _playerInputActions.Player.Jump.canceled += HandlePlayerJump;
 
-            _playerInputActions.Player.Sprint.performed += HandleSprint;
-            _playerInputActions.Player.Sprint.canceled += HandleSprint;
+            _playerInputActions.Player.Sprint.performed += HandlePlayerSprint;
+            _playerInputActions.Player.Sprint.canceled += HandlePlayerSprint;
 
-            _playerInputActions.Player.Interact.performed += HandleInteract;
-            _playerInputActions.Player.Interact.canceled += HandleInteract;
+            _playerInputActions.Player.Interact.performed += HandlePlayerInteract;
+            _playerInputActions.Player.Interact.canceled += HandlePlayerInteract;
 
-            _playerInputActions.Player.Attack.performed += HandleAttack;
-            _playerInputActions.Player.Attack.canceled += HandleAttack;
+            _playerInputActions.Player.Attack.performed += HandlePlayerAttack;
+            _playerInputActions.Player.Attack.canceled += HandlePlayerAttack;
         }
 
         private void UnsubscribePlayerEventActions()
         {
-            _playerInputActions.Player.Move.performed -= HandleMovement;
-            _playerInputActions.Player.Move.canceled -= HandleMovement;
+            _playerInputActions.Player.Move.performed -= HandlePlayerMovement;
+            _playerInputActions.Player.Move.canceled -= HandlePlayerMovement;
 
-            _playerInputActions.Player.Look.performed -= HandleLook;
-            _playerInputActions.Player.Look.canceled -= HandleLook;
+            _playerInputActions.Player.Look.performed -= HandlePlayerLook;
+            _playerInputActions.Player.Look.canceled -= HandlePlayerLook;
 
-            _playerInputActions.Player.Jump.performed -= HandleJump;
-            _playerInputActions.Player.Jump.canceled -= HandleJump;
+            _playerInputActions.Player.Jump.performed -= HandlePlayerJump;
+            _playerInputActions.Player.Jump.canceled -= HandlePlayerJump;
 
-            _playerInputActions.Player.Sprint.performed -= HandleSprint;
-            _playerInputActions.Player.Sprint.canceled -= HandleSprint;
+            _playerInputActions.Player.Sprint.performed -= HandlePlayerSprint;
+            _playerInputActions.Player.Sprint.canceled -= HandlePlayerSprint;
 
-            _playerInputActions.Player.Interact.performed -= HandleInteract;
-            _playerInputActions.Player.Interact.canceled -= HandleInteract;
+            _playerInputActions.Player.Interact.performed -= HandlePlayerInteract;
+            _playerInputActions.Player.Interact.canceled -= HandlePlayerInteract;
 
-            _playerInputActions.Player.Attack.performed -= HandleAttack;
-            _playerInputActions.Player.Attack.canceled -= HandleAttack;
+            _playerInputActions.Player.Attack.performed -= HandlePlayerAttack;
+            _playerInputActions.Player.Attack.canceled -= HandlePlayerAttack;
         }
 
         private void SubscribeUIEventActions()
         {
-            _playerInputActions.UI.Quest.performed += HandleQuest;
+            _playerInputActions.UI.Quest.performed += HandleUIQuest;
+            _playerInputActions.UI.Escape.performed += HandleUIEscape;
         }
 
         private void UnsubscribeUIEventActions()
         {
-            _playerInputActions.UI.Quest.performed -= HandleQuest;
+            _playerInputActions.UI.Quest.performed -= HandleUIQuest;
+            _playerInputActions.UI.Escape.performed -= HandleUIEscape;
         }
 
-        private void HandleMovement(InputAction.CallbackContext ctx)
+        private void HandlePlayerMovement(InputAction.CallbackContext ctx)
         {
             MoveInput = ctx.ReadValue<Vector2>();
-            OnMovementAction?.Invoke(MoveInput);
+            OnPlayerMovementAction?.Invoke(MoveInput);
         }
 
-        private void HandleLook(InputAction.CallbackContext ctx)
+        private void HandlePlayerLook(InputAction.CallbackContext ctx)
         {
             LookInput = ctx.ReadValue<Vector2>();
-            OnLookAction?.Invoke(LookInput);
+            OnPlayerLookAction?.Invoke(LookInput);
         }
 
-        private void HandleJump(InputAction.CallbackContext ctx)
+        private void HandlePlayerJump(InputAction.CallbackContext ctx)
         {
             JumpInput = ctx.ReadValueAsButton();
-            OnJumpAction?.Invoke(JumpInput);
+            OnPlayerJumpAction?.Invoke(JumpInput);
         }
 
-        private void HandleSprint(InputAction.CallbackContext ctx)
+        private void HandlePlayerSprint(InputAction.CallbackContext ctx)
         {
             SprintInput = ctx.ReadValueAsButton();
-            OnSprintAction?.Invoke(SprintInput);
+            OnPlayerSprintAction?.Invoke(SprintInput);
         }
 
-        private void HandleInteract(InputAction.CallbackContext ctx)
+        private void HandlePlayerInteract(InputAction.CallbackContext ctx)
         {
             InteractInput = ctx.ReadValueAsButton();
-            OnInteractAction?.Invoke(InteractInput);
+            OnPlayerInteractAction?.Invoke(InteractInput);
         }
 
-        private void HandleAttack(InputAction.CallbackContext ctx)
+        private void HandlePlayerAttack(InputAction.CallbackContext ctx)
         {
             AttackInput = ctx.ReadValueAsButton();
-            OnAttackAction?.Invoke(AttackInput);
+            OnPlayerAttackAction?.Invoke(AttackInput);
         }
 
-        private void HandleQuest(InputAction.CallbackContext _) => OnQuestAction?.Invoke();
+        private void HandleUIQuest(InputAction.CallbackContext _) => OnUIQuestAction?.Invoke();
+        private void HandleUIEscape(InputAction.CallbackContext _) => OnUIEscapeAction?.Invoke();
     }
 }

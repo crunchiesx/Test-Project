@@ -1,4 +1,5 @@
 using Crunchies.InputActions;
+using Crunchies.UI;
 using Crunchies.Utility;
 using UnityEngine;
 
@@ -13,7 +14,8 @@ namespace Crunchies.QuestSystem
         {
             if (PlayerInputHandler.Instance != null)
             {
-                PlayerInputHandler.Instance.OnQuestAction += OnQuestAction;
+                PlayerInputHandler.Instance.OnUIQuestAction += OnUIQuestAction;
+                PlayerInputHandler.Instance.OnUIEscapeAction += OnUIEscapeAction;
             }
         }
 
@@ -21,11 +23,12 @@ namespace Crunchies.QuestSystem
         {
             if (PlayerInputHandler.Instance != null)
             {
-                PlayerInputHandler.Instance.OnQuestAction += OnQuestAction;
+                PlayerInputHandler.Instance.OnUIQuestAction -= OnUIQuestAction;
+                PlayerInputHandler.Instance.OnUIEscapeAction -= OnUIEscapeAction;
             }
         }
 
-        private void OnQuestAction()
+        private void OnUIQuestAction()
         {
             if (questUI == null)
             {
@@ -40,6 +43,11 @@ namespace Crunchies.QuestSystem
             {
                 questUI.Open();
             }
+        }
+
+        private void OnUIEscapeAction()
+        {
+            UIPanel.CloseRecentActivePanel();
         }
     }
 }

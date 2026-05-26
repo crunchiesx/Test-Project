@@ -16,7 +16,7 @@ namespace Crunchies.PlayerSystem
         {
             if (PlayerInputHandler.Instance != null)
             {
-                PlayerInputHandler.Instance.OnInteractAction += Interact;
+                PlayerInputHandler.Instance.OnPlayerInteractAction += Interact;
             }
         }
 
@@ -24,7 +24,7 @@ namespace Crunchies.PlayerSystem
         {
             if (PlayerInputHandler.Instance != null)
             {
-                PlayerInputHandler.Instance.OnInteractAction -= Interact;
+                PlayerInputHandler.Instance.OnPlayerInteractAction -= Interact;
             }
         }
 
