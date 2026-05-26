@@ -21,13 +21,13 @@ namespace Crunchies.QuestSystem
     {
         public static QuestManager Instance { get; private set; }
 
-        private readonly List<Quest> _activeQuest = new();
-        private readonly List<Quest> _completedQuest = new();
-        private readonly List<Quest> _failedQuest = new();
+        private readonly List<QuestSO> _activeQuest = new();
+        private readonly List<QuestSO> _completedQuest = new();
+        private readonly List<QuestSO> _failedQuest = new();
 
-        public IReadOnlyList<Quest> ActiveQuest => _activeQuest;
-        public IReadOnlyList<Quest> CompletedQuest => _completedQuest;
-        public IReadOnlyList<Quest> FailedQuest => _failedQuest;
+        public IReadOnlyList<QuestSO> ActiveQuest => _activeQuest;
+        public IReadOnlyList<QuestSO> CompletedQuest => _completedQuest;
+        public IReadOnlyList<QuestSO> FailedQuest => _failedQuest;
 
         public int TotalQuestCount => _activeQuest.Count + _completedQuest.Count + _failedQuest.Count;
 
@@ -58,7 +58,7 @@ namespace Crunchies.QuestSystem
             QuestEvents.OnQuestCompleted += MoveToCompleted;
             QuestEvents.OnQuestFailed += MoveToFailed;
 
-            foreach (Quest quest in _activeQuest)
+            foreach (QuestSO quest in _activeQuest)
             {
                 quest.RegisterObjectiveListeners();
             }
@@ -73,7 +73,7 @@ namespace Crunchies.QuestSystem
             QuestEvents.OnQuestCompleted -= MoveToCompleted;
             QuestEvents.OnQuestFailed -= MoveToFailed;
 
-            foreach (Quest quest in _activeQuest)
+            foreach (QuestSO quest in _activeQuest)
             {
                 quest.UnregisterObjectiveListeners();
             }
@@ -102,7 +102,7 @@ namespace Crunchies.QuestSystem
         /// <summary>
         /// Hand a quest to the manager. Returns false if already active or completed.
         /// </summary>
-        public bool AcceptQuest(Quest quest)
+        public bool AcceptQuest(QuestSO quest)
         {
             if (quest == null) return false;
 
@@ -129,25 +129,25 @@ namespace Crunchies.QuestSystem
         /// </summary>
         public void FailQuest(string questId)
         {
-            Quest quest = _activeQuest.FirstOrDefault(q => q.questId == questId);
+            QuestSO quest = _activeQuest.FirstOrDefault(q => q.questId == questId);
             quest.Fail();
         }
 
         public bool IsQuestActive(string questId) => _activeQuest.Any(q => q.questId == questId);
         public bool IsQuestCompleted(string questId) => _completedQuest.Any(q => q.questId == questId);
-        public Quest GetActiveQuest(string questId) => _activeQuest.FirstOrDefault(q => q.questId == questId);
+        public QuestSO GetActiveQuest(string questId) => _activeQuest.FirstOrDefault(q => q.questId == questId);
 
         // ------------------------------------------------------------------
         // Event handlers
         // ------------------------------------------------------------------
 
-        private void MoveToCompleted(Quest quest)
+        private void MoveToCompleted(QuestSO quest)
         {
             _activeQuest.Remove(quest);
             _completedQuest.Add(quest);
         }
 
-        private void MoveToFailed(Quest quest)
+        private void MoveToFailed(QuestSO quest)
         {
             _activeQuest.Remove(quest);
             _failedQuest.Add(quest);
@@ -190,9 +190,9 @@ namespace Crunchies.QuestSystem
         {
             if (debugGetAllQuest)
             {
-                List<Quest> quests = QuestFactory.GetAllQuest();
+                List<QuestSO> quests = QuestFactory.GetAllQuest();
 
-                foreach (Quest q in quests)
+                foreach (QuestSO q in quests)
                 {
                     AcceptQuest(q);
                 }
@@ -200,7 +200,7 @@ namespace Crunchies.QuestSystem
                 return;
             }
 
-            Quest quest = QuestFactory.GetRandomQuest(debugQuestType == 0 ? UnityEngine.Random.Range(1, 9) : debugQuestType);
+            QuestSO quest = QuestFactory.GetRandomQuest(debugQuestType == 0 ? UnityEngine.Random.Range(1, 9) : debugQuestType);
             if (quest != null)
             {
                 AcceptQuest(quest);
@@ -231,7 +231,7 @@ namespace Crunchies.QuestSystem
             }
 
             debugActiveQuest.Clear();
-            foreach (Quest quest in _activeQuest)
+            foreach (QuestSO quest in _activeQuest)
             {
                 DebugQuestInfo info = new(quest.questName, quest.questId);
                 foreach (QuestObjective obj in quest.objectives)
@@ -248,7 +248,7 @@ namespace Crunchies.QuestSystem
             }
 
             debugCompletedQuest.Clear();
-            foreach (Quest quest in _completedQuest)
+            foreach (QuestSO quest in _completedQuest)
             {
                 DebugQuestInfo info = new(quest.questName, quest.questId);
                 foreach (QuestObjective obj in quest.objectives)
@@ -265,7 +265,7 @@ namespace Crunchies.QuestSystem
             }
 
             debugFailedQuest.Clear();
-            foreach (Quest quest in _failedQuest)
+            foreach (QuestSO quest in _failedQuest)
             {
                 DebugQuestInfo info = new(quest.questName, quest.questId);
                 foreach (QuestObjective obj in quest.objectives)

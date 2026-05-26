@@ -19,8 +19,8 @@ namespace Crunchies.QuestSystem
         Failed
     }
 
-    [CreateAssetMenu(fileName = "Quest", menuName = "ScriptableObjects/Quests/New Quest")]
-    public class Quest : ScriptableObject
+    [CreateAssetMenu(fileName = "QuestSO", menuName = "ScriptableObjects/Quests/New Quest")]
+    public class QuestSO : ScriptableObject
     {
         [Header("Identity")]
         public string questId;
@@ -40,7 +40,7 @@ namespace Crunchies.QuestSystem
         // Populate this list in code via QuestFactory or QuestGiver.
         // For Inspector-driven quests, look into a ScriptableObject-per-objective 
         // wrapper pattern or Odin Inspector's polymorphic list.
-        [NonSerialized] public List<QuestObjective> objectives = new();
+        [SerializeReference] public List<QuestObjective> objectives = new();
 
 
         // ---- Runtime state (not persisted in SO asset) ----

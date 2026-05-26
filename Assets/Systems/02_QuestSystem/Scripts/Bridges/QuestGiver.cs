@@ -19,7 +19,7 @@ namespace Crunchies.QuestSystem
     public class QuestGiver : MonoBehaviour
     {
         [Tooltip("Drag a Quest ScriptableObject here. If empty, questType is used instead.")]
-        [SerializeField] private Quest questAsset;
+        [SerializeField] private QuestSO questAsset;
 
         [Header("Fallback - used when no asset is assigned")]
         [SerializeField] private QuestType questType = QuestType.Gather;
@@ -31,7 +31,7 @@ namespace Crunchies.QuestSystem
         {
             if (_isGiven) return;
 
-            Quest quest = questAsset != null ? questAsset : BuildFromType();
+            QuestSO quest = questAsset != null ? questAsset : BuildFromType();
 
             if (quest == null)
             {
@@ -43,7 +43,7 @@ namespace Crunchies.QuestSystem
             if (accepted) _isGiven = true;
         }
 
-        private Quest BuildFromType() => questType switch
+        private QuestSO BuildFromType() => questType switch
         {
             QuestType.Gather => QuestFactory.CreateGatherQuest(Guid.NewGuid().ToString(), "wood", "Wood", 10),
             QuestType.Kill => QuestFactory.CreateKillQuest(Guid.NewGuid().ToString(), "wolf", "Wolves", 5),

@@ -22,14 +22,14 @@ namespace Crunchies.QuestSystem
 
         private readonly List<TextMeshProUGUI> _lines = new();
 
-        public void Populate(Quest quest)
+        public void Populate(QuestSO quest)
         {
             titleText.SetText(quest.questName);
             BuildLines(quest);
             Refresh(quest);
         }
 
-        public void Refresh(Quest quest)
+        public void Refresh(QuestSO quest)
         {
             statusText.SetText
             (
@@ -53,7 +53,7 @@ namespace Crunchies.QuestSystem
             }
         }
 
-        private void BuildLines(Quest quest)
+        private void BuildLines(QuestSO quest)
         {
             foreach (Transform child in objectivesParent)
             {

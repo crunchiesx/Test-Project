@@ -48,7 +48,7 @@ namespace Crunchies.QuestSystem
             QuestEvents.OnObjectiveUpdated -= OnObjectiveUpdated;
         }
 
-        private void OnQuestStarted(Quest quest)
+        private void OnQuestStarted(QuestSO quest)
         {
             if (_entries.ContainsKey(quest.questId)) return;
 
@@ -60,7 +60,7 @@ namespace Crunchies.QuestSystem
             RefreshNoQuestLabel();
         }
 
-        private void OnQuestChanged(Quest quest)
+        private void OnQuestChanged(QuestSO quest)
         {
             if (_entries.TryGetValue(quest.questId, out var entry))
             {
@@ -72,7 +72,7 @@ namespace Crunchies.QuestSystem
 
         private void OnObjectiveUpdated(QuestObjective objective)
         {
-            foreach (Quest quest in QuestManager.Instance.ActiveQuest)
+            foreach (QuestSO quest in QuestManager.Instance.ActiveQuest)
             {
                 if (!quest.objectives.Contains(objective)) continue;
 

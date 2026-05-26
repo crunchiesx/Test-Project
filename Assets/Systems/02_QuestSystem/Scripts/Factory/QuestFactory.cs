@@ -12,9 +12,9 @@ namespace Crunchies.QuestSystem
 {
     public static class QuestFactory
     {
-        public static Quest CreateGatherQuest(string id, string itemId, string itemName, int amount)
+        public static QuestSO CreateGatherQuest(string id, string itemId, string itemName, int amount)
         {
-            Quest quest = ScriptableObject.CreateInstance<Quest>();
+            QuestSO quest = ScriptableObject.CreateInstance<QuestSO>();
             quest.questId = id;
             quest.questName = $"Gather {amount} {itemName}";
             quest.description = $"Collect {amount} {itemName} and bring them back.";
@@ -22,9 +22,9 @@ namespace Crunchies.QuestSystem
             return quest;
         }
 
-        public static Quest CreateKillQuest(string id, string enemyId, string enemyName, int count)
+        public static QuestSO CreateKillQuest(string id, string enemyId, string enemyName, int count)
         {
-            Quest quest = ScriptableObject.CreateInstance<Quest>();
+            QuestSO quest = ScriptableObject.CreateInstance<QuestSO>();
             quest.questId = id;
             quest.questName = $"Hunt {count} {enemyName}";
             quest.description = $"Kill {count} {enemyName} in the area.";
@@ -33,9 +33,9 @@ namespace Crunchies.QuestSystem
             return quest;
         }
 
-        public static Quest CreateWalkQuest(string id, float distance, string unit = "m")
+        public static QuestSO CreateWalkQuest(string id, float distance, string unit = "m")
         {
-            Quest quest = ScriptableObject.CreateInstance<Quest>();
+            QuestSO quest = ScriptableObject.CreateInstance<QuestSO>();
             quest.questId = id;
             quest.questName = $"Walk {distance}{unit}";
             quest.description = $"Travel {distance}{unit}.";
@@ -44,9 +44,9 @@ namespace Crunchies.QuestSystem
             return quest;
         }
 
-        public static Quest CreateEscortQuest(string id, string npcId, string npcName, string destId, string destName)
+        public static QuestSO CreateEscortQuest(string id, string npcId, string npcName, string destId, string destName)
         {
-            Quest quest = ScriptableObject.CreateInstance<Quest>();
+            QuestSO quest = ScriptableObject.CreateInstance<QuestSO>();
             quest.questId = id;
             quest.questName = $"Escort {npcName}";
             quest.description = $"Bring {npcName} safely to {destName}";
@@ -56,9 +56,9 @@ namespace Crunchies.QuestSystem
             return quest;
         }
 
-        public static Quest CreateSurvivalQuest(string id, float seconds)
+        public static QuestSO CreateSurvivalQuest(string id, float seconds)
         {
-            Quest quest = ScriptableObject.CreateInstance<Quest>();
+            QuestSO quest = ScriptableObject.CreateInstance<QuestSO>();
             quest.questId = id;
             quest.questName = $"Survive for {seconds:0}s";
             quest.description = $"Stay alive for {seconds:0} seconds.";
@@ -67,9 +67,9 @@ namespace Crunchies.QuestSystem
             return quest;
         }
 
-        public static Quest CreateCraftQuest(string id, string recipeId, string itemName, int count)
+        public static QuestSO CreateCraftQuest(string id, string recipeId, string itemName, int count)
         {
-            Quest quest = ScriptableObject.CreateInstance<Quest>();
+            QuestSO quest = ScriptableObject.CreateInstance<QuestSO>();
             quest.questId = id;
             quest.questName = $"Craft {count} {itemName}";
             quest.description = $"Use crafting table to make {count} {itemName}";
@@ -78,9 +78,9 @@ namespace Crunchies.QuestSystem
             return quest;
         }
 
-        public static Quest CreateReachLocationQuest(string id, string locationId, string locationName)
+        public static QuestSO CreateReachLocationQuest(string id, string locationId, string locationName)
         {
-            Quest quest = ScriptableObject.CreateInstance<Quest>();
+            QuestSO quest = ScriptableObject.CreateInstance<QuestSO>();
             quest.questId = id;
             quest.questName = $"Reach {locationName}";
             quest.description = $"Travel to {locationName}.";
@@ -92,9 +92,9 @@ namespace Crunchies.QuestSystem
         /// <summary>
         /// Multi-objective: kill + gather + reach location.
         /// </summary>
-        public static Quest CreateRangersErrand()
+        public static QuestSO CreateRangersErrand()
         {
-            Quest quest = ScriptableObject.CreateInstance<Quest>();
+            QuestSO quest = ScriptableObject.CreateInstance<QuestSO>();
             quest.questId = "compound_rangers_errand";
             quest.questName = "Ranger's Errand";
             quest.description = "Hunt wolves, gather wood, and report to the outpost";
@@ -107,7 +107,7 @@ namespace Crunchies.QuestSystem
         }
 
 #if UNITY_EDITOR
-        public static Quest GetRandomQuest(int id)
+        public static QuestSO GetRandomQuest(int id)
         {
             return id switch
             {
@@ -123,9 +123,9 @@ namespace Crunchies.QuestSystem
             };
         }
 
-        public static List<Quest> GetAllQuest()
+        public static List<QuestSO> GetAllQuest()
         {
-            List<Quest> quests = new()
+            List<QuestSO> quests = new()
             {
                 CreateGatherQuest("gather_wood", "wood", "Wood", 5),
                 CreateKillQuest("kill_wolf", "wolf", "Wolves", 3),
