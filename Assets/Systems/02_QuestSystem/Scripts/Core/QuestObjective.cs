@@ -16,7 +16,7 @@ namespace Crunchies.QuestSystem
         [Header("Display")]
         public string description = "Complete the Objective";
 
-        [Header("Runtime State - do not edit in Inspector")]
+        [Header("Runtime State - Do not edit in Inspector")]
         [SerializeField] protected float currentAmount;
         [SerializeField] protected float requiredAmount = 1f;
         [SerializeField] private bool isCompleted;

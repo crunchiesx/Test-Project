@@ -6,12 +6,14 @@
 // Bridge: EnemyDeathQuestBridge.cs
 // ============================================================
 using System;
+using UnityEngine;
 
 namespace Crunchies.QuestSystem
 {
     [Serializable]
     public class KillObjective : QuestObjective
     {
+        [Header("Kill Objective")]
         public string enemyId = "wolf";
         public string enemyDisplayName = "Wolves";
 

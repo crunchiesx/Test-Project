@@ -6,12 +6,14 @@
 // Bridge: none needed - fire directly from your crafting system: QuestEvents.ItemCrafted("iron_sword", 1);
 // ============================================================
 using System;
+using UnityEngine;
 
 namespace Crunchies.QuestSystem
 {
     [Serializable]
     public class CraftObjective : QuestObjective
     {
+        [Header("Craft Objective")]
         public string recipeId = "iron_sword";
         public string itemDisplayName = "Iron Sword";
 

@@ -6,12 +6,14 @@
 // Bridge: NpcArrivalQuestBridge.cs (on the NPC GameObject)
 // ============================================================
 using System;
+using UnityEngine;
 
 namespace Crunchies.QuestSystem
 {
     [Serializable]
     public class EscortObjective : QuestObjective
     {
+        [Header("Escort Objective")]
         public string npcId = "merchant_01";
         public string npcDisplayName = "Merchant";
 

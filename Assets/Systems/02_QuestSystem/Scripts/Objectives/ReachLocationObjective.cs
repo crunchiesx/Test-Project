@@ -6,12 +6,14 @@
 // Bridge: LocationReachedQuestBridge.cs
 // ============================================================
 using System;
+using UnityEngine;
 
 namespace Crunchies.QuestSystem
 {
     [Serializable]
     public class ReachLocationObjective : QuestObjective
     {
+        [Header("Reach Objective")]
         public string locationId = "village_gate";
         public string locationDisplayName = "Village Gate";
 

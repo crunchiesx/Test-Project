@@ -6,12 +6,14 @@
 // Bridge: InteractQuestBridge.cs
 // ============================================================
 using System;
+using UnityEngine;
 
 namespace Crunchies.QuestSystem
 {
     [Serializable]
     public class InteractObjective : QuestObjective
     {
+        [Header("Interact Objective")]
         public string objectId = "lever_01";
         public string objectDisplayName = "Ancient Lever";
 

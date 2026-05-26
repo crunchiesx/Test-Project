@@ -6,12 +6,14 @@
 // Bridge:    ItemPickupQuestBridge.cs
 // ============================================================
 using System;
+using UnityEngine;
 
 namespace Crunchies.QuestSystem
 {
     [Serializable]
     public class GatherObjective : QuestObjective
     {
+        [Header("Gather Objective")]
         public string itemId = "wood";
         public string itemDisplayName = "Wood";
 

@@ -6,12 +6,14 @@
 // Bridge: PlayerDistanceQuestBridge.cs
 // ============================================================
 using System;
+using UnityEngine;
 
 namespace Crunchies.QuestSystem
 {
     [Serializable]
     public class WalkDistanceObjective : QuestObjective
     {
+        [Header("Walk Objective")]
         public string unitLabel = "m";
 
         public WalkDistanceObjective() { }
