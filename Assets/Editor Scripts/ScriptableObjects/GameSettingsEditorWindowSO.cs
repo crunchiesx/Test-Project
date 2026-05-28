@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "GameSettingsEditorWindow", menuName = "ScriptableObjects/EditorWindow", order = 2)]
+[CreateAssetMenu(fileName = "GameSettingsEditorWindow", menuName = "Scriptable Objects/Editor Window", order = 2)]
 public class GameSettingsEditorWindowSO : ScriptableObject
 {
     public enum DifficultyPreset

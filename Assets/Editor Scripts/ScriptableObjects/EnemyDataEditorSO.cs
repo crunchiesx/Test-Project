@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "EnemyDataEditor", menuName = "ScriptableObjects/Editor")]
+[CreateAssetMenu(fileName = "EnemyDataEditor", menuName = "Scriptable Objects/Editor")]
 public class EnemyDataEditorSO : ScriptableObject
 {
     public enum EnemyFaction
