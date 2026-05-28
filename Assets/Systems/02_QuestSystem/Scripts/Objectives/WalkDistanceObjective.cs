@@ -31,5 +31,12 @@ namespace Crunchies.QuestSystem
         private void OnDistanceTraveled(float delta) => AddProgress(delta);
 
         public override string GetProgressText() => $"Distance: {currentAmount:F1}{unitLabel} / {requiredAmount:F1}{unitLabel}";
+
+#if UNITY_EDITOR
+        public override void Validate()
+        {
+            description = $"Travel {requiredAmount}{unitLabel}";
+        }
+#endif
     }
 }

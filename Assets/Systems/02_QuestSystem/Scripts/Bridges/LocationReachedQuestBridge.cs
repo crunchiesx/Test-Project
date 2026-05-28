@@ -12,14 +12,15 @@
 //   └── LocationReachedQuestBridge.cs  ← this file
 // ============================================================
 using Crunchies.PlayerSystem;
+using Crunchies.ScriptableObjects;
 using UnityEngine;
 
 namespace Crunchies.QuestSystem
 {
     public class LocationReachedQuestBridge : MonoBehaviour
     {
-        [Tooltip("Must match the locationId set in ReachedLocationObjective")]
-        [SerializeField] private string locationId = "village_gate";
+        [Tooltip("Must match the LocationDataSO set in ReachedLocationObjective")]
+        [SerializeField] private LocationDataSO locationData;
         [SerializeField] private bool triggerOnce = true;
 
         private bool _triggered = false;
@@ -28,7 +29,7 @@ namespace Crunchies.QuestSystem
         {
             if (_triggered || !other.transform.TryGetComponent<Player>(out _)) return;
             if (triggerOnce) _triggered = true;
-            QuestEvents.LocationReached(locationId);
+            QuestEvents.LocationReached(locationData.locationId);
         }
     }
 }

@@ -6,6 +6,7 @@
 // Bridge: EnemyDeathQuestBridge.cs
 // ============================================================
 using System;
+using Crunchies.ScriptableObjects;
 using UnityEngine;
 
 namespace Crunchies.QuestSystem
@@ -14,17 +15,15 @@ namespace Crunchies.QuestSystem
     public class KillObjective : QuestObjective
     {
         [Header("Kill Objective")]
-        public string enemyId = "wolf";
-        public string enemyDisplayName = "Wolves";
+        [SerializeField] private EnemyDataSO enemyData;
 
         public KillObjective() { }
 
-        public KillObjective(string enemyId, string displayName, int count)
+        public KillObjective(EnemyDataSO enemyData, int count)
         {
-            this.enemyId = enemyId;
-            enemyDisplayName = displayName;
+            this.enemyData = enemyData;
             requiredAmount = count;
-            description = $"Kill {count} {displayName}";
+            description = $"Kill {count} {enemyData.characterName}";
         }
 
         protected override void OnRegisterListeners() => QuestEvents.OnEnemyKilled += OnEnemyKilled;
@@ -32,9 +31,22 @@ namespace Crunchies.QuestSystem
 
         private void OnEnemyKilled(string id)
         {
-            if (id == enemyId) AddProgress(1);
+            if (id == enemyData.characterId) AddProgress(1);
         }
 
-        public override string GetProgressText() => $"{enemyDisplayName} Killed: {currentAmount:0} / {requiredAmount:0}";
+        public override string GetProgressText() => $"{enemyData.characterName} Killed: {currentAmount:0} / {requiredAmount:0}";
+
+#if UNITY_EDITOR
+        public override void Validate()
+        {
+            if (enemyData == null)
+            {
+                base.Validate();
+                return;
+            }
+
+            description = $"Kill {requiredAmount} {enemyData.characterName}";
+        }
+#endif
     }
 }

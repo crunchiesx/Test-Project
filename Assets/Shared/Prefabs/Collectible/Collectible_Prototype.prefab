@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2f9481d40986e745952ea0a58aea2ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuestSystem.Collectible
-  itemId: wood
+  itemData: {fileID: 11400000, guid: 4b3679ea8124b4943b2ca95bec1c3053, type: 2}
   amount: 1
 --- !u!208 &5865216169799750454
 NavMeshObstacle:

@@ -6,6 +6,7 @@
 // Bridge: LocationReachedQuestBridge.cs
 // ============================================================
 using System;
+using Crunchies.ScriptableObjects;
 using UnityEngine;
 
 namespace Crunchies.QuestSystem
@@ -14,17 +15,15 @@ namespace Crunchies.QuestSystem
     public class ReachLocationObjective : QuestObjective
     {
         [Header("Reach Objective")]
-        public string locationId = "village_gate";
-        public string locationDisplayName = "Village Gate";
+        [SerializeField] private LocationDataSO locationData;
 
         public ReachLocationObjective() { }
 
-        public ReachLocationObjective(string locationId, string displayName)
+        public ReachLocationObjective(LocationDataSO locationData)
         {
-            this.locationId = locationId;
-            locationDisplayName = displayName;
+            this.locationData = locationData;
             requiredAmount = 1;
-            description = $"Reach: {displayName}";
+            description = $"Reach: {locationData.locationName}";
         }
 
         protected override void OnRegisterListeners() => QuestEvents.OnLocationReached += OnLocationReached;
@@ -32,9 +31,22 @@ namespace Crunchies.QuestSystem
 
         private void OnLocationReached(string id)
         {
-            if (id == locationId) AddProgress(1);
+            if (id == locationData.locationId) AddProgress(1);
         }
 
-        public override string GetProgressText() => IsCompleted ? $"{locationDisplayName}: Reached!" : $"{locationDisplayName}: Not Yet";
+        public override string GetProgressText() => IsCompleted ? $"{locationData.locationName}: Reached!" : $"{locationData.locationName}: Not Yet";
+
+#if UNITY_EDITOR
+        public override void Validate()
+        {
+            if (locationData == null)
+            {
+                base.Validate();
+                return;
+            }
+
+            description = $"Reach: {locationData.locationName}";
+        }
+#endif
     }
 }

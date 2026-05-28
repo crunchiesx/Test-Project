@@ -6,6 +6,7 @@
 // Bridge:    ItemPickupQuestBridge.cs
 // ============================================================
 using System;
+using Crunchies.ScriptableObjects;
 using UnityEngine;
 
 namespace Crunchies.QuestSystem
@@ -14,17 +15,15 @@ namespace Crunchies.QuestSystem
     public class GatherObjective : QuestObjective
     {
         [Header("Gather Objective")]
-        public string itemId = "wood";
-        public string itemDisplayName = "Wood";
+        [SerializeField] private ItemDataSO itemData;
 
         public GatherObjective() { }
 
-        public GatherObjective(string itemId, string displayName, int amount)
+        public GatherObjective(ItemDataSO itemData, int amount)
         {
-            this.itemId = itemId;
-            itemDisplayName = displayName;
+            this.itemData = itemData;
             requiredAmount = amount;
-            description = $"Collect {amount} {displayName}";
+            description = $"Collect {amount} {itemData.itemName}";
         }
 
         protected override void OnRegisterListeners() => QuestEvents.OnItemCollected += OnItemCollected;
@@ -32,9 +31,22 @@ namespace Crunchies.QuestSystem
 
         private void OnItemCollected(string id, int amount)
         {
-            if (id == itemId) AddProgress(amount);
+            if (id == itemData.itemId) AddProgress(amount);
         }
 
-        public override string GetProgressText() => $"{itemDisplayName}: {currentAmount:0} / {requiredAmount:0}";
+        public override string GetProgressText() => $"{itemData.itemName}: {currentAmount:0} / {requiredAmount:0}";
+
+#if UNITY_EDITOR
+        public override void Validate()
+        {
+            if (itemData == null)
+            {
+                base.Validate();
+                return;
+            }
+
+            description = $"Collect {requiredAmount} {itemData.itemName}";
+        }
+#endif 
     }
 }

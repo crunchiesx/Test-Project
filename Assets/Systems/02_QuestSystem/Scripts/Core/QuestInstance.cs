@@ -2,6 +2,14 @@ using System.Collections.Generic;
 
 namespace Crunchies.QuestSystem
 {
+    public enum QuestStatus
+    {
+        NotStarted,
+        Active,
+        Completed,
+        Failed
+    }
+
     public class QuestInstance
     {
         public QuestSO Definition { get; private set; }

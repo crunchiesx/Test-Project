@@ -11,15 +11,7 @@ using UnityEngine;
 
 namespace Crunchies.QuestSystem
 {
-    public enum QuestStatus
-    {
-        NotStarted,
-        Active,
-        Completed,
-        Failed
-    }
-
-    [CreateAssetMenu(fileName = "QuestSO", menuName = "ScriptableObjects/Quests/New Quest")]
+    [CreateAssetMenu(fileName = "QuestSO", menuName = "Scriptable Objects/Quests/New Quest")]
     public class QuestSO : ScriptableObject
     {
         [Header("Identity")]
@@ -48,5 +40,15 @@ namespace Crunchies.QuestSystem
 
             return new QuestInstance(this, runtimeObjectives);
         }
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            foreach (QuestObjective obj in objectives)
+            {
+                obj.Validate();
+            }
+        }
+#endif
     }
 }

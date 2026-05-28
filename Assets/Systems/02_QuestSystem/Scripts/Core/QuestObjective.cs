@@ -110,5 +110,12 @@ namespace Crunchies.QuestSystem
             isFailed = false;
             listenersRegistered = false;
         }
+
+#if UNITY_EDITOR
+        public virtual void Validate()
+        {
+            description = $"Complete the Objective";
+        }
+#endif
     }
 }

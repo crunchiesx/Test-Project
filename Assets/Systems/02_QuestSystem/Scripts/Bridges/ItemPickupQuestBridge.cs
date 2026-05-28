@@ -11,6 +11,7 @@
 //   └── ItemPickupQuestBridge.cs ← this file
 // ============================================================
 using Crunchies.Components;
+using Crunchies.ScriptableObjects;
 using Crunchies.Utility;
 using UnityEngine;
 
@@ -19,8 +20,8 @@ namespace Crunchies.QuestSystem
     [RequireComponent(typeof(ItemPickup))]
     public class ItemPickupQuestBridge : MonoBehaviour
     {
-        [Tooltip("Must match the itemId set in GatherObjective")]
-        [SerializeField] private string itemId = "wood";
+        [Tooltip("Must match the ItemDataSO set in GatherObjective")]
+        [SerializeField] private ItemDataSO itemData;
         [SerializeField] private int amount = 1;
 
         private ItemPickup _pickup;
@@ -36,6 +37,6 @@ namespace Crunchies.QuestSystem
         private void OnEnable() => _pickup.OnPickedUp += HandlePickup;
         private void OnDisable() => _pickup.OnPickedUp -= HandlePickup;
 
-        private void HandlePickup() => QuestEvents.ItemCollected(itemId, amount);
+        private void HandlePickup() => QuestEvents.ItemCollected(itemData.itemId, amount);
     }
 }

@@ -11,6 +11,7 @@
 //   └── NpcArrivalQuestBridge.cs  ← this file
 // ============================================================
 using Crunchies.AI;
+using Crunchies.ScriptableObjects;
 using Crunchies.Utility;
 using UnityEngine;
 
@@ -19,9 +20,8 @@ namespace Crunchies.QuestSystem
     [RequireComponent(typeof(NpcController))]
     public class NpcArrivalQuestBridge : MonoBehaviour
     {
-        [Tooltip("Must match the npcId set in EscortObjective.")]
-        [SerializeField] private string npcId = "merchant_01";
-
+        [Tooltip("Must match the NpcDataSO set in EscortObjective.")]
+        [SerializeField] private NpcDataSO npcData;
         private NpcController _controller;
 
         private void Awake()
@@ -37,7 +37,7 @@ namespace Crunchies.QuestSystem
 
         private void HandleArrival()
         {
-            QuestEvents.NpcReachDestination(npcId);
+            QuestEvents.NpcReachDestination(npcData.characterId);
         }
     }
 }

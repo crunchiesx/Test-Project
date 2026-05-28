@@ -6,6 +6,7 @@
 // Bridge: NpcArrivalQuestBridge.cs (on the NPC GameObject)
 // ============================================================
 using System;
+using Crunchies.ScriptableObjects;
 using UnityEngine;
 
 namespace Crunchies.QuestSystem
@@ -14,17 +15,15 @@ namespace Crunchies.QuestSystem
     public class EscortObjective : QuestObjective
     {
         [Header("Escort Objective")]
-        public string npcId = "merchant_01";
-        public string npcDisplayName = "Merchant";
+        [SerializeField] private NpcDataSO npcData;
 
         public EscortObjective() { }
 
-        public EscortObjective(string npcId, string displayName)
+        public EscortObjective(NpcDataSO npcData)
         {
-            this.npcId = npcId;
-            npcDisplayName = displayName;
+            this.npcData = npcData;
             requiredAmount = 1;
-            description = $"Escort {displayName} to safety";
+            description = $"Escort {npcData.characterName} to safety";
         }
 
         protected override void OnRegisterListeners() => QuestEvents.OnNpcReachedDestination += OnNpcArrived;
@@ -32,9 +31,22 @@ namespace Crunchies.QuestSystem
 
         private void OnNpcArrived(string id)
         {
-            if (id == npcId) AddProgress(1);
+            if (id == npcData.characterId) AddProgress(1);
         }
 
-        public override string GetProgressText() => IsCompleted ? $"{npcDisplayName}: Safe!" : $"Escorting {npcDisplayName}...";
+        public override string GetProgressText() => IsCompleted ? $"{npcData.characterName}: Safe!" : $"Escorting {npcData.characterName}...";
+
+#if UNITY_EDITOR
+        public override void Validate()
+        {
+            if (npcData == null)
+            {
+                base.Validate();
+                return;
+            }
+
+            description = $"Escort {npcData.characterName} to safety";
+        }
+#endif
     }
 }

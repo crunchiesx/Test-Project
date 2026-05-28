@@ -7,6 +7,8 @@
 // ============================================================
 using System.Collections.Generic;
 using UnityEngine;
+using Crunchies.ScriptableObjects;
+
 
 namespace Crunchies.QuestSystem
 {
@@ -18,7 +20,11 @@ namespace Crunchies.QuestSystem
             quest.questId = id;
             quest.questName = $"Gather {amount} {itemName}";
             quest.description = $"Collect {amount} {itemName} and bring them back.";
-            quest.objectives.Add(new GatherObjective(itemId, itemName, amount));
+
+            ItemDataSO itemData = ScriptableObject.CreateInstance<ItemDataSO>();
+            itemData.itemId = itemId;
+            itemData.itemName = itemName;
+            quest.objectives.Add(new GatherObjective(itemData, amount));
             return quest;
         }
 
@@ -29,7 +35,11 @@ namespace Crunchies.QuestSystem
             quest.questName = $"Hunt {count} {enemyName}";
             quest.description = $"Kill {count} {enemyName} in the area.";
             quest.xpReward = count * 25;
-            quest.objectives.Add(new KillObjective(enemyId, enemyName, count));
+
+            EnemyDataSO enemyData = ScriptableObject.CreateInstance<EnemyDataSO>();
+            enemyData.characterId = enemyId;
+            enemyData.characterName = enemyName;
+            quest.objectives.Add(new KillObjective(enemyData, count));
             return quest;
         }
 
@@ -51,8 +61,16 @@ namespace Crunchies.QuestSystem
             quest.questName = $"Escort {npcName}";
             quest.description = $"Bring {npcName} safely to {destName}";
             quest.xpReward = 200;
-            quest.objectives.Add(new EscortObjective(npcId, npcName));
-            quest.objectives.Add(new ReachLocationObjective(destId, destName));
+
+            NpcDataSO npcDataSO = ScriptableObject.CreateInstance<NpcDataSO>();
+            npcDataSO.characterId = npcId;
+            npcDataSO.characterName = npcName;
+            quest.objectives.Add(new EscortObjective(npcDataSO));
+
+            LocationDataSO locationDataSO = ScriptableObject.CreateInstance<LocationDataSO>();
+            locationDataSO.locationId = destId;
+            locationDataSO.locationName = destName;
+            quest.objectives.Add(new ReachLocationObjective(locationDataSO));
             return quest;
         }
 
@@ -67,14 +85,18 @@ namespace Crunchies.QuestSystem
             return quest;
         }
 
-        public static QuestSO CreateCraftQuest(string id, string recipeId, string itemName, int count)
+        public static QuestSO CreateCraftQuest(string id, string itemId, string itemName, int count)
         {
             QuestSO quest = ScriptableObject.CreateInstance<QuestSO>();
             quest.questId = id;
             quest.questName = $"Craft {count} {itemName}";
             quest.description = $"Use crafting table to make {count} {itemName}";
             quest.xpReward = count * 30;
-            quest.objectives.Add(new CraftObjective(recipeId, itemName, count));
+
+            ItemDataSO itemDataSO = ScriptableObject.CreateInstance<ItemDataSO>();
+            itemDataSO.itemId = itemId;
+            itemDataSO.itemName = itemName;
+            quest.objectives.Add(new CraftObjective(itemDataSO, count));
             return quest;
         }
 
@@ -85,7 +107,11 @@ namespace Crunchies.QuestSystem
             quest.questName = $"Reach {locationName}";
             quest.description = $"Travel to {locationName}.";
             quest.xpReward = 150;
-            quest.objectives.Add(new ReachLocationObjective(locationId, locationName));
+
+            LocationDataSO locationDataSO = ScriptableObject.CreateInstance<LocationDataSO>();
+            locationDataSO.locationId = locationId;
+            locationDataSO.locationName = locationName;
+            quest.objectives.Add(new ReachLocationObjective(locationDataSO));
             return quest;
         }
 
@@ -100,9 +126,21 @@ namespace Crunchies.QuestSystem
             quest.description = "Hunt wolves, gather wood, and report to the outpost";
             quest.xpReward = 500;
             quest.goldReward = 50;
-            quest.objectives.Add(new KillObjective("wolf", "Wolves", 3));
-            quest.objectives.Add(new GatherObjective("wood", "Wood", 5));
-            quest.objectives.Add(new ReachLocationObjective("outpost_north", "Northern Outpost"));
+
+            EnemyDataSO enemyDataSO = ScriptableObject.CreateInstance<EnemyDataSO>();
+            enemyDataSO.characterId = "wolf";
+            enemyDataSO.characterName = "Wolves";
+            quest.objectives.Add(new KillObjective(enemyDataSO, 3));
+
+            ItemDataSO itemDataSO = ScriptableObject.CreateInstance<ItemDataSO>();
+            itemDataSO.itemId = "wood";
+            itemDataSO.itemName = "Wood";
+            quest.objectives.Add(new GatherObjective(itemDataSO, 5));
+
+            LocationDataSO locationDataSO = ScriptableObject.CreateInstance<LocationDataSO>();
+            locationDataSO.locationId = "outpost_north";
+            locationDataSO.locationName = "Northern Outpost";
+            quest.objectives.Add(new ReachLocationObjective(locationDataSO));
             return quest;
         }
 
@@ -114,7 +152,7 @@ namespace Crunchies.QuestSystem
                 1 => CreateGatherQuest("gather_wood", "wood", "Wood", 5),
                 2 => CreateKillQuest("kill_wolf", "wolf", "Wolves", 3),
                 3 => CreateWalkQuest("walk_around", 100f),
-                4 => CreateEscortQuest("escort_farmer", "farmer_john", "Farmer John", "farmhouse", "Farmhouse"),
+                4 => CreateEscortQuest("escort_farmer", "farmer_john", "Farmer John", "village_gate", "Village Gate"),
                 5 => CreateSurvivalQuest("survive_night", 60f),
                 6 => CreateCraftQuest("craft_potion", "potion_health", "Health Potion", 5),
                 7 => CreateReachLocationQuest("reach_village", "village_gate", "Village Gate"),

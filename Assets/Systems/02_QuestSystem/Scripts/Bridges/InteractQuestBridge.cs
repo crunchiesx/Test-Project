@@ -12,6 +12,7 @@
 //   └── InteractQuestBridge.cs  ← this file
 // ============================================================
 using Crunchies.Interfaces;
+using Crunchies.ScriptableObjects;
 using Crunchies.Utility;
 using UnityEngine;
 
@@ -20,8 +21,8 @@ namespace Crunchies.QuestSystem
     [RequireComponent(typeof(IInteractable))]
     public class InteractQuestBridge : MonoBehaviour
     {
-        [Tooltip("Must match the objectId set in InteractObjective")]
-        [SerializeField] private string objectId = "lever_01";
+        [Tooltip("Must match the ObjectDataSO set in InteractObjective")]
+        [SerializeField] private ObjectDataSO objectData;
 
         public IInteractable _interactable;
 
@@ -36,6 +37,6 @@ namespace Crunchies.QuestSystem
         private void OnEnable() => _interactable.OnInteract += HandleInteract;
         private void OnDisable() => _interactable.OnInteract -= HandleInteract;
 
-        private void HandleInteract() => QuestEvents.ObjectInteracted(objectId);
+        private void HandleInteract() => QuestEvents.ObjectInteracted(objectData.objectId);
     }
 }

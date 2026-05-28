@@ -6,6 +6,7 @@
 // Bridge: SurvivalTimeQuestBridge.cs
 // ============================================================
 using System;
+using UnityEngine;
 
 namespace Crunchies.QuestSystem
 {
@@ -31,5 +32,12 @@ namespace Crunchies.QuestSystem
             float remaining = requiredAmount - currentAmount;
             return $"Survive: {remaining:0}s remaining";
         }
+
+#if UNITY_EDITOR
+        public override void Validate()
+        {
+            description = $"Survive for {requiredAmount:0}s";
+        }
+#endif
     }
 }

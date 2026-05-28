@@ -7,6 +7,7 @@
 // ============================================================
 using System;
 using UnityEngine;
+using Crunchies.ScriptableObjects;
 
 namespace Crunchies.QuestSystem
 {
@@ -14,8 +15,7 @@ namespace Crunchies.QuestSystem
     public class InteractObjective : QuestObjective
     {
         [Header("Interact Objective")]
-        public string objectId = "lever_01";
-        public string objectDisplayName = "Ancient Lever";
+        [SerializeField] private ObjectDataSO objectData;
 
         /// <summary>
         /// If true, the same object only counts once even if used multiple times.
@@ -27,13 +27,12 @@ namespace Crunchies.QuestSystem
 
         public InteractObjective() { }
 
-        public InteractObjective(string objectId, string displayName, int count = 1, bool uniqueOnly = false)
+        public InteractObjective(ObjectDataSO objectData, int count = 1, bool uniqueOnly = false)
         {
-            this.objectId = objectId;
-            objectDisplayName = displayName;
+            this.objectData = objectData;
             this.uniqueOnly = uniqueOnly;
             requiredAmount = count;
-            description = $"Interact with {displayName} ({count}x)";
+            description = $"Interact with {objectData.objectName} ({count}x)";
         }
 
         protected override void OnRegisterListeners() => QuestEvents.OnObjectInteracted += OnObjectInteracted;
@@ -41,7 +40,7 @@ namespace Crunchies.QuestSystem
 
         private void OnObjectInteracted(string id)
         {
-            if (id != objectId) return;
+            if (id != objectData.objectId) return;
             if (uniqueOnly && _uniqueCount >= 1) return;
             _uniqueCount++;
             AddProgress(1);
@@ -49,6 +48,20 @@ namespace Crunchies.QuestSystem
 
         protected override void OnReset() => _uniqueCount = 0;
 
-        public override string GetProgressText() => $"{objectDisplayName}: {currentAmount:0} / {requiredAmount:0}";
+        public override string GetProgressText() => $"{objectData.objectName}: {currentAmount:0} / {requiredAmount:0}";
+
+
+#if UNITY_EDITOR
+        public override void Validate()
+        {
+            if (objectData == null)
+            {
+                base.Validate();
+                return;
+            }
+
+            description = $"Interact with {objectData.objectName} ({requiredAmount}x)";
+        }
+#endif
     }
 }

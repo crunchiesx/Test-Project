@@ -17,9 +17,9 @@ namespace Crunchies.QuestSystem
 
         public override void OnInspectorGUI()
         {
-            DrawPropertiesExcluding(serializedObject, "objectives");
-
             serializedObject.Update();
+
+            DrawPropertiesExcluding(serializedObject, "objectives");
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Objectives", EditorStyles.boldLabel);

@@ -16,6 +16,7 @@
 //   └── EnemyDeathQuestBridge.cs  ← this file
 // ============================================================
 using Crunchies.Components;
+using Crunchies.ScriptableObjects;
 using Crunchies.Utility;
 using UnityEngine;
 
@@ -24,8 +25,8 @@ namespace Crunchies.QuestSystem
     [RequireComponent(typeof(CharacterHealth))]
     public class EnemyDeathQuestBridge : MonoBehaviour
     {
-        [Tooltip("Must match the enemyId set in KillObjective.")]
-        [SerializeField] private string enemyId = "wolf";
+        [Tooltip("Must match the EnemyDataSO set in KillObjective.")]
+        [SerializeField] private EnemyDataSO enemyData;
 
         private CharacterHealth _health;
 
@@ -40,6 +41,6 @@ namespace Crunchies.QuestSystem
         private void OnEnable() => _health.OnDied += HandleDeath;
         private void OnDisable() => _health.OnDied -= HandleDeath;
 
-        private void HandleDeath() => QuestEvents.EnemyKilled(enemyId);
+        private void HandleDeath() => QuestEvents.EnemyKilled(enemyData.characterId);
     }
 }
