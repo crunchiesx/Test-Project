@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Crunchies.QuestSystem.QuestSO
   questId: escort_farmer
   questName: Escort Farmer John
-  description: Bring Farmer John safely to {destName}
+  description: Bring Farmer John safely to Village Gate
   xpReward: 0
   goldReward: 0
+  itemRewards: []
   objectives:
   - rid: 7217895356401451074
   - rid: 7217895356401451077
