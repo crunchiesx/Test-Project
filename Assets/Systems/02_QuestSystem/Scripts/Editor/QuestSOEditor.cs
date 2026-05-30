@@ -9,7 +9,7 @@ using Unity.VisualScripting;
 namespace Crunchies.QuestSystem
 {
     [CustomEditor(typeof(QuestSO))]
-    public class QuestEditor : Editor
+    public class QuestSOEditor : Editor
     {
         private static readonly List<Type> ObjectiveTypes = AppDomain.CurrentDomain
             .GetAssemblies()
