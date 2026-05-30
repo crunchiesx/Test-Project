@@ -17,7 +17,9 @@ MonoBehaviour:
   description: Bring Farmer John safely to Village Gate
   xpReward: 0
   goldReward: 0
-  itemRewards: []
+  itemRewards:
+  - item: {fileID: 11400000, guid: 4b3679ea8124b4943b2ca95bec1c3053, type: 2}
+    quantity: 5
   objectives:
   - rid: 7217895356401451074
   - rid: 7217895356401451077

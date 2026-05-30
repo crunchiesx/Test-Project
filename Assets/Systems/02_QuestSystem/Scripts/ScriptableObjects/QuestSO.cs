@@ -25,7 +25,7 @@ namespace Crunchies.QuestSystem
 
         public int Quantity
         {
-            get => quantity;
+            readonly get => quantity;
             set => quantity = Mathf.Max(1, value);
         }
 
