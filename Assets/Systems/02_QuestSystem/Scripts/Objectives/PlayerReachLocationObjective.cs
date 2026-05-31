@@ -12,14 +12,14 @@ using UnityEngine;
 namespace Crunchies.QuestSystem
 {
     [Serializable]
-    public class ReachLocationObjective : QuestObjective
+    public class PlayerReachLocationObjective : QuestObjective
     {
         [Header("Reach Objective")]
         [SerializeField] private LocationDataSO locationData;
 
-        public ReachLocationObjective() { }
+        public PlayerReachLocationObjective() { }
 
-        public ReachLocationObjective(LocationDataSO locationData)
+        public PlayerReachLocationObjective(LocationDataSO locationData)
         {
             this.locationData = locationData;
             requiredAmount = 1;

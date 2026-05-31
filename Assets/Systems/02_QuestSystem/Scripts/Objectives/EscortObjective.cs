@@ -7,6 +7,7 @@
 // ============================================================
 using System;
 using Crunchies.ScriptableObjects;
+using Crunchies.Utility;
 using UnityEngine;
 
 namespace Crunchies.QuestSystem
@@ -16,22 +17,27 @@ namespace Crunchies.QuestSystem
     {
         [Header("Escort Objective")]
         [SerializeField] private NpcDataSO npcData;
+        [SerializeField] private LocationDataSO locationData;
 
         public EscortObjective() { }
 
-        public EscortObjective(NpcDataSO npcData)
+        public EscortObjective(NpcDataSO npcData, LocationDataSO locationData)
         {
             this.npcData = npcData;
+            this.locationData = locationData;
             requiredAmount = 1;
-            description = $"Escort {npcData.characterName} to safety";
+            description = $"Escort {npcData.characterName} to {locationData.locationName}";
         }
 
         protected override void OnRegisterListeners() => QuestEvents.OnNpcReachedDestination += OnNpcArrived;
         protected override void OnUnregisterListeners() => QuestEvents.OnNpcReachedDestination -= OnNpcArrived;
 
-        private void OnNpcArrived(string id)
+        private void OnNpcArrived(CharacterDataSO charData, LocationDataSO locData)
         {
-            if (id == npcData.characterId) AddProgress(1);
+            if (charData.characterId != npcData.characterId) return;
+            if (locData.locationId != locationData.locationId) return;
+
+            AddProgress(1);
         }
 
         public override string GetProgressText() => IsCompleted ? $"{npcData.characterName}: Safe!" : $"Escorting {npcData.characterName}...";
@@ -39,13 +45,13 @@ namespace Crunchies.QuestSystem
 #if UNITY_EDITOR
         public override void Validate()
         {
-            if (npcData == null)
+            if (npcData == null && locationData == null)
             {
                 base.Validate();
                 return;
             }
 
-            description = $"Escort {npcData.characterName} to safety";
+            description = $"Escort {(npcData == null ? "???" : npcData.characterName)} to {(locationData == null ? "???" : locationData.locationName)}";
         }
 #endif
     }

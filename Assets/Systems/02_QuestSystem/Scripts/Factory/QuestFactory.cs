@@ -65,12 +65,12 @@ namespace Crunchies.QuestSystem
             NpcDataSO npcDataSO = ScriptableObject.CreateInstance<NpcDataSO>();
             npcDataSO.characterId = npcId;
             npcDataSO.characterName = npcName;
-            quest.objectives.Add(new EscortObjective(npcDataSO));
 
             LocationDataSO locationDataSO = ScriptableObject.CreateInstance<LocationDataSO>();
             locationDataSO.locationId = destId;
             locationDataSO.locationName = destName;
-            quest.objectives.Add(new ReachLocationObjective(locationDataSO));
+
+            quest.objectives.Add(new EscortObjective(npcDataSO, locationDataSO));
             return quest;
         }
 
@@ -111,7 +111,7 @@ namespace Crunchies.QuestSystem
             LocationDataSO locationDataSO = ScriptableObject.CreateInstance<LocationDataSO>();
             locationDataSO.locationId = locationId;
             locationDataSO.locationName = locationName;
-            quest.objectives.Add(new ReachLocationObjective(locationDataSO));
+            quest.objectives.Add(new PlayerReachLocationObjective(locationDataSO));
             return quest;
         }
 
@@ -140,7 +140,7 @@ namespace Crunchies.QuestSystem
             LocationDataSO locationDataSO = ScriptableObject.CreateInstance<LocationDataSO>();
             locationDataSO.locationId = "outpost_north";
             locationDataSO.locationName = "Northern Outpost";
-            quest.objectives.Add(new ReachLocationObjective(locationDataSO));
+            quest.objectives.Add(new PlayerReachLocationObjective(locationDataSO));
             return quest;
         }
 

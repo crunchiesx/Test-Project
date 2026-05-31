@@ -607,6 +607,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8abea721cc278c42b623a681a2a168d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Crunchies.AI.NpcController
+  agentData: {fileID: 11400000, guid: 2221b1061b191c244be7ac504ff158de, type: 2}
   stoppingDistance: 5
   minMoveTime: 0.5
   maxMoveTime: 1.5
@@ -3873,6 +3874,7 @@ GameObject:
   m_Component:
   - component: {fileID: 782601969}
   - component: {fileID: 782601971}
+  - component: {fileID: 782601972}
   - component: {fileID: 782601970}
   m_Layer: 0
   m_Name: NorthernOutpost
@@ -3931,7 +3933,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Crunchies.QuestSystem.LocationReachedQuestBridge
   locationData: {fileID: 11400000, guid: 9d4728a16654acd419e851d52ad76e51, type: 2}
-  triggerOnce: 1
+  triggerOnceForPlayer: 1
+--- !u!114 &782601972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 782601968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32d0de50168f9d849b2ca674ac325492, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Crunchies.QuestSystem.NpcArrivalQuestBridge
+  locationData: {fileID: 11400000, guid: 9d4728a16654acd419e851d52ad76e51, type: 2}
 --- !u!1 &792283555
 GameObject:
   m_ObjectHideFlags: 0
@@ -5351,6 +5366,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1105732161}
   - component: {fileID: 1105732163}
+  - component: {fileID: 1105732164}
   - component: {fileID: 1105732162}
   m_Layer: 0
   m_Name: VillageGate
@@ -5409,7 +5425,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Crunchies.QuestSystem.LocationReachedQuestBridge
   locationData: {fileID: 11400000, guid: b40bbeafb72c9db4888907b4cd2812b7, type: 2}
-  triggerOnce: 1
+  triggerOnceForPlayer: 1
+--- !u!114 &1105732164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1105732160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32d0de50168f9d849b2ca674ac325492, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Crunchies.QuestSystem.NpcArrivalQuestBridge
+  locationData: {fileID: 11400000, guid: b40bbeafb72c9db4888907b4cd2812b7, type: 2}
 --- !u!1 &1112374974
 GameObject:
   m_ObjectHideFlags: 0

@@ -21,20 +21,14 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: 4b3679ea8124b4943b2ca95bec1c3053, type: 2}
     quantity: 5
   objectives:
-  - rid: 7217895356401451074
-  - rid: 7217895356401451077
+  - rid: 7217895423478857791
   references:
     version: 2
     RefIds:
-    - rid: 7217895356401451074
+    - rid: 7217895423478857791
       type: {class: EscortObjective, ns: Crunchies.QuestSystem, asm: Assembly-CSharp}
       data:
-        description: Escort Farmer John to safety
+        description: Escort Farmer John to Village Gate
         requiredAmount: 1
         npcData: {fileID: 11400000, guid: 2221b1061b191c244be7ac504ff158de, type: 2}
-    - rid: 7217895356401451077
-      type: {class: ReachLocationObjective, ns: Crunchies.QuestSystem, asm: Assembly-CSharp}
-      data:
-        description: 'Reach: Village Gate'
-        requiredAmount: 1
         locationData: {fileID: 11400000, guid: b40bbeafb72c9db4888907b4cd2812b7, type: 2}

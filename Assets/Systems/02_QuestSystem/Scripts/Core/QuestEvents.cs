@@ -6,6 +6,7 @@
 // Any system fires an event; objectives listen.
 // ============================================================
 using System;
+using Crunchies.ScriptableObjects;
 using Crunchies.Utility;
 
 namespace Crunchies.QuestSystem
@@ -108,11 +109,11 @@ namespace Crunchies.QuestSystem
         }
 
         // Escort
-        public static event Action<string> OnNpcReachedDestination;
-        public static void NpcReachDestination(string npcId)
+        public static event Action<CharacterDataSO, LocationDataSO> OnNpcReachedDestination;
+        public static void NpcReachDestination(CharacterDataSO characterData, LocationDataSO locationData)
         {
-            Log.Info("[EVENT] NPC Reached Destination: " + npcId);
-            OnNpcReachedDestination?.Invoke(npcId);
+            Log.Info("[EVENT] NPC Reached Destination: " + characterData.characterId + " @ " + locationData.locationId);
+            OnNpcReachedDestination?.Invoke(characterData, locationData);
         }
 
         // Survival

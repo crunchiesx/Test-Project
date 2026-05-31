@@ -11,12 +11,13 @@
 //   └── QuestGiver.cs          ← this file
 // ============================================================
 using System;
+using Crunchies.Interfaces;
 using Crunchies.Utility;
 using UnityEngine;
 
 namespace Crunchies.QuestSystem
 {
-    public class QuestGiver : MonoBehaviour
+    public class QuestGiver : MonoBehaviour, IInteractable
     {
         [Tooltip("Drag a Quest ScriptableObject here. If empty, questType is used instead.")]
         [SerializeField] private QuestSO questAsset;
@@ -25,6 +26,8 @@ namespace Crunchies.QuestSystem
         [SerializeField] private QuestType questType = QuestType.Gather;
 
         private bool _isGiven;
+
+        public event Action OnInteract;
 
         // Called by your dialogue system, or auto-triggered on player proximity.
         public void GiveQuest()
@@ -54,5 +57,10 @@ namespace Crunchies.QuestSystem
             QuestType.Compound => QuestFactory.CreateRangersErrand(),
             _ => null
         };
+
+        public void Interact()
+        {
+            GiveQuest();
+        }
     }
 }

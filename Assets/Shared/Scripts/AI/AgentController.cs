@@ -1,5 +1,6 @@
 using System;
 using Crunchies.PlayerSystem;
+using Crunchies.ScriptableObjects;
 using Crunchies.Utility;
 using UnityEngine;
 using UnityEngine.AI;
@@ -7,9 +8,10 @@ using UnityEngine.AI;
 namespace Crunchies.AI
 {
     [RequireComponent(typeof(NavMeshAgent))]
-    public class NpcController : MonoBehaviour
+    public class AgentController : MonoBehaviour
     {
-        public event Action OnDestinationReached;
+        [Header("Temporary Data")]
+        [SerializeField] private CharacterDataSO agentData;
 
         [Header("Navigation")]
         [SerializeField] private float stoppingDistance = 3f;
@@ -20,6 +22,8 @@ namespace Crunchies.AI
 
         [Header("Patrol")]
         [SerializeField] private float patrolRadius = 7f;
+
+        public CharacterDataSO AgentData => agentData;
 
         private float _moveTime;
 

@@ -11,13 +11,13 @@ namespace Crunchies.InputActions
 
         public event Action OnUIQuestAction;
         public event Action OnUIEscapeAction;
+        public event Action OnPlayerInteractAction;
 
         public event Action<Vector2> OnPlayerMovementAction;
         public event Action<Vector2> OnPlayerLookAction;
 
         public event Action<bool> OnPlayerJumpAction;
         public event Action<bool> OnPlayerSprintAction;
-        public event Action<bool> OnPlayerInteractAction;
         public event Action<bool> OnPlayerAttackAction;
 
         public Vector2 MoveInput { get; private set; }
@@ -143,17 +143,13 @@ namespace Crunchies.InputActions
             OnPlayerSprintAction?.Invoke(SprintInput);
         }
 
-        private void HandlePlayerInteract(InputAction.CallbackContext ctx)
-        {
-            InteractInput = ctx.ReadValueAsButton();
-            OnPlayerInteractAction?.Invoke(InteractInput);
-        }
-
         private void HandlePlayerAttack(InputAction.CallbackContext ctx)
         {
             AttackInput = ctx.ReadValueAsButton();
             OnPlayerAttackAction?.Invoke(AttackInput);
         }
+
+        private void HandlePlayerInteract(InputAction.CallbackContext _) => OnPlayerInteractAction?.Invoke();
 
         private void HandleUIQuest(InputAction.CallbackContext _) => OnUIQuestAction?.Invoke();
         private void HandleUIEscape(InputAction.CallbackContext _) => OnUIEscapeAction?.Invoke();

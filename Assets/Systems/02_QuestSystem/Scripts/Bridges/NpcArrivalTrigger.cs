@@ -17,27 +17,20 @@ using UnityEngine;
 
 namespace Crunchies.QuestSystem
 {
-    [RequireComponent(typeof(NpcController))]
-    public class NpcArrivalQuestBridge : MonoBehaviour
+    public class NpcArrivalTrigger : MonoBehaviour
     {
-        [Tooltip("Must match the NpcDataSO set in EscortObjective.")]
-        [SerializeField] private NpcDataSO npcData;
-        private NpcController _controller;
+        [Tooltip("Must match the locationData set in EscortObjective.")]
+        [SerializeField] private LocationDataSO locationData;
 
-        private void Awake()
+        private void OnTriggerEnter(Collider other)
         {
-            if (!TryGetComponent(out _controller))
-            {
-                Log.MissingComponent<NpcController>(this);
-            }
+            if (!other.transform.TryGetComponent(out AgentController controller)) return;
+            HandleArrival(controller.AgentData);
         }
 
-        private void OnEnable() => _controller.OnDestinationReached += HandleArrival;
-        private void OnDisable() => _controller.OnDestinationReached -= HandleArrival;
-
-        private void HandleArrival()
+        private void HandleArrival(CharacterDataSO characterData)
         {
-            QuestEvents.NpcReachDestination(npcData.characterId);
+            QuestEvents.NpcReachDestination(characterData, locationData);
         }
     }
 }

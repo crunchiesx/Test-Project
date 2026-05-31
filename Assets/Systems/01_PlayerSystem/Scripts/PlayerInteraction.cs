@@ -28,10 +28,8 @@ namespace Crunchies.PlayerSystem
             }
         }
 
-        private void Interact(bool isInteracting)
+        private void Interact()
         {
-            if (!isInteracting) return;
-
             if (Physics.Raycast(interactTransform.position, interactTransform.forward, out RaycastHit hit, interactRange))
             {
                 if (hit.collider.TryGetComponent(out IInteractable interactable))

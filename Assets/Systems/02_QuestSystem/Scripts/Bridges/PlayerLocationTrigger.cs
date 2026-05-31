@@ -13,22 +13,23 @@
 // ============================================================
 using Crunchies.PlayerSystem;
 using Crunchies.ScriptableObjects;
+using Crunchies.AI;
 using UnityEngine;
 
 namespace Crunchies.QuestSystem
 {
-    public class LocationReachedQuestBridge : MonoBehaviour
+    public class PlayerLocationTrigger : MonoBehaviour
     {
         [Tooltip("Must match the LocationDataSO set in ReachedLocationObjective")]
         [SerializeField] private LocationDataSO locationData;
-        [SerializeField] private bool triggerOnce = true;
+        [SerializeField] private bool triggerOnceForPlayer = true;
 
-        private bool _triggered = false;
+        private bool _hasBeenTriggeredByPlayer = false;
 
         private void OnTriggerEnter(Collider other)
         {
-            if (_triggered || !other.transform.TryGetComponent<Player>(out _)) return;
-            if (triggerOnce) _triggered = true;
+            if (_hasBeenTriggeredByPlayer || !other.transform.TryGetComponent<Player>(out _)) return;
+            if (triggerOnceForPlayer) _hasBeenTriggeredByPlayer = true;
             QuestEvents.LocationReached(locationData.locationId);
         }
     }
