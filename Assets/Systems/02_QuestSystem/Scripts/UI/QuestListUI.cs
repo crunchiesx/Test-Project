@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace Crunchies.QuestSystem
 {
-    public class QuestUI : UIPanel
+    public class QuestListUI : UIPanel
     {
         [Header("References")]
         [SerializeField] private Transform questLogParent;

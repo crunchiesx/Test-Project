@@ -8,7 +8,7 @@ namespace Crunchies.QuestSystem
     public class GameMenuController : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] private QuestUI questUI;
+        [SerializeField] private QuestListUI questUI;
 
         private void OnEnable()
         {
@@ -32,7 +32,7 @@ namespace Crunchies.QuestSystem
         {
             if (questUI == null)
             {
-                Log.MissingReference<QuestUI>(this);
+                Log.MissingReference<QuestListUI>(this);
             }
 
             if (questUI.IsOpen)

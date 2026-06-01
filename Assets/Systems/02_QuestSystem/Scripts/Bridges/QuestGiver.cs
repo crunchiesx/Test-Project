@@ -19,31 +19,52 @@ namespace Crunchies.QuestSystem
 {
     public class QuestGiver : MonoBehaviour, IInteractable
     {
+        public static event Action<QuestGiver> OnQuestOffered;
+
+        public event Action OnInteract;
+
         [Tooltip("Drag a Quest ScriptableObject here. If empty, questType is used instead.")]
         [SerializeField] private QuestSO questAsset;
 
         [Header("Fallback - used when no asset is assigned")]
         [SerializeField] private QuestType questType = QuestType.Gather;
 
+        public QuestSO QuestAsset => questAsset;
+
         private bool _isGiven;
 
-        public event Action OnInteract;
+        private void Awake()
+        {
+            if (questAsset == null)
+            {
+                questAsset = BuildFromType();
+
+                if (questAsset == null)
+                {
+                    Log.Warning("[QuestGiver] No quest configured.", this);
+                    return;
+                }
+            }
+        }
 
         // Called by your dialogue system, or auto-triggered on player proximity.
         public void GiveQuest()
         {
             if (_isGiven) return;
 
-            QuestSO quest = questAsset != null ? questAsset : BuildFromType();
+            bool accepted = QuestManager.Instance.AcceptQuest(questAsset);
 
-            if (quest == null)
+            if (accepted) _isGiven = true;
+        }
+
+        public void Interact()
+        {
+            if (!_isGiven)
             {
-                Log.Warning("[QuestGiver] No quest configured.", this);
-                return;
+                OnQuestOffered?.Invoke(this);
             }
 
-            bool accepted = QuestManager.Instance.AcceptQuest(quest);
-            if (accepted) _isGiven = true;
+            OnInteract?.Invoke();
         }
 
         private QuestSO BuildFromType() => questType switch
@@ -57,10 +78,5 @@ namespace Crunchies.QuestSystem
             QuestType.Compound => QuestFactory.CreateRangersErrand(),
             _ => null
         };
-
-        public void Interact()
-        {
-            GiveQuest();
-        }
     }
 }
