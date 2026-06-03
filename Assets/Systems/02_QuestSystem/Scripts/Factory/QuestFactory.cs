@@ -17,9 +17,9 @@ namespace Crunchies.QuestSystem
         public static QuestSO CreateGatherQuest(string id, string itemId, string itemName, int amount)
         {
             QuestSO quest = ScriptableObject.CreateInstance<QuestSO>();
-            quest.questId = id;
-            quest.questName = $"Gather {amount} {itemName}";
-            quest.description = $"Collect {amount} {itemName} and bring them back.";
+            quest.QuestId = id;
+            quest.QuestName = $"Gather {amount} {itemName}";
+            quest.Description = $"Collect {amount} {itemName} and bring them back.";
 
             ItemDataSO itemData = ScriptableObject.CreateInstance<ItemDataSO>();
             itemData.itemId = itemId;
@@ -31,10 +31,10 @@ namespace Crunchies.QuestSystem
         public static QuestSO CreateKillQuest(string id, string enemyId, string enemyName, int count)
         {
             QuestSO quest = ScriptableObject.CreateInstance<QuestSO>();
-            quest.questId = id;
-            quest.questName = $"Hunt {count} {enemyName}";
-            quest.description = $"Kill {count} {enemyName} in the area.";
-            quest.xpReward = count * 25;
+            quest.QuestId = id;
+            quest.QuestName = $"Hunt {count} {enemyName}";
+            quest.Description = $"Kill {count} {enemyName} in the area.";
+            quest.ExpReward = count * 25;
 
             EnemyDataSO enemyData = ScriptableObject.CreateInstance<EnemyDataSO>();
             enemyData.characterId = enemyId;
@@ -46,10 +46,10 @@ namespace Crunchies.QuestSystem
         public static QuestSO CreateWalkQuest(string id, float distance, string unit = "m")
         {
             QuestSO quest = ScriptableObject.CreateInstance<QuestSO>();
-            quest.questId = id;
-            quest.questName = $"Walk {distance}{unit}";
-            quest.description = $"Travel {distance}{unit}.";
-            quest.xpReward = (int)(distance * 0.5f);
+            quest.QuestId = id;
+            quest.QuestName = $"Walk {distance}{unit}";
+            quest.Description = $"Travel {distance}{unit}.";
+            quest.ExpReward = (int)(distance * 0.5f);
             quest.objectives.Add(new WalkDistanceObjective(distance, unit));
             return quest;
         }
@@ -57,10 +57,10 @@ namespace Crunchies.QuestSystem
         public static QuestSO CreateEscortQuest(string id, string npcId, string npcName, string destId, string destName)
         {
             QuestSO quest = ScriptableObject.CreateInstance<QuestSO>();
-            quest.questId = id;
-            quest.questName = $"Escort {npcName}";
-            quest.description = $"Bring {npcName} safely to {destName}";
-            quest.xpReward = 200;
+            quest.QuestId = id;
+            quest.QuestName = $"Escort {npcName}";
+            quest.Description = $"Bring {npcName} safely to {destName}";
+            quest.ExpReward = 200;
 
             NpcDataSO npcDataSO = ScriptableObject.CreateInstance<NpcDataSO>();
             npcDataSO.characterId = npcId;
@@ -77,10 +77,10 @@ namespace Crunchies.QuestSystem
         public static QuestSO CreateSurvivalQuest(string id, float seconds)
         {
             QuestSO quest = ScriptableObject.CreateInstance<QuestSO>();
-            quest.questId = id;
-            quest.questName = $"Survive for {seconds:0}s";
-            quest.description = $"Stay alive for {seconds:0} seconds.";
-            quest.xpReward = 500;
+            quest.QuestId = id;
+            quest.QuestName = $"Survive for {seconds:0}s";
+            quest.Description = $"Stay alive for {seconds:0} seconds.";
+            quest.ExpReward = 500;
             quest.objectives.Add(new SurviveObjective(seconds));
             return quest;
         }
@@ -88,10 +88,10 @@ namespace Crunchies.QuestSystem
         public static QuestSO CreateCraftQuest(string id, string itemId, string itemName, int count)
         {
             QuestSO quest = ScriptableObject.CreateInstance<QuestSO>();
-            quest.questId = id;
-            quest.questName = $"Craft {count} {itemName}";
-            quest.description = $"Use crafting table to make {count} {itemName}";
-            quest.xpReward = count * 30;
+            quest.QuestId = id;
+            quest.QuestName = $"Craft {count} {itemName}";
+            quest.Description = $"Use crafting table to make {count} {itemName}";
+            quest.ExpReward = count * 30;
 
             ItemDataSO itemDataSO = ScriptableObject.CreateInstance<ItemDataSO>();
             itemDataSO.itemId = itemId;
@@ -103,10 +103,10 @@ namespace Crunchies.QuestSystem
         public static QuestSO CreateReachLocationQuest(string id, string locationId, string locationName)
         {
             QuestSO quest = ScriptableObject.CreateInstance<QuestSO>();
-            quest.questId = id;
-            quest.questName = $"Reach {locationName}";
-            quest.description = $"Travel to {locationName}.";
-            quest.xpReward = 150;
+            quest.QuestId = id;
+            quest.QuestName = $"Reach {locationName}";
+            quest.Description = $"Travel to {locationName}.";
+            quest.ExpReward = 150;
 
             LocationDataSO locationDataSO = ScriptableObject.CreateInstance<LocationDataSO>();
             locationDataSO.locationId = locationId;
@@ -121,11 +121,11 @@ namespace Crunchies.QuestSystem
         public static QuestSO CreateRangersErrand()
         {
             QuestSO quest = ScriptableObject.CreateInstance<QuestSO>();
-            quest.questId = "compound_rangers_errand";
-            quest.questName = "Ranger's Errand";
-            quest.description = "Hunt wolves, gather wood, and report to the outpost";
-            quest.xpReward = 500;
-            quest.goldReward = 50;
+            quest.QuestId = "compound_rangers_errand";
+            quest.QuestName = "Ranger's Errand";
+            quest.Description = "Hunt wolves, gather wood, and report to the outpost";
+            quest.ExpReward = 500;
+            quest.GoldReward = 50;
 
             EnemyDataSO enemyDataSO = ScriptableObject.CreateInstance<EnemyDataSO>();
             enemyDataSO.characterId = "wolf";

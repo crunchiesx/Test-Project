@@ -58,6 +58,14 @@ namespace Crunchies.QuestSystem
             OnObjectiveUpdated?.Invoke(objective);
         }
 
+        // Quest Offered
+        public static event Action<QuestGiver> OnQuestOffered;
+        public static void QuestOffered(QuestGiver giver)
+        {
+            Log.Info("[EVENT] Quest Offered: " + giver.QuestAsset.QuestName);
+            OnQuestOffered?.Invoke(giver);
+        }
+
         // ==== OBJECTIVE EVENTS ====
 
         // Item / Gathering

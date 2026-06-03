@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b92b24b053b80a4f8ff92b5f5f25dcb, type: 3}
   m_Name: Farmer_John_QuestSO
   m_EditorClassIdentifier: Assembly-CSharp::Crunchies.QuestSystem.QuestSO
-  questId: escort_farmer
-  questName: Escort Farmer John
-  description: Bring Farmer John safely to Village Gate
-  xpReward: 0
-  goldReward: 0
+  QuestId: escort_farmer
+  QuestName: Escort Farmer John
+  Description: Bring Farmer John safely to Village Gate
+  ExpReward: 0
+  GoldReward: 0
   itemRewards:
   - item: {fileID: 11400000, guid: 4b3679ea8124b4943b2ca95bec1c3053, type: 2}
     quantity: 5

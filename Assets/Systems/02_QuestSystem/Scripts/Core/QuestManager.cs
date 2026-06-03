@@ -106,15 +106,15 @@ namespace Crunchies.QuestSystem
         {
             if (questDefinition == null) return false;
 
-            if (_activeQuest.Any(q => q.QuestId == questDefinition.questId))
+            if (_activeQuest.Any(q => q.QuestId == questDefinition.QuestId))
             {
-                Log.Warning($"[QuestManager] Already active: {questDefinition.questName}");
+                Log.Warning($"[QuestManager] Already active: {questDefinition.QuestName}");
                 return false;
             }
 
-            if (_completedQuest.Any(q => q.QuestId == questDefinition.questId))
+            if (_completedQuest.Any(q => q.QuestId == questDefinition.QuestId))
             {
-                Log.Warning($"[QuestManager] Already completed: {questDefinition.questName}");
+                Log.Warning($"[QuestManager] Already completed: {questDefinition.QuestName}");
                 return false;
             }
 

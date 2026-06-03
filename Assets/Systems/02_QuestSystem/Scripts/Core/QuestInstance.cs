@@ -16,11 +16,11 @@ namespace Crunchies.QuestSystem
         public List<QuestObjective> Objectives { get; private set; }
         public QuestStatus Status { get; private set; } = QuestStatus.NotStarted;
 
-        public string QuestId => Definition.questId;
-        public string QuestName => Definition.questName;
-        public string Description => Definition.description;
-        public int XpReward => Definition.xpReward;
-        public int GoldReward => Definition.goldReward;
+        public string QuestId => Definition.QuestId;
+        public string QuestName => Definition.QuestName;
+        public string Description => Definition.Description;
+        public int XpReward => Definition.ExpReward;
+        public int GoldReward => Definition.GoldReward;
 
         public bool IsActive => Status == QuestStatus.Active;
         public bool IsCompleted => Status == QuestStatus.Completed;

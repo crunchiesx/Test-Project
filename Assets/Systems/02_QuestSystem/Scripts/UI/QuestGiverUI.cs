@@ -32,8 +32,8 @@ namespace Crunchies.QuestSystem
             declineButton.onClick.AddListener(() => Close());
         }
 
-        private void OnEnable() => QuestGiver.OnQuestOffered += OnQuestOffered;
-        private void OnDisable() => QuestGiver.OnQuestOffered -= OnQuestOffered;
+        private void OnEnable() => QuestEvents.OnQuestOffered += OnQuestOffered;
+        private void OnDisable() => QuestEvents.OnQuestOffered -= OnQuestOffered;
 
         private void OnQuestOffered(QuestGiver giver)
         {
@@ -44,8 +44,8 @@ namespace Crunchies.QuestSystem
 
         private void SetUpUI(QuestSO quest)
         {
-            titleText.text = quest.questName;
-            descriptionText.text = quest.description;
+            titleText.text = quest.QuestName;
+            descriptionText.text = quest.Description;
         }
     }
 }

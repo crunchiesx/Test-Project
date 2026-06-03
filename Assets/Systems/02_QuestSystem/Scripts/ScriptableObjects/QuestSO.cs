@@ -40,15 +40,15 @@ namespace Crunchies.QuestSystem
     public class QuestSO : ScriptableObject
     {
         [Header("Identity")]
-        public string questId;
-        public string questName = "Unnamed Quest";
+        public string QuestId;
+        public string QuestName = "Unnamed Quest";
 
         [TextArea]
-        public string description = "";
+        public string Description = "";
 
         [Header("Rewards")]
-        public int xpReward = 0;
-        public int goldReward = 0;
+        public int ExpReward = 0;
+        public int GoldReward = 0;
 
         [SerializeField] private List<ItemReward> itemRewards = new();
 

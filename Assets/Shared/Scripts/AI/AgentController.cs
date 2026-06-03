@@ -44,7 +44,7 @@ namespace Crunchies.AI
             _moveTime = UnityEngine.Random.Range(minMoveTime, maxMoveTime);
         }
 
-        private async void Update()
+        private void Update()
         {
             _moveTime = Mathf.Max(0f, _moveTime - Time.deltaTime);
 
@@ -69,10 +69,20 @@ namespace Crunchies.AI
             }
         }
 
-        private void SetFollowTarget(Transform target)
+        public void SetFollowTarget(Transform target = null)
         {
+            // If we had a target, but the new target is null, lock in the old target's position
+            if (_followTarget != null && target == null)
+            {
+                SetPatrolCenter(_followTarget.position);
+            }
+
             _followTarget = target;
         }
+
+        public void ClearFollowTarget() => SetFollowTarget();
+
+        private void SetPatrolCenter(Vector3 center) => _patrolCenter = center;
 
         private void OnDrawGizmosSelected()
         {

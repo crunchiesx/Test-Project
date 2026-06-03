@@ -14,13 +14,12 @@ using System;
 using Crunchies.Interfaces;
 using Crunchies.Utility;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Crunchies.QuestSystem
 {
     public class QuestGiver : MonoBehaviour, IInteractable
     {
-        public static event Action<QuestGiver> OnQuestOffered;
-
         public event Action OnInteract;
 
         [Tooltip("Drag a Quest ScriptableObject here. If empty, questType is used instead.")]
@@ -28,6 +27,10 @@ namespace Crunchies.QuestSystem
 
         [Header("Fallback - used when no asset is assigned")]
         [SerializeField] private QuestType questType = QuestType.Gather;
+
+        [Header("Events")]
+        [SerializeField] private UnityEvent OnQuestGiven = new();
+        [SerializeField] private UnityEvent OnQuestEnded = new();
 
         public QuestSO QuestAsset => questAsset;
 
@@ -47,6 +50,38 @@ namespace Crunchies.QuestSystem
             }
         }
 
+        private void OnEnable()
+        {
+            QuestEvents.OnQuestStarted += QuestGiven;
+            QuestEvents.OnQuestCompleted += QuestEnded;
+            QuestEvents.OnQuestFailed += QuestEnded;
+        }
+
+        private void OnDisable()
+        {
+            QuestEvents.OnQuestStarted -= QuestGiven;
+            QuestEvents.OnQuestCompleted -= QuestEnded;
+            QuestEvents.OnQuestFailed -= QuestEnded;
+        }
+
+        private void QuestGiven(QuestInstance instance)
+        {
+            if (instance.QuestId == questAsset.QuestId)
+            {
+                Log.Info("[QuestGiver] Quest Given: " + questAsset.QuestName);
+                OnQuestGiven?.Invoke();
+            }
+        }
+
+        private void QuestEnded(QuestInstance instance)
+        {
+            if (instance.QuestId == questAsset.QuestId)
+            {
+                Log.Info("[QuestGiver] Quest Updated: " + questAsset.QuestName);
+                OnQuestEnded?.Invoke();
+            }
+        }
+
         // Called by your dialogue system, or auto-triggered on player proximity.
         public void GiveQuest()
         {
@@ -61,7 +96,8 @@ namespace Crunchies.QuestSystem
         {
             if (!_isGiven)
             {
-                OnQuestOffered?.Invoke(this);
+                QuestEvents.QuestOffered(this);
+                return;
             }
 
             OnInteract?.Invoke();
