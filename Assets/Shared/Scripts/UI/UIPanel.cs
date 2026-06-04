@@ -14,6 +14,7 @@ namespace Crunchies.UI
 
         [Header("Base")]
         [SerializeField] private GameObject panel;
+        [SerializeField] private bool includeInList = true;
 
         public bool IsOpen => panel.activeSelf;
 
@@ -29,32 +30,38 @@ namespace Crunchies.UI
 
         public virtual void Open()
         {
-            ActivePanels.RemoveAll(panel => panel == null);
-
-            if (ActivePanels.Contains(this))
+            if (includeInList)
             {
-                ActivePanels.Remove(this);
-            }
+                ActivePanels.RemoveAll(panel => panel == null);
 
-            Log.Info("Panel Added!", this);
-            ActivePanels.Add(this);
-            OnPanelChange?.Invoke();
+                if (ActivePanels.Contains(this))
+                {
+                    ActivePanels.Remove(this);
+                }
+
+                Log.Info("Panel Added!", this);
+                ActivePanels.Add(this);
+                OnPanelChange?.Invoke();
+            }
 
             panel.SetActive(true);
         }
 
         public virtual void Close()
         {
-            if (ActivePanels.Contains(this))
+            if (includeInList)
             {
-                Log.Info("Panel Removed!", this);
-                ActivePanels.Remove(this);
-                OnPanelChange?.Invoke();
+                if (ActivePanels.Contains(this))
+                {
+                    Log.Info("Panel Removed!", this);
+                    ActivePanels.Remove(this);
+                    OnPanelChange?.Invoke();
+                }
+
+                ActivePanels.RemoveAll(panel => panel == null);
             }
 
             panel.SetActive(false);
-
-            ActivePanels.RemoveAll(panel => panel == null);
         }
     }
 }

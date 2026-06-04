@@ -1,5 +1,7 @@
+using System;
 using Crunchies.InputActions;
 using Crunchies.Interfaces;
+using Crunchies.Utility;
 using UnityEngine;
 
 namespace Crunchies.PlayerSystem
@@ -12,6 +14,8 @@ namespace Crunchies.PlayerSystem
 
     public class PlayerInteraction : MonoBehaviour
     {
+        public static event Action<bool> OnInteractionChanged;
+
         [Header("References")]
         [SerializeField] private Transform interactTransform;
 
@@ -19,6 +23,9 @@ namespace Crunchies.PlayerSystem
         [SerializeField] private InteractType interactType = InteractType.Raycast;
         [SerializeField] private float raycastRange = 1f;
         [SerializeField] private Vector3 boxZoneSize = new(1f, 1f, 1f);
+
+        private IInteractable currentInteractable;
+        private IInteractable previousInteractable;
 
         private readonly Collider[] _interactionHitBuffer = new Collider[64];
 
@@ -38,32 +45,49 @@ namespace Crunchies.PlayerSystem
             }
         }
 
-        private void Interact()
+        private void Update()
         {
             if (interactTransform == null) return;
 
-            IInteractable interactable = interactType switch
+            previousInteractable = currentInteractable;
+
+            currentInteractable = interactType switch
             {
                 InteractType.Raycast => PerformRaycast(),
                 InteractType.OverlapBox => PerformOverlapBox(),
                 _ => throw new System.NotImplementedException()
             };
 
-            interactable?.Interact();
+            if (currentInteractable != null && currentInteractable != previousInteractable)
+            {
+                OnInteractionChanged?.Invoke(true);
+            }
+            else if (currentInteractable == null && previousInteractable != null)
+            {
+                OnInteractionChanged?.Invoke(false);
+            }
+        }
+
+        private void Interact()
+        {
+            if (currentInteractable == null) return;
+            currentInteractable?.Interact();
         }
 
         private IInteractable PerformRaycast()
         {
             if (Physics.Raycast(interactTransform.position, interactTransform.forward, out RaycastHit hit, raycastRange))
             {
-                if (hit.collider != null)
+                Collider hitCollider = hit.collider;
+
+                if (hitCollider != null)
                 {
-                    if (hit.collider.TryGetComponent(out IInteractable interactable))
+                    if (hitCollider.TryGetComponent(out IInteractable interactable))
                     {
                         return interactable;
                     }
 
-                    interactable = hit.collider.GetComponentInParent<IInteractable>();
+                    interactable = hitCollider.GetComponentInParent<IInteractable>();
                     if (interactable != null)
                     {
                         return interactable;
@@ -77,7 +101,6 @@ namespace Crunchies.PlayerSystem
         private IInteractable PerformOverlapBox()
         {
             Vector3 halfExtents = boxZoneSize * 0.5f;
-            float maxSqrDistance = raycastRange * raycastRange;
             int hitCount = Physics.OverlapBoxNonAlloc
             (
                 interactTransform.position,
@@ -100,10 +123,9 @@ namespace Crunchies.PlayerSystem
 
                 if (interactable == null) continue;
 
-                Vector3 closestPoint = collider.ClosestPoint(interactTransform.position);
-                Vector3 directionToTarget = closestPoint - interactTransform.position;
+                Vector3 closestPoint = collider.ClosestPoint(transform.position);
+                Vector3 directionToTarget = closestPoint - transform.position;
                 float distance = directionToTarget.sqrMagnitude;
-                if (distance > maxSqrDistance) continue;
 
                 if (distance < closestDistance)
                 {
