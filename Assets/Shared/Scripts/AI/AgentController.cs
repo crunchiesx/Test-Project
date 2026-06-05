@@ -14,20 +14,22 @@ namespace Crunchies.AI
         [SerializeField] private CharacterDataSO agentData;
 
         [Header("Navigation")]
-        [SerializeField] private float stoppingDistance = 3f;
+        [SerializeField] private float followStopDistance = 5f;
+
+        [SerializeField][Min(1f)] private float patrolStopDistance = 1f;
 
         [Header("Movement")]
         [SerializeField] private float minMoveTime = 0.5f;
         [SerializeField] private float maxMoveTime = 1.5f;
 
         [Header("Patrol")]
-        [SerializeField] private float patrolRadius = 7f;
+        [SerializeField] private float patrolRadius = 5f;
 
         public CharacterDataSO AgentData => agentData;
 
         private float _moveTime;
 
-        private Transform _followTarget;
+        private Transform _currentFollowTarget;
         private Vector3 _patrolCenter;
 
         private NavMeshAgent _navAgent;
@@ -39,18 +41,20 @@ namespace Crunchies.AI
                 Log.MissingComponent<NavMeshAgent>(this);
             }
 
-            _navAgent.stoppingDistance = stoppingDistance;
+            _navAgent.stoppingDistance = _currentFollowTarget == null ? patrolStopDistance : followStopDistance;
             _patrolCenter = transform.position;
             _moveTime = UnityEngine.Random.Range(minMoveTime, maxMoveTime);
         }
 
         private void Update()
         {
-            _moveTime = Mathf.Max(0f, _moveTime - Time.deltaTime);
-
-            if (_followTarget == null)
+            if (_currentFollowTarget == null)
             {
-                if (_moveTime <= 0f && _navAgent.remainingDistance <= _navAgent.stoppingDistance)
+                if (IsAgentMoving()) return;
+
+                _moveTime = Mathf.Max(0f, _moveTime - Time.deltaTime);
+
+                if (_moveTime <= 0f && _navAgent.remainingDistance <= patrolStopDistance)
                 {
                     Vector2 randomOffset = UnityEngine.Random.insideUnitCircle * patrolRadius;
                     Vector3 patrolPosition = _patrolCenter + new Vector3(randomOffset.x, 0, randomOffset.y);
@@ -61,23 +65,46 @@ namespace Crunchies.AI
             }
             else
             {
-                if (_moveTime <= 0f && _navAgent.remainingDistance <= _navAgent.stoppingDistance)
+                _moveTime = Mathf.Max(0f, _moveTime - Time.deltaTime);
+
+                if (_moveTime <= 0f && _navAgent.remainingDistance <= followStopDistance)
                 {
-                    _navAgent.SetDestination(_followTarget.position);
+                    _navAgent.SetDestination(_currentFollowTarget.position);
                     _moveTime = UnityEngine.Random.Range(minMoveTime, maxMoveTime);
                 }
             }
         }
 
-        public void SetFollowTarget(Transform target = null)
+        private bool IsAgentMoving()
         {
-            // If we had a target, but the new target is null, lock in the old target's position
-            if (_followTarget != null && target == null)
+            if (_navAgent.pathPending)
             {
-                SetPatrolCenter(_followTarget.position);
+                return true;
             }
 
-            _followTarget = target;
+            if (_navAgent.remainingDistance > _navAgent.stoppingDistance)
+            {
+                return true;
+            }
+
+            if (_navAgent.hasPath && _navAgent.velocity.sqrMagnitude >= 0.15f)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public void SetFollowTarget(Transform target = null)
+        {
+            if (_currentFollowTarget != null && target == null)
+            {
+                SetPatrolCenter(_currentFollowTarget.position);
+            }
+
+            _navAgent.stoppingDistance = target == null ? patrolStopDistance : followStopDistance;
+
+            _currentFollowTarget = target;
         }
 
         public void ClearFollowTarget() => SetFollowTarget();
@@ -87,7 +114,11 @@ namespace Crunchies.AI
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z), stoppingDistance);
+            Gizmos.DrawWireSphere
+            (
+                new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z),
+                _navAgent != null ? _navAgent.stoppingDistance : _currentFollowTarget == null ? patrolStopDistance : followStopDistance
+            );
 
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere
