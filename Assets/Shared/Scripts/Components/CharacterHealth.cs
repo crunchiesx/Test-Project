@@ -5,10 +5,9 @@ using UnityEngine;
 
 namespace Crunchies.Components
 {
-    public class CharacterHealth : MonoBehaviour, IInteractable
+    public class CharacterHealth : MonoBehaviour
     {
         public event Action OnDied;
-        public event Action OnInteract;
 
         [SerializeField] private float maxHealth = 100f;
 
@@ -33,11 +32,6 @@ namespace Crunchies.Components
         {
             OnDied?.Invoke();
             Destroy(gameObject);
-        }
-
-        public void Interact()
-        {
-            OnInteract?.Invoke();
         }
     }
 }

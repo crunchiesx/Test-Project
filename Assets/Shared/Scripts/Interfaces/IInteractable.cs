@@ -8,5 +8,7 @@ namespace Crunchies.Interfaces
         public event Action OnInteract;
 
         public void Interact();
+        public bool IsInteractable();
+        public string GetInteractionPrompt() => "Press 'E' to interact.";
     }
 }

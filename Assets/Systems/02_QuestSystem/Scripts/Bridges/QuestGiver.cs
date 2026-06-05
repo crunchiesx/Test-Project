@@ -87,9 +87,10 @@ namespace Crunchies.QuestSystem
         {
             if (_isGiven) return;
 
-            bool accepted = QuestManager.Instance.AcceptQuest(questAsset);
-
-            if (accepted) _isGiven = true;
+            if (QuestManager.Instance.AcceptQuest(questAsset))
+            {
+                _isGiven = true;
+            }
         }
 
         public void Interact()
@@ -102,6 +103,10 @@ namespace Crunchies.QuestSystem
 
             OnInteract?.Invoke();
         }
+
+        public bool IsInteractable() => !_isGiven;
+
+        public string GetInteractionPrompt() => "Press 'E' to Accept Quest";
 
         private QuestSO BuildFromType() => questType switch
         {

@@ -25,10 +25,10 @@ namespace Crunchies.UI
             if (ActivePanels.Count == 0) return;
 
             UIPanel recentPanel = ActivePanels[^1];
-            recentPanel.Close();
+            recentPanel.ClosePanel();
         }
 
-        public virtual void Open()
+        public virtual void OpenPanel()
         {
             if (includeInList)
             {
@@ -47,7 +47,7 @@ namespace Crunchies.UI
             panel.SetActive(true);
         }
 
-        public virtual void Close()
+        public virtual void ClosePanel()
         {
             if (includeInList)
             {

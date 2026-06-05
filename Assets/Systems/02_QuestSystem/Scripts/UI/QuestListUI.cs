@@ -28,7 +28,7 @@ namespace Crunchies.QuestSystem
         {
             if (IsOpen)
             {
-                Close();
+                ClosePanel();
             }
         }
 
@@ -93,9 +93,9 @@ namespace Crunchies.QuestSystem
             }
         }
 
-        public override void Open()
+        public override void OpenPanel()
         {
-            base.Open();
+            base.OpenPanel();
             RefreshNoQuestLabel();
         }
     }

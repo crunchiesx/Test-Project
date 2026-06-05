@@ -37,17 +37,14 @@ namespace Crunchies.QuestSystem
 
             if (questUI.IsOpen)
             {
-                questUI.Close();
+                questUI.ClosePanel();
             }
             else
             {
-                questUI.Open();
+                questUI.OpenPanel();
             }
         }
 
-        private void OnUIEscapeAction()
-        {
-            UIPanel.CloseRecentActivePanel();
-        }
+        private void OnUIEscapeAction() => UIPanel.CloseRecentActivePanel();
     }
 }

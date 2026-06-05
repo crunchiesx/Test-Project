@@ -14,7 +14,7 @@ namespace Crunchies.PlayerSystem
 
     public class PlayerInteraction : MonoBehaviour
     {
-        public static event Action<bool> OnInteractionChanged;
+        public static event Action<bool, IInteractable> OnInteractionUpdate;
 
         [Header("References")]
         [SerializeField] private Transform interactTransform;
@@ -58,20 +58,27 @@ namespace Crunchies.PlayerSystem
                 _ => throw new System.NotImplementedException()
             };
 
-            if (currentInteractable != null && currentInteractable != previousInteractable)
-            {
-                OnInteractionChanged?.Invoke(true);
-            }
-            else if (currentInteractable == null && previousInteractable != null)
-            {
-                OnInteractionChanged?.Invoke(false);
-            }
+            EvaluateInteractionState();
         }
 
         private void Interact()
         {
             if (currentInteractable == null) return;
             currentInteractable?.Interact();
+        }
+
+        private void EvaluateInteractionState()
+        {
+            if (currentInteractable != null && currentInteractable != previousInteractable && currentInteractable.IsInteractable())
+            {
+                Log.Info($"Interaction started with: {currentInteractable}");
+                OnInteractionUpdate?.Invoke(true, currentInteractable);
+            }
+            else if (currentInteractable == null && previousInteractable != null)
+            {
+                Log.Info("Interaction ended.");
+                OnInteractionUpdate?.Invoke(false, currentInteractable);
+            }
         }
 
         private IInteractable PerformRaycast()

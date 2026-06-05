@@ -21,15 +21,15 @@ namespace Crunchies.QuestSystem
         {
             if (IsOpen)
             {
-                Close();
+                ClosePanel();
             }
 
             acceptButton.onClick.AddListener(() =>
             {
                 currentGiver.GiveQuest();
-                Close();
+                ClosePanel();
             });
-            declineButton.onClick.AddListener(() => Close());
+            declineButton.onClick.AddListener(() => ClosePanel());
         }
 
         private void OnEnable() => QuestEvents.OnQuestOffered += OnQuestOffered;
@@ -39,7 +39,7 @@ namespace Crunchies.QuestSystem
         {
             currentGiver = giver;
             SetUpUI(currentGiver.QuestAsset);
-            Open();
+            OpenPanel();
         }
 
         private void SetUpUI(QuestSO quest)
