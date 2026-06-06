@@ -7,6 +7,18 @@ using UnityEngine.AI;
 
 namespace Crunchies.AI
 {
+    public struct PatrolPoint
+    {
+        public bool valid;
+        public Vector3 point;
+
+        public PatrolPoint(bool valid, Vector3 point)
+        {
+            this.valid = valid;
+            this.point = point;
+        }
+    }
+
     [RequireComponent(typeof(NavMeshAgent))]
     public class AgentController : MonoBehaviour
     {
@@ -15,7 +27,6 @@ namespace Crunchies.AI
 
         [Header("Navigation")]
         [SerializeField] private float followStopDistance = 5f;
-
         [SerializeField][Min(1f)] private float patrolStopDistance = 1f;
 
         [Header("Movement")]
@@ -46,7 +57,7 @@ namespace Crunchies.AI
             _moveTime = UnityEngine.Random.Range(minMoveTime, maxMoveTime);
         }
 
-        private void Update()
+        private async void Update()
         {
             if (_currentFollowTarget == null)
             {
@@ -56,10 +67,18 @@ namespace Crunchies.AI
 
                 if (_moveTime <= 0f && _navAgent.remainingDistance <= patrolStopDistance)
                 {
-                    Vector2 randomOffset = UnityEngine.Random.insideUnitCircle * patrolRadius;
-                    Vector3 patrolPosition = _patrolCenter + new Vector3(randomOffset.x, 0, randomOffset.y);
+                    PatrolPoint patrolPoint = await GetValidPatrolPoint(_patrolCenter, patrolRadius);
 
-                    _navAgent.SetDestination(patrolPosition);
+                    if (patrolPoint.valid)
+                    {
+                        _navAgent.SetDestination(patrolPoint.point);
+
+                        if (UnityEngine.Random.value < 0.10f)
+                        {
+                            _patrolCenter = ClampCenterToNavMesh(patrolPoint.point, patrolRadius);
+                        }
+                    }
+
                     _moveTime = UnityEngine.Random.Range(minMoveTime + 1, maxMoveTime + 1);
                 }
             }
@@ -73,6 +92,59 @@ namespace Crunchies.AI
                     _moveTime = UnityEngine.Random.Range(minMoveTime, maxMoveTime);
                 }
             }
+        }
+
+        private async Awaitable<PatrolPoint> GetValidPatrolPoint(Vector3 center, float radius)
+        {
+            int attempts = 0;
+            int maxAttempts = 10;
+
+            while (attempts < maxAttempts)
+            {
+                attempts++;
+
+                Vector2 randomOffset = UnityEngine.Random.insideUnitCircle * radius;
+                Vector3 targetPosition = center + new Vector3(randomOffset.x, 0, randomOffset.y);
+
+                if (NavMesh.SamplePosition(targetPosition, out NavMeshHit hit, radius, NavMesh.AllAreas))
+                {
+                    return new PatrolPoint(true, hit.position);
+                }
+
+                await Awaitable.NextFrameAsync();
+            }
+
+            return new PatrolPoint(false, center);
+        }
+
+        private Vector3 ClampCenterToNavMesh(Vector3 desiredCenter, float radius = 5f)
+        {
+            if (!NavMesh.SamplePosition(desiredCenter, out NavMeshHit centerHit, radius, NavMesh.AllAreas))
+            {
+                return desiredCenter;
+            }
+
+            Vector3 clampedCenter = centerHit.position;
+
+            if (NavMesh.FindClosestEdge(clampedCenter, out NavMeshHit edgeHit, NavMesh.AllAreas))
+            {
+                float distanceToEdge = edgeHit.distance;
+
+                if (distanceToEdge < radius)
+                {
+                    float pullback = radius - distanceToEdge;
+
+                    Vector3 directionAwayFromEdge = (clampedCenter - edgeHit.position).normalized;
+                    clampedCenter += directionAwayFromEdge * pullback;
+
+                    if (NavMesh.SamplePosition(clampedCenter, out NavMeshHit resnappedHit, radius, NavMesh.AllAreas))
+                    {
+                        clampedCenter = resnappedHit.position;
+                    }
+                }
+            }
+
+            return clampedCenter;
         }
 
         private bool IsAgentMoving()
@@ -121,12 +193,7 @@ namespace Crunchies.AI
             );
 
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere
-            (
-                _patrolCenter == Vector3.zero ?
-                new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z) :
-                new Vector3(_patrolCenter.x, _patrolCenter.y - 1f, _patrolCenter.z), patrolRadius
-            );
+            Gizmos.DrawWireSphere(_patrolCenter == Vector3.zero ? transform.position : _patrolCenter, patrolRadius);
         }
     }
 }
