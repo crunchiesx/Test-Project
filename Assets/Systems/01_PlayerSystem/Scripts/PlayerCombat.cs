@@ -62,10 +62,20 @@ namespace Crunchies.PlayerSystem
             }
         }
 
-        private void OnDrawGizmosSelected()
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(attackTransform.position, attackRange);
+            GameObject selected = UnityEditor.Selection.activeGameObject;
+
+            if (selected != null)
+            {
+                if (selected == gameObject || selected.transform.IsChildOf(transform))
+                {
+                    Gizmos.color = Color.red;
+                    Gizmos.DrawWireSphere(attackTransform.position, attackRange);
+                }
+            }
         }
+#endif
     }
 }

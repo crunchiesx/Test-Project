@@ -17,17 +17,43 @@ namespace Crunchies.PlayerSystem
         public static event Action<bool, IInteractable> OnInteractionUpdate;
 
         [Header("References")]
-        [SerializeField] private Transform interactTransform;
+        [SerializeField] private Transform interactionPivot;
+        [SerializeField] private Transform raycastInteraction;
+        [SerializeField] private Transform overlapBoxInteraction;
 
         [Header("Interaction Settings")]
         [SerializeField] private InteractType interactType = InteractType.Raycast;
         [SerializeField] private float raycastRange = 1f;
         [SerializeField] private Vector3 boxZoneSize = new(1f, 1f, 1f);
+        [Space]
+        [SerializeField] private float pivotRotationSpeed = 5f;
 
         private IInteractable currentInteractable;
         private IInteractable previousInteractable;
 
         private readonly Collider[] _interactionHitBuffer = new Collider[64];
+
+        private void Awake()
+        {
+            if (interactionPivot == null)
+            {
+                Log.MissingReference<Transform>(this);
+            }
+
+            if (raycastInteraction == null && overlapBoxInteraction == null)
+            {
+                Log.MissingReference<Transform>(this);
+            }
+
+            if (raycastInteraction == null)
+            {
+                interactType = InteractType.OverlapBox;
+            }
+            else if (overlapBoxInteraction == null)
+            {
+                interactType = InteractType.Raycast;
+            }
+        }
 
         private void OnEnable()
         {
@@ -47,7 +73,7 @@ namespace Crunchies.PlayerSystem
 
         private void Update()
         {
-            if (interactTransform == null) return;
+            SyncPivotToCameraYaw();
 
             previousInteractable = currentInteractable;
 
@@ -83,7 +109,7 @@ namespace Crunchies.PlayerSystem
 
         private IInteractable PerformRaycast()
         {
-            if (Physics.Raycast(interactTransform.position, interactTransform.forward, out RaycastHit hit, raycastRange))
+            if (Physics.Raycast(raycastInteraction.position, raycastInteraction.forward, out RaycastHit hit, raycastRange))
             {
                 Collider hitCollider = hit.collider;
 
@@ -110,10 +136,10 @@ namespace Crunchies.PlayerSystem
             Vector3 halfExtents = boxZoneSize * 0.5f;
             int hitCount = Physics.OverlapBoxNonAlloc
             (
-                interactTransform.position,
+                overlapBoxInteraction.position,
                 halfExtents,
                 _interactionHitBuffer,
-                interactTransform.rotation
+                overlapBoxInteraction.rotation
             );
 
             IInteractable closest = null;
@@ -144,21 +170,43 @@ namespace Crunchies.PlayerSystem
             return closest;
         }
 
-        private void OnDrawGizmosSelected()
+        private void SyncPivotToCameraYaw()
         {
-            if (interactTransform == null) return;
+            if (interactionPivot == null) return;
 
-            Gizmos.color = Color.yellow;
+            Camera cam = Camera.main;
+            if (cam == null) return;
 
-            switch (interactType)
+            float cameraYaw = cam.transform.eulerAngles.y;
+            Quaternion targetRotation = Quaternion.Euler(0f, cameraYaw, 0f);
+            interactionPivot.rotation = Quaternion.Slerp(interactionPivot.rotation, targetRotation, pivotRotationSpeed * Time.deltaTime);
+        }
+
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            GameObject selected = UnityEditor.Selection.activeGameObject;
+
+            if (selected != null)
             {
-                case InteractType.Raycast:
-                    Gizmos.DrawRay(interactTransform.position, interactTransform.forward * raycastRange);
-                    break;
-                case InteractType.OverlapBox:
-                    Gizmos.DrawWireCube(interactTransform.position, boxZoneSize);
-                    break;
+                if (selected == gameObject || selected.transform.IsChildOf(transform))
+                {
+                    if (overlapBoxInteraction == null) return;
+
+                    Gizmos.color = Color.yellow;
+
+                    switch (interactType)
+                    {
+                        case InteractType.Raycast:
+                            Gizmos.DrawRay(raycastInteraction.position, raycastInteraction.forward * raycastRange);
+                            break;
+                        case InteractType.OverlapBox:
+                            Gizmos.DrawWireCube(overlapBoxInteraction.position, boxZoneSize);
+                            break;
+                    }
+                }
             }
         }
+#endif
     }
 }
