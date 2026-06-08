@@ -2,6 +2,7 @@ using System;
 using Crunchies.PlayerSystem;
 using Crunchies.ScriptableObjects;
 using Crunchies.Utility;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -27,7 +28,7 @@ namespace Crunchies.AI
 
         [Header("Navigation")]
         [SerializeField] private float followStopDistance = 5f;
-        [SerializeField][Min(1f)] private float patrolStopDistance = 1f;
+        [SerializeField, Min(1f)] private float patrolStopDistance = 1f;
 
         [Header("Movement")]
         [SerializeField] private float minMoveTime = 0.5f;
@@ -35,6 +36,7 @@ namespace Crunchies.AI
 
         [Header("Patrol")]
         [SerializeField] private float patrolRadius = 5f;
+        [SerializeField, Range(0f, 1f)] private float centerChangeChance = 0.10f;
 
         public CharacterDataSO AgentData => agentData;
 
@@ -73,7 +75,7 @@ namespace Crunchies.AI
                     {
                         _navAgent.SetDestination(patrolPoint.point);
 
-                        if (UnityEngine.Random.value < 0.10f)
+                        if (UnityEngine.Random.value < centerChangeChance)
                         {
                             _patrolCenter = ClampCenterToNavMesh(patrolPoint.point, patrolRadius);
                         }
@@ -105,6 +107,8 @@ namespace Crunchies.AI
 
                 Vector2 randomOffset = UnityEngine.Random.insideUnitCircle * radius;
                 Vector3 targetPosition = center + new Vector3(randomOffset.x, 0, randomOffset.y);
+
+                if (Vector3.Distance(targetPosition, transform.position) <= patrolStopDistance + 0.5f) continue;
 
                 if (NavMesh.SamplePosition(targetPosition, out NavMeshHit hit, radius, NavMesh.AllAreas))
                 {

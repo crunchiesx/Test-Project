@@ -97,12 +97,10 @@ namespace Crunchies.PlayerSystem
         {
             if (currentInteractable != null && currentInteractable != previousInteractable && currentInteractable.IsInteractable())
             {
-                Log.Info($"Interaction started with: {currentInteractable}");
                 OnInteractionUpdate?.Invoke(true, currentInteractable);
             }
             else if (currentInteractable == null && previousInteractable != null)
             {
-                Log.Info("Interaction ended.");
                 OnInteractionUpdate?.Invoke(false, currentInteractable);
             }
         }
