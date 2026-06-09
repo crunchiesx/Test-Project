@@ -68,7 +68,6 @@ namespace Crunchies.QuestSystem
         {
             if (instance.QuestId == questAsset.QuestId)
             {
-                Log.Info("[QuestGiver] Quest Given: " + questAsset.QuestName);
                 OnQuestGiven?.Invoke();
             }
         }
@@ -77,7 +76,6 @@ namespace Crunchies.QuestSystem
         {
             if (instance.QuestId == questAsset.QuestId)
             {
-                Log.Info("[QuestGiver] Quest Updated: " + questAsset.QuestName);
                 OnQuestEnded?.Invoke();
             }
         }

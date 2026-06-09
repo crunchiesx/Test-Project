@@ -24,7 +24,6 @@ namespace Crunchies.QuestSystem
 
         private void OnTriggerEnter(Collider other)
         {
-            Log.Info("[NpcArrivalTrigger] Triggered by " + other.gameObject.name);
             if (!other.transform.TryGetComponent(out AgentController controller)) return;
             HandleArrival(controller.AgentData);
         }
