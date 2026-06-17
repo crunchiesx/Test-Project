@@ -1,4 +1,5 @@
 using System;
+using Crunchies.Components;
 using Crunchies.InputActions;
 using Crunchies.Interfaces;
 using Crunchies.Utility;
@@ -14,7 +15,7 @@ namespace Crunchies.PlayerSystem
 
     public class PlayerInteraction : MonoBehaviour
     {
-        public static event Action<bool, IInteractable> OnInteractionUpdate;
+        public static event Action<bool, Interactable> OnInteractionUpdate;
 
         [Header("References")]
         [SerializeField] private Transform interactionPivot;
@@ -28,8 +29,8 @@ namespace Crunchies.PlayerSystem
         [Space]
         [SerializeField] private float pivotRotationSpeed = 5f;
 
-        private IInteractable currentInteractable;
-        private IInteractable previousInteractable;
+        private Interactable currentInteractable;
+        private Interactable previousInteractable;
 
         private readonly Collider[] _interactionHitBuffer = new Collider[64];
 
@@ -89,8 +90,10 @@ namespace Crunchies.PlayerSystem
 
         private void Interact()
         {
-            if (currentInteractable == null) return;
-            currentInteractable?.Interact();
+            if (currentInteractable != null)
+            {
+                currentInteractable.Interact();
+            }
         }
 
         private void EvaluateInteractionState()
@@ -105,7 +108,7 @@ namespace Crunchies.PlayerSystem
             }
         }
 
-        private IInteractable PerformRaycast()
+        private Interactable PerformRaycast()
         {
             if (Physics.Raycast(raycastInteraction.position, raycastInteraction.forward, out RaycastHit hit, raycastRange))
             {
@@ -113,12 +116,12 @@ namespace Crunchies.PlayerSystem
 
                 if (hitCollider != null)
                 {
-                    if (hitCollider.TryGetComponent(out IInteractable interactable))
+                    if (hitCollider.TryGetComponent(out Interactable interactable))
                     {
                         return interactable;
                     }
 
-                    interactable = hitCollider.GetComponentInParent<IInteractable>();
+                    interactable = hitCollider.GetComponentInParent<Interactable>();
                     if (interactable != null)
                     {
                         return interactable;
@@ -129,7 +132,7 @@ namespace Crunchies.PlayerSystem
             return null;
         }
 
-        private IInteractable PerformOverlapBox()
+        private Interactable PerformOverlapBox()
         {
             Vector3 halfExtents = boxZoneSize * 0.5f;
             int hitCount = Physics.OverlapBoxNonAlloc
@@ -140,16 +143,16 @@ namespace Crunchies.PlayerSystem
                 overlapBoxInteraction.rotation
             );
 
-            IInteractable closest = null;
+            Interactable closest = null;
             float closestDistance = float.PositiveInfinity;
             for (int i = 0; i < hitCount; i++)
             {
                 Collider collider = _interactionHitBuffer[i];
                 if (collider == null) continue;
 
-                if (!collider.TryGetComponent(out IInteractable interactable))
+                if (!collider.TryGetComponent(out Interactable interactable))
                 {
-                    interactable = collider.GetComponentInParent<IInteractable>();
+                    interactable = collider.GetComponentInParent<Interactable>();
                 }
 
                 if (interactable == null) continue;

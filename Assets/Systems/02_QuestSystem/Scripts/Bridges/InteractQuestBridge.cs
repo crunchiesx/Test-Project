@@ -11,6 +11,7 @@
 //   ├── Interactable.cs     ← handles E-key prompt, calls OnUsed
 //   └── InteractQuestBridge.cs  ← this file
 // ============================================================
+using Crunchies.Components;
 using Crunchies.Interfaces;
 using Crunchies.ScriptableObjects;
 using Crunchies.Utility;
@@ -18,19 +19,19 @@ using UnityEngine;
 
 namespace Crunchies.QuestSystem
 {
-    [RequireComponent(typeof(IInteractable))]
+    [RequireComponent(typeof(Interactable))]
     public class InteractQuestBridge : MonoBehaviour
     {
         [Tooltip("Must match the ObjectDataSO set in InteractObjective")]
         [SerializeField] private ObjectDataSO objectData;
 
-        public IInteractable _interactable;
+        public Interactable _interactable;
 
         private void Awake()
         {
             if (!TryGetComponent(out _interactable))
             {
-                Log.MissingComponent(nameof(IInteractable), this);
+                Log.MissingComponent(nameof(Interactable), this);
             }
         }
 

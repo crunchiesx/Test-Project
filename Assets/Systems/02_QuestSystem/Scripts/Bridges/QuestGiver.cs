@@ -18,9 +18,13 @@ using UnityEngine.Events;
 
 namespace Crunchies.QuestSystem
 {
-    public class QuestGiver : MonoBehaviour, IInteractable
+    public class QuestGiver : MonoBehaviour, IInteractionOption
     {
         public event Action OnInteract;
+
+        [field: SerializeField] public int InteractionPriority { get; set; }
+
+        [Space]
 
         [Tooltip("Drag a Quest ScriptableObject here. If empty, questType is used instead.")]
         [SerializeField] private QuestSO questAsset;
@@ -91,7 +95,7 @@ namespace Crunchies.QuestSystem
             }
         }
 
-        public void Interact()
+        public void ExecuteInteraction()
         {
             if (!_isGiven)
             {
@@ -102,7 +106,7 @@ namespace Crunchies.QuestSystem
             OnInteract?.Invoke();
         }
 
-        public bool IsInteractable() => !_isGiven;
+        public bool CanInteract() => !_isGiven;
 
         public string GetInteractionPrompt() => "Press 'E' to Accept Quest";
     }

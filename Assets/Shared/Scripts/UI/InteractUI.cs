@@ -1,3 +1,4 @@
+using Crunchies.Components;
 using Crunchies.Interfaces;
 using Crunchies.PlayerSystem;
 using Crunchies.Utility;
@@ -47,13 +48,13 @@ namespace Crunchies.UI
             }
         }
 
-        private void InteractionUpdate(bool hasInteraction, IInteractable interactable)
+        private void InteractionUpdate(bool hasInteraction, Interactable interactable)
         {
             interactionState = hasInteraction;
 
             if (hasInteraction)
             {
-                interactText.SetText(interactable.GetInteractionPrompt());
+                interactText.SetText(interactable.GetCurrentInteractionPrompt());
                 OpenPanel();
             }
             else
