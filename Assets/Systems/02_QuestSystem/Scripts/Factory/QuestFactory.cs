@@ -8,6 +8,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Crunchies.ScriptableObjects;
+using System;
 
 
 namespace Crunchies.QuestSystem
@@ -143,6 +144,18 @@ namespace Crunchies.QuestSystem
             quest.objectives.Add(new PlayerReachLocationObjective(locationDataSO));
             return quest;
         }
+
+        public static QuestSO BuildFromType(QuestType questType) => questType switch
+        {
+            QuestType.Gather => CreateGatherQuest(Guid.NewGuid().ToString(), "wood", "Wood", 10),
+            QuestType.Kill => CreateKillQuest(Guid.NewGuid().ToString(), "wolf", "Wolves", 5),
+            QuestType.Walk => CreateWalkQuest(Guid.NewGuid().ToString(), 200f),
+            QuestType.Escort => CreateEscortQuest(Guid.NewGuid().ToString(), "npc_merchant", "Merchant", "outpost_south", "Southern Outpost"),
+            QuestType.Survival => CreateSurvivalQuest(Guid.NewGuid().ToString(), 60f),
+            QuestType.Craft => CreateCraftQuest(Guid.NewGuid().ToString(), "iron_sword", "Iron Sword", 1),
+            QuestType.Compound => CreateRangersErrand(),
+            _ => null
+        };
 
 #if UNITY_EDITOR
         public static QuestSO GetRandomQuest(int id)

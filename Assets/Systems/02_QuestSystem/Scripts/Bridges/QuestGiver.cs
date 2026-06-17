@@ -40,7 +40,7 @@ namespace Crunchies.QuestSystem
         {
             if (questAsset == null)
             {
-                questAsset = BuildFromType();
+                questAsset = QuestFactory.BuildFromType(questType);
 
                 if (questAsset == null)
                 {
@@ -105,17 +105,5 @@ namespace Crunchies.QuestSystem
         public bool IsInteractable() => !_isGiven;
 
         public string GetInteractionPrompt() => "Press 'E' to Accept Quest";
-
-        private QuestSO BuildFromType() => questType switch
-        {
-            QuestType.Gather => QuestFactory.CreateGatherQuest(Guid.NewGuid().ToString(), "wood", "Wood", 10),
-            QuestType.Kill => QuestFactory.CreateKillQuest(Guid.NewGuid().ToString(), "wolf", "Wolves", 5),
-            QuestType.Walk => QuestFactory.CreateWalkQuest(Guid.NewGuid().ToString(), 200f),
-            QuestType.Escort => QuestFactory.CreateEscortQuest(Guid.NewGuid().ToString(), "npc_merchant", "Merchant", "outpost_south", "Southern Outpost"),
-            QuestType.Survival => QuestFactory.CreateSurvivalQuest(Guid.NewGuid().ToString(), 60f),
-            QuestType.Craft => QuestFactory.CreateCraftQuest(Guid.NewGuid().ToString(), "iron_sword", "Iron Sword", 1),
-            QuestType.Compound => QuestFactory.CreateRangersErrand(),
-            _ => null
-        };
     }
 }
