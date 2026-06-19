@@ -22,6 +22,7 @@ namespace Crunchies.QuestSystem
     {
         public event Action OnInteract;
 
+        [field: SerializeField] public string InteractionPrompt { get; set; }
         [field: SerializeField] public int InteractionPriority { get; set; }
 
         [Space]
@@ -84,7 +85,6 @@ namespace Crunchies.QuestSystem
             }
         }
 
-        // Called by your dialogue system, or auto-triggered on player proximity.
         public void GiveQuest()
         {
             if (_isGiven) return;
@@ -108,6 +108,14 @@ namespace Crunchies.QuestSystem
 
         public bool CanInteract() => !_isGiven;
 
-        public string GetInteractionPrompt() => "Press 'E' to Accept Quest";
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (string.IsNullOrWhiteSpace(InteractionPrompt))
+            {
+                InteractionPrompt = "Press 'E' to Accept Quest";
+            }
+        }
+#endif
     }
 }
