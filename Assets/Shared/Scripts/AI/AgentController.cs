@@ -108,11 +108,12 @@ namespace Crunchies.AI
                 Vector2 randomOffset = UnityEngine.Random.insideUnitCircle * radius;
                 Vector3 targetPosition = center + new Vector3(randomOffset.x, 0, randomOffset.y);
 
-                if (Vector3.Distance(targetPosition, transform.position) <= patrolStopDistance + 0.5f) continue;
-
-                if (NavMesh.SamplePosition(targetPosition, out NavMeshHit hit, radius, NavMesh.AllAreas))
+                if (Vector3.Distance(targetPosition, transform.position) <= patrolStopDistance + 0.5f)
                 {
-                    return new PatrolPoint(true, hit.position);
+                    if (NavMesh.SamplePosition(targetPosition, out NavMeshHit hit, radius, NavMesh.AllAreas))
+                    {
+                        return new PatrolPoint(true, hit.position);
+                    }
                 }
 
                 await Awaitable.NextFrameAsync();

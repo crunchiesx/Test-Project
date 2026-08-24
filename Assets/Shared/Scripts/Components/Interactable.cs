@@ -11,7 +11,7 @@ namespace Crunchies.Components
         public event Action OnInteract;
 
         [Header("Interaction Settings")]
-        [SerializeField] private string defaultPrompt = "Press 'E' to Interact";
+        [SerializeField] private string interactPrompt = "Press 'E' to Interact";
 
         private List<IInteractionOption> _interactionOptions = new();
 
@@ -42,11 +42,11 @@ namespace Crunchies.Components
             IInteractionOption option = GetBestAvailableOption();
             if (option == null)
             {
-                return defaultPrompt;
+                return interactPrompt;
             }
 
             string prompt = option.GetInteractionPrompt();
-            return string.IsNullOrWhiteSpace(prompt) ? defaultPrompt : prompt;
+            return string.IsNullOrWhiteSpace(prompt) ? interactPrompt : prompt;
         }
 
         private IInteractionOption GetBestAvailableOption()
