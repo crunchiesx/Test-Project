@@ -23,7 +23,7 @@ namespace Crunchies.QuestSystem
         public event Action OnInteract;
 
         [field: SerializeField] public string InteractionPrompt { get; set; }
-        [field: SerializeField] public int InteractionPriority { get; set; }
+        [field: SerializeField] public PriorityOrder InteractionPriority { get; set; }
 
         [Space]
 

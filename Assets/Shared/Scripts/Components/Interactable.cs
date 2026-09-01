@@ -19,7 +19,8 @@ namespace Crunchies.Components
         {
             _interactionOptions = GetComponents<MonoBehaviour>()
                 .OfType<IInteractionOption>()
-                .OrderByDescending(option => option.InteractionPriority)
+                .Where(option => option.InteractionPriority != PriorityOrder.None)
+                .OrderBy(option => option.InteractionPriority)
                 .ToList();
         }
 
