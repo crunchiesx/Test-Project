@@ -153,5 +153,7 @@ namespace Crunchies.InputActions
 
         private void HandleUIQuest(InputAction.CallbackContext _) => OnUIQuestAction?.Invoke();
         private void HandleUIEscape(InputAction.CallbackContext _) => OnUIEscapeAction?.Invoke();
+
+        public string InteractDisplayString() => _playerInputActions.Player.Interact.GetBindingDisplayString();
     }
 }

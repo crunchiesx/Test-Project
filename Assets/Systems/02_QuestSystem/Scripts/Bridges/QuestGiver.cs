@@ -113,7 +113,7 @@ namespace Crunchies.QuestSystem
         {
             if (string.IsNullOrWhiteSpace(InteractionPrompt))
             {
-                InteractionPrompt = "Press 'E' to Accept Quest";
+                InteractionPrompt = "Accept Quest";
             }
         }
 #endif

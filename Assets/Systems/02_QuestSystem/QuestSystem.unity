@@ -977,7 +977,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7696edfb0f071f446ab956386fc78e97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Crunchies.QuestSystem.QuestGiver
-  <InteractionPrompt>k__BackingField: Press 'E' to Accept Quest
+  <InteractionPrompt>k__BackingField: Accept Quest
   <InteractionPriority>k__BackingField: 1
   questAsset: {fileID: 11400000, guid: 3fb0a39bbdfc22c4c8b32517ccb7c76b, type: 2}
   questType: 3
@@ -1050,7 +1050,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea442000a2f7a62439f51964423bb9f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Crunchies.Components.Interactable
-  interactPrompt: Press 'E' to Interact
+  interactPrompt: Interact
 --- !u!1001 &84054681
 PrefabInstance:
   m_ObjectHideFlags: 0

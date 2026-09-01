@@ -11,7 +11,7 @@ namespace Crunchies.Components
         public event Action OnInteract;
 
         [Header("Interaction Settings")]
-        [SerializeField] private string interactPrompt = "Press 'E' to Interact";
+        [SerializeField] private string interactPrompt = "Interact";
 
         private List<IInteractionOption> _interactionOptions = new();
 

@@ -1,4 +1,5 @@
 using Crunchies.Components;
+using Crunchies.InputActions;
 using Crunchies.Interfaces;
 using Crunchies.PlayerSystem;
 using Crunchies.Utility;
@@ -54,7 +55,8 @@ namespace Crunchies.UI
 
             if (hasInteraction)
             {
-                interactText.SetText(interactable.GetCurrentInteractionPrompt());
+                string context = $"Press '{PlayerInputHandler.Instance.InteractDisplayString()}' to {interactable.GetCurrentInteractionPrompt()}";
+                interactText.SetText(context);
                 OpenPanel();
             }
             else
