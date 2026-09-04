@@ -114,19 +114,14 @@ namespace Crunchies.Components
         {
             Vector3 toTarget = targetTransform.position - cachedTransform.position;
 
-            switch (lookMode)
+            return lookMode switch
             {
-                case LookMode.LookAt:
-                    return toTarget;
-                case LookMode.LookAtInverted:
-                    return -toTarget;
-                case LookMode.CameraForward:
-                    return targetTransform.forward;
-                case LookMode.CameraForwardInverted:
-                    return -targetTransform.forward;
-                default:
-                    return toTarget;
-            }
+                LookMode.LookAt => toTarget,
+                LookMode.LookAtInverted => -toTarget,
+                LookMode.CameraForward => targetTransform.forward,
+                LookMode.CameraForwardInverted => -targetTransform.forward,
+                _ => toTarget,
+            };
         }
     }
 }
