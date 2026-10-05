@@ -9,8 +9,6 @@ namespace Crunchies.InputActions
     {
         public static PlayerInputHandler Instance { get; private set; }
 
-        public event Action OnUIQuestAction;
-        public event Action OnUIEscapeAction;
         public event Action OnPlayerInteractAction;
 
         public event Action<Vector2> OnPlayerMovementAction;
@@ -26,6 +24,13 @@ namespace Crunchies.InputActions
         public bool SprintInput { get; private set; }
         public bool InteractInput { get; private set; }
         public bool AttackInput { get; private set; }
+
+        // UI Actions
+        public event Action OnUIQuestAction;
+        public event Action OnUIEscapeAction;
+
+        // Debug Actions
+        public event Action OnDebugRandomQuestAction;
 
         private PlayerInputActions _playerInputActions;
 
@@ -48,6 +53,7 @@ namespace Crunchies.InputActions
             _playerInputActions = new PlayerInputActions();
             SubscribePlayerEventActions();
             SubscribeUIEventActions();
+            SubscribeDebugEventActions();
         }
 
         private void OnEnable() => _playerInputActions?.Enable();
@@ -61,10 +67,12 @@ namespace Crunchies.InputActions
             {
                 UnsubscribePlayerEventActions();
                 UnsubscribeUIEventActions();
+                UnSubscribeDebugEventActions();
                 _playerInputActions.Dispose();
             }
         }
 
+        #region  PLAYER EVENTS
         private void SubscribePlayerEventActions()
         {
             _playerInputActions.Player.Move.performed += HandlePlayerMovement;
@@ -107,18 +115,6 @@ namespace Crunchies.InputActions
             _playerInputActions.Player.Attack.canceled -= HandlePlayerAttack;
         }
 
-        private void SubscribeUIEventActions()
-        {
-            _playerInputActions.UI.Quest.performed += HandleUIQuest;
-            _playerInputActions.UI.Escape.performed += HandleUIEscape;
-        }
-
-        private void UnsubscribeUIEventActions()
-        {
-            _playerInputActions.UI.Quest.performed -= HandleUIQuest;
-            _playerInputActions.UI.Escape.performed -= HandleUIEscape;
-        }
-
         private void HandlePlayerMovement(InputAction.CallbackContext ctx)
         {
             MoveInput = ctx.ReadValue<Vector2>();
@@ -149,11 +145,45 @@ namespace Crunchies.InputActions
             OnPlayerAttackAction?.Invoke(AttackInput);
         }
 
+
         private void HandlePlayerInteract(InputAction.CallbackContext _) => OnPlayerInteractAction?.Invoke();
+        public string InteractDisplayString() => _playerInputActions.Player.Interact.GetBindingDisplayString();
+
+        #endregion
+
+        #region UI EVENTS
+
+        private void SubscribeUIEventActions()
+        {
+            _playerInputActions.UI.Quest.performed += HandleUIQuest;
+            _playerInputActions.UI.Escape.performed += HandleUIEscape;
+        }
+
+        private void UnsubscribeUIEventActions()
+        {
+            _playerInputActions.UI.Quest.performed -= HandleUIQuest;
+            _playerInputActions.UI.Escape.performed -= HandleUIEscape;
+        }
 
         private void HandleUIQuest(InputAction.CallbackContext _) => OnUIQuestAction?.Invoke();
         private void HandleUIEscape(InputAction.CallbackContext _) => OnUIEscapeAction?.Invoke();
 
-        public string InteractDisplayString() => _playerInputActions.Player.Interact.GetBindingDisplayString();
+        #endregion
+
+        #region DEBUG EVENTS
+
+        private void SubscribeDebugEventActions()
+        {
+            _playerInputActions.Debug.AddRandomQuest.performed += HandleDebugRandomQuest;
+        }
+
+        private void UnSubscribeDebugEventActions()
+        {
+            _playerInputActions.Debug.AddRandomQuest.performed -= HandleDebugRandomQuest;
+        }
+
+        private void HandleDebugRandomQuest(InputAction.CallbackContext _) => OnDebugRandomQuestAction?.Invoke();
+
+        #endregion
     }
 }

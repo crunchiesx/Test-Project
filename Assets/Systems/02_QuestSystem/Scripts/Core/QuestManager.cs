@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Crunchies.Utility;
 using UnityEngine;
+using Crunchies.InputActions;
+
 
 #if UNITY_EDITOR
 using System;
@@ -64,6 +66,7 @@ namespace Crunchies.QuestSystem
             }
 
 #if UNITY_EDITOR
+            DebugEnabled();
             SyncDebugInfo(true);
 #endif
         }
@@ -79,6 +82,7 @@ namespace Crunchies.QuestSystem
             }
 
 #if UNITY_EDITOR
+            DebugDisabled();
             SyncDebugInfo(true);
 #endif
         }
@@ -176,13 +180,18 @@ namespace Crunchies.QuestSystem
 
         private readonly Stopwatch sw = new();
 
+        private void DebugEnabled()
+        {
+            PlayerInputHandler.Instance.OnDebugRandomQuestAction += DebugStartQuest;
+        }
+
+        private void DebugDisabled()
+        {
+            PlayerInputHandler.Instance.OnDebugRandomQuestAction -= DebugStartQuest;
+        }
+
         private void DebugUpdate()
         {
-            if (Keyboard.current.qKey.wasPressedThisFrame)
-            {
-                DebugStartQuest();
-            }
-
             SyncDebugInfo();
         }
 

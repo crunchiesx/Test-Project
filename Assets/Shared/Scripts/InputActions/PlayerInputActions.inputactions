@@ -250,6 +250,35 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Debug",
+            "id": "d0085f62-3bc5-4bd2-bb20-79ce067474a8",
+            "actions": [
+                {
+                    "name": "AddRandomQuest",
+                    "type": "Button",
+                    "id": "a4ad7583-f4af-4499-9138-8cf4a15eff03",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "9fd732da-a8ee-48ac-9005-c5ef787a6b93",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard",
+                    "action": "AddRandomQuest",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [
