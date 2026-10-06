@@ -29,8 +29,10 @@ namespace Crunchies.InputActions
         public event Action OnUIQuestAction;
         public event Action OnUIEscapeAction;
 
+#if UNITY_EDITOR
         // Debug Actions
         public event Action OnDebugRandomQuestAction;
+#endif
 
         private PlayerInputActions _playerInputActions;
 
@@ -53,7 +55,10 @@ namespace Crunchies.InputActions
             _playerInputActions = new PlayerInputActions();
             SubscribePlayerEventActions();
             SubscribeUIEventActions();
+
+#if UNITY_EDITOR
             SubscribeDebugEventActions();
+#endif
         }
 
         private void OnEnable() => _playerInputActions?.Enable();
@@ -67,7 +72,10 @@ namespace Crunchies.InputActions
             {
                 UnsubscribePlayerEventActions();
                 UnsubscribeUIEventActions();
+
+#if UNITY_EDITOR
                 UnSubscribeDebugEventActions();
+#endif
                 _playerInputActions.Dispose();
             }
         }
@@ -170,6 +178,8 @@ namespace Crunchies.InputActions
 
         #endregion
 
+#if UNITY_EDITOR
+
         #region DEBUG EVENTS
 
         private void SubscribeDebugEventActions()
@@ -185,5 +195,7 @@ namespace Crunchies.InputActions
         private void HandleDebugRandomQuest(InputAction.CallbackContext _) => OnDebugRandomQuestAction?.Invoke();
 
         #endregion
+
+#endif
     }
 }
