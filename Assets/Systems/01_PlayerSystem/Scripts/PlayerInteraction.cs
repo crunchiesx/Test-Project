@@ -102,7 +102,7 @@ namespace Crunchies.PlayerSystem
             {
                 OnInteractionUpdate?.Invoke(true, currentInteractable);
             }
-            else if (currentInteractable == null && previousInteractable != null)
+            else if (currentInteractable == null && previousInteractable != null || currentInteractable != null && !currentInteractable.IsInteractable())
             {
                 OnInteractionUpdate?.Invoke(false, currentInteractable);
             }
