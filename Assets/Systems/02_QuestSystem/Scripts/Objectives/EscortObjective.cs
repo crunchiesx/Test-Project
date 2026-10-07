@@ -40,7 +40,7 @@ namespace Crunchies.QuestSystem
             AddProgress(1);
         }
 
-        public override string GetProgressText() => IsCompleted ? $"{npcData.characterName}: Safe!" : $"Escorting {npcData.characterName}...";
+        public override string GetProgressText() => IsCompleted ? $"{npcData.characterName}: Safe!" : $"Escorting {npcData.characterName} to {locationData.locationName}";
 
 #if UNITY_EDITOR
         public override void Validate()

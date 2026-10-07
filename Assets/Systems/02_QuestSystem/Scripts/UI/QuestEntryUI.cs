@@ -25,7 +25,7 @@ namespace Crunchies.QuestSystem
         public void Populate(QuestInstance quest)
         {
             titleText.SetText(quest.QuestName);
-            BuildLines(quest);
+            BuildLines(quest.Objectives.Count);
             Refresh(quest);
         }
 
@@ -53,7 +53,7 @@ namespace Crunchies.QuestSystem
             }
         }
 
-        private void BuildLines(QuestInstance quest)
+        private void BuildLines(int count)
         {
             foreach (Transform child in objectivesParent)
             {
@@ -61,7 +61,7 @@ namespace Crunchies.QuestSystem
             }
             _lines.Clear();
 
-            foreach (QuestObjective _ in quest.Objectives)
+            for (int i = 0; i < count; i++)
             {
                 GameObject go = Instantiate(objectiveLinePrefab, objectivesParent);
                 TextMeshProUGUI tmp = go.GetComponentInChildren<TextMeshProUGUI>();
