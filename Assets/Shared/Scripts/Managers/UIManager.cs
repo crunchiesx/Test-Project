@@ -2,11 +2,11 @@ using Crunchies.InputActions;
 using Crunchies.UI;
 using Crunchies.Utility;
 using UnityEngine;
-using Crunchies.Managers;
+using Crunchies.QuestSystem;
 
-namespace Crunchies.QuestSystem
+namespace Crunchies.Managers
 {
-    public class GameMenuController : MonoBehaviour
+    public class UIManager : MonoBehaviour
     {
         [Header("References")]
         [SerializeField] private QuestListUI questUI;

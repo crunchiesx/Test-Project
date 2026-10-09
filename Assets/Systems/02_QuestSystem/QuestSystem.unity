@@ -6653,7 +6653,7 @@ GameObject:
   - component: {fileID: 1171010827}
   - component: {fileID: 1171010828}
   m_Layer: 0
-  m_Name: GameMenuController
+  m_Name: UIManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10708,7 +10708,7 @@ GameObject:
   - component: {fileID: 2068616991}
   - component: {fileID: 2068616992}
   m_Layer: 0
-  m_Name: PauseManager
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
