@@ -2,6 +2,7 @@ using Crunchies.InputActions;
 using Crunchies.UI;
 using Crunchies.Utility;
 using UnityEngine;
+using Crunchies.Managers;
 
 namespace Crunchies.QuestSystem
 {
@@ -45,6 +46,14 @@ namespace Crunchies.QuestSystem
             }
         }
 
-        private void OnUIEscapeAction() => UIPanel.CloseRecentActivePanel();
+        private void OnUIEscapeAction()
+        {
+            bool panelWasClosed = UIPanel.CloseRecentActivePanel();
+
+            if (!panelWasClosed)
+            {
+                GameManager.Instance.TogglePause();
+            }
+        }
     }
 }

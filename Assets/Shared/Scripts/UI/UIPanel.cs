@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Crunchies.Utility;
 using UnityEngine;
+using Crunchies.Managers;
 
 namespace Crunchies.UI
 {
@@ -14,23 +15,30 @@ namespace Crunchies.UI
 
         [Header("Base")]
         [SerializeField] private GameObject panel;
-        [SerializeField] private bool includeInList = true;
+        [SerializeField] private bool includedInList = true;
 
         public bool IsOpen => panel.activeSelf;
 
-        public static void CloseRecentActivePanel()
+        public static bool CloseRecentActivePanel()
         {
             ActivePanels.RemoveAll(panel => panel == null);
 
-            if (ActivePanels.Count == 0) return;
+            if (ActivePanels.Count == 0) return false;
 
             UIPanel recentPanel = ActivePanels[^1];
             recentPanel.ClosePanel();
+            return true;
         }
 
         public virtual void OpenPanel()
         {
-            if (includeInList)
+            if (GameManager.Instance.IsPaused)
+            {
+                Log.Info("Game is Paused!");
+                return;
+            }
+
+            if (includedInList)
             {
                 ActivePanels.RemoveAll(panel => panel == null);
 
@@ -49,7 +57,7 @@ namespace Crunchies.UI
 
         public virtual void ClosePanel()
         {
-            if (includeInList)
+            if (includedInList)
             {
                 if (ActivePanels.Contains(this))
                 {
