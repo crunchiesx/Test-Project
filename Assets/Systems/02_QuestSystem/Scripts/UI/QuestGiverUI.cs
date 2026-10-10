@@ -14,6 +14,7 @@ namespace Crunchies.QuestSystem
         [SerializeField] private TextMeshProUGUI descriptionText;
         [SerializeField] private Button acceptButton;
         [SerializeField] private Button declineButton;
+        [SerializeField] private Button closeButton;
 
         private QuestGiver currentGiver;
 
@@ -30,6 +31,7 @@ namespace Crunchies.QuestSystem
                 ClosePanel();
             });
             declineButton.onClick.AddListener(() => ClosePanel());
+            closeButton.onClick.AddListener(() => ClosePanel());
         }
 
         private void OnEnable() => QuestEvents.OnQuestOffered += OnQuestOffered;

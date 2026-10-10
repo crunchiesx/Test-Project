@@ -12,6 +12,7 @@
 using System.Collections.Generic;
 using Crunchies.UI;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Crunchies.QuestSystem
 {
@@ -21,6 +22,7 @@ namespace Crunchies.QuestSystem
         [SerializeField] private Transform questLogParent;
         [SerializeField] private GameObject questEntryPrefab;
         [SerializeField] private GameObject noQuestLabel;
+        [SerializeField] private Button closeButton;
 
         private readonly Dictionary<string, QuestEntryUI> _entries = new();
 
@@ -30,6 +32,8 @@ namespace Crunchies.QuestSystem
             {
                 ClosePanel();
             }
+
+            closeButton.onClick.AddListener(() => ClosePanel());
         }
 
         private void OnEnable()
