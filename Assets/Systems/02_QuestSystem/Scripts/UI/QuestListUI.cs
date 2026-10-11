@@ -26,12 +26,9 @@ namespace Crunchies.QuestSystem
 
         private readonly Dictionary<string, QuestEntryUI> _entries = new();
 
-        private void Awake()
+        protected override void Awake()
         {
-            if (IsOpen)
-            {
-                ClosePanel();
-            }
+            base.Awake();
 
             closeButton.onClick.AddListener(() => ClosePanel());
         }

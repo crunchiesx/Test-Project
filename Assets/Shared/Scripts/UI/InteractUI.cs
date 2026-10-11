@@ -27,14 +27,6 @@ namespace Crunchies.UI
             PlayerInteraction.OnInteractionUpdate -= InteractionUpdate;
         }
 
-        public void Awake()
-        {
-            if (IsOpen)
-            {
-                ClosePanel();
-            }
-        }
-
         private void PanelChange()
         {
             bool shouldBeOpen = interactionState && !IsAnyPanelActive;

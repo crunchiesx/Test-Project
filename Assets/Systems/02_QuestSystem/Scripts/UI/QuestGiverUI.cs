@@ -18,12 +18,9 @@ namespace Crunchies.QuestSystem
 
         private QuestGiver currentGiver;
 
-        private void Awake()
+        protected override void Awake()
         {
-            if (IsOpen)
-            {
-                ClosePanel();
-            }
+            base.Awake();
 
             acceptButton.onClick.AddListener(() =>
             {

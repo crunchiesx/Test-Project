@@ -369,6 +369,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   panel: {fileID: 570674493}
   includedInList: 0
+  closeOnStart: 1
+  affectedByPause: 1
   interactText: {fileID: 1331919585}
 --- !u!1001 &20436673
 PrefabInstance:
@@ -8057,6 +8059,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QuestGiverUI
   panel: {fileID: 537107081}
   includedInList: 1
+  closeOnStart: 1
+  affectedByPause: 1
   titleText: {fileID: 8622326}
   descriptionText: {fileID: 1692703330}
   acceptButton: {fileID: 687931313}
@@ -9000,6 +9004,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Crunchies.QuestSystem.QuestUI
   panel: {fileID: 924317357}
   includedInList: 1
+  closeOnStart: 1
+  affectedByPause: 1
   questLogParent: {fileID: 128693117}
   questEntryPrefab: {fileID: 2354858348146805608, guid: b5e22ca372dcbc44286e9b53f08f73bb, type: 3}
   noQuestLabel: {fileID: 2008955801}
@@ -10035,6 +10041,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdd5ad6b29f709b4894667ab232c210a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuUI
+  panel: {fileID: 787526708}
+  includedInList: 0
+  closeOnStart: 1
+  affectedByPause: 0
 --- !u!1001 &1764861907
 PrefabInstance:
   m_ObjectHideFlags: 0

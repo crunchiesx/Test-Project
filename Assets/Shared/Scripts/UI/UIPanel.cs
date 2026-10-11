@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Crunchies.Utility;
 using UnityEngine;
 using Crunchies.Managers;
+using Unity.IO.LowLevel.Unsafe;
 
 namespace Crunchies.UI
 {
@@ -13,11 +14,21 @@ namespace Crunchies.UI
         public static event Action OnPanelChange;
         public static bool IsAnyPanelActive => ActivePanels.Count > 0;
 
-        [Header("Base")]
+        [Header("Base UI")]
         [SerializeField] private GameObject panel;
         [SerializeField] private bool includedInList = true;
+        [SerializeField] private bool closeOnStart = true;
+        [SerializeField] private bool affectedByPause = true;
 
         public bool IsOpen => panel.activeSelf;
+
+        protected virtual void Awake()
+        {
+            if (IsOpen && closeOnStart)
+            {
+                ClosePanel();
+            }
+        }
 
         public static bool CloseRecentActivePanel()
         {
@@ -32,7 +43,7 @@ namespace Crunchies.UI
 
         public virtual void OpenPanel()
         {
-            if (GameManager.Instance.IsPaused)
+            if (GameManager.Instance.IsPaused && affectedByPause)
             {
                 Log.Info("Game is Paused!");
                 return;

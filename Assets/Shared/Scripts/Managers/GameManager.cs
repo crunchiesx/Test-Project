@@ -11,8 +11,7 @@ namespace Crunchies.Managers
     {
         public static GameManager Instance { get; private set; }
 
-        public event Action OnGamePaused;
-        public event Action OnGameUnpaused;
+        public event Action OnGamePauseChange;
 
         public bool IsPaused { get; private set; } = false;
 
@@ -40,17 +39,15 @@ namespace Crunchies.Managers
             if (IsPaused)
             {
                 Log.Info("Paused");
-
                 // Time.timeScale = 0;
-                OnGamePaused?.Invoke();
             }
             else
             {
                 Log.Info("Unpaused");
-
                 // Time.timeScale = 1;
-                OnGameUnpaused?.Invoke();
             }
+
+            OnGamePauseChange?.Invoke();
         }
     }
 }
