@@ -26,10 +26,31 @@ namespace Crunchies.Managers
             Instance = this;
         }
 
-        private void OnEnable() => UIPanel.OnPanelChange += OnPanelChange;
-        private void OnDisable() => UIPanel.OnPanelChange -= OnPanelChange;
+        private void OnEnable()
+        {
+            UIPanel.OnPanelChange += SetCursorState;
+            GameManager.Instance.OnPauseStateChange += SetCursorState;
+        }
 
-        private void Start() => OnPanelChange();
+        private void OnDisable()
+        {
+            UIPanel.OnPanelChange -= SetCursorState;
+            GameManager.Instance.OnPauseStateChange -= SetCursorState;
+        }
+
+        private void Start() => SetCursorState();
+
+        private void SetCursorState()
+        {
+            if (UIPanel.IsAnyPanelActive || GameManager.Instance.IsPaused)
+            {
+                SetMenuCursor();
+            }
+            else
+            {
+                SetGameplayCursor();
+            }
+        }
 
         public void SetGameplayCursor()
         {
@@ -47,18 +68,6 @@ namespace Crunchies.Managers
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.Confined;
-        }
-
-        private void OnPanelChange()
-        {
-            if (UIPanel.IsAnyPanelActive)
-            {
-                SetMenuCursor();
-            }
-            else
-            {
-                SetGameplayCursor();
-            }
         }
     }
 }

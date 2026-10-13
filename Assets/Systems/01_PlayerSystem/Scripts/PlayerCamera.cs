@@ -1,4 +1,5 @@
 using System;
+using Crunchies.Managers;
 using Crunchies.UI;
 using Crunchies.Utility;
 using Unity.Cinemachine;
@@ -46,10 +47,19 @@ namespace Crunchies.PlayerSystem
             SetCameraSensitivity(_currentCameraSensitivity);
         }
 
-        private void OnEnable() => UIPanel.OnPanelChange += OnPanelChange;
-        private void OnDisable() => UIPanel.OnPanelChange -= OnPanelChange;
+        private void OnEnable()
+        {
+            UIPanel.OnPanelChange += RefreshCameraInput;
+            GameManager.Instance.OnPauseStateChange += RefreshCameraInput;
+        }
 
-        private void Start() => OnPanelChange();
+        private void OnDisable()
+        {
+            UIPanel.OnPanelChange -= RefreshCameraInput;
+            GameManager.Instance.OnPauseStateChange -= RefreshCameraInput;
+        }
+
+        private void Start() => RefreshCameraInput();
 
         private void Update()
         {
@@ -58,6 +68,12 @@ namespace Crunchies.PlayerSystem
                 _currentCameraSensitivity = cameraSensitivity;
                 SetCameraSensitivity(_currentCameraSensitivity);
             }
+        }
+
+        private void RefreshCameraInput()
+        {
+            bool enabled = !UIPanel.IsAnyPanelActive && !GameManager.Instance.IsPaused;
+            SetCameraInputEnabled(enabled);
         }
 
         private void SetCameraSensitivity(float sens)
@@ -102,8 +118,6 @@ namespace Crunchies.PlayerSystem
 
             return false;
         }
-
-        private void OnPanelChange() => SetCameraInputEnabled(!UIPanel.IsAnyPanelActive);
     }
 }
 

@@ -22,17 +22,21 @@ namespace Crunchies.QuestSystem
         {
             base.Awake();
 
-            acceptButton.onClick.AddListener(() =>
-            {
-                currentGiver.GiveQuest();
-                ClosePanel();
-            });
-            declineButton.onClick.AddListener(() => ClosePanel());
-            closeButton.onClick.AddListener(() => ClosePanel());
+            acceptButton.onClick.AddListener(OnAcceptButtonPressed);
+            declineButton.onClick.AddListener(OnDeclineButtonPressed);
+            closeButton.onClick.AddListener(OnCloseButtonPressed);
         }
 
         private void OnEnable() => QuestEvents.OnQuestOffered += OnQuestOffered;
         private void OnDisable() => QuestEvents.OnQuestOffered -= OnQuestOffered;
+
+        private void OnAcceptButtonPressed()
+        {
+            currentGiver.GiveQuest();
+            ClosePanel();
+        }
+        private void OnDeclineButtonPressed() => ClosePanel();
+        private void OnCloseButtonPressed() => ClosePanel();
 
         private void OnQuestOffered(QuestGiver giver)
         {

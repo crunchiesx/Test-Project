@@ -1,4 +1,6 @@
+using System;
 using Crunchies.Managers;
+using Crunchies.Utility;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,14 +8,24 @@ namespace Crunchies.UI
 {
     public class PauseMenuUI : UIPanel
     {
+        [Header("UI References")]
         [SerializeField] private Button resumeButton;
-        [SerializeField] private Button optionsButton;
         [SerializeField] private Button controlsButton;
+        [SerializeField] private Button optionsButton;
 
-        private void OnEnable() => GameManager.Instance.OnGamePauseChange += OnGamePauseChange;
-        private void OnDisable() => GameManager.Instance.OnGamePauseChange -= OnGamePauseChange;
+        protected override void Awake()
+        {
+            base.Awake();
 
-        private void OnGamePauseChange()
+            resumeButton.onClick.AddListener(OnResumeButtonPressed);
+            controlsButton.onClick.AddListener(OnControlsButtonPressed);
+            optionsButton.onClick.AddListener(OnOptionsButtonPressed);
+        }
+
+        private void OnEnable() => GameManager.Instance.OnPauseStateChange += OnPauseStateChange;
+        private void OnDisable() => GameManager.Instance.OnPauseStateChange -= OnPauseStateChange;
+
+        private void OnPauseStateChange()
         {
             if (GameManager.Instance.IsPaused)
             {
@@ -23,6 +35,24 @@ namespace Crunchies.UI
             {
                 ClosePanel();
             }
+        }
+
+        private void OnResumeButtonPressed()
+        {
+            Log.Info("Resume Pressed");
+
+            GameManager.Instance.TogglePause();
+            ClosePanel();
+        }
+
+        private void OnControlsButtonPressed()
+        {
+            Log.Info("Controls Panel Pressed");
+        }
+
+        private void OnOptionsButtonPressed()
+        {
+            Log.Info("Options Panel Pressed");
         }
     }
 }

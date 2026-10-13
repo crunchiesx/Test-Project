@@ -18,7 +18,7 @@ namespace Crunchies.QuestSystem
 {
     public class QuestListUI : UIPanel
     {
-        [Header("References")]
+        [Header("UI References")]
         [SerializeField] private Transform questLogParent;
         [SerializeField] private GameObject questEntryPrefab;
         [SerializeField] private GameObject noQuestLabel;
@@ -30,7 +30,7 @@ namespace Crunchies.QuestSystem
         {
             base.Awake();
 
-            closeButton.onClick.AddListener(() => ClosePanel());
+            closeButton.onClick.AddListener(OnCloseButtonPressed);
         }
 
         private void OnEnable()
@@ -48,6 +48,8 @@ namespace Crunchies.QuestSystem
             QuestEvents.OnQuestFailed -= OnQuestChanged;
             QuestEvents.OnObjectiveUpdated -= OnObjectiveUpdated;
         }
+
+        private void OnCloseButtonPressed() => ClosePanel();
 
         private void OnQuestStarted(QuestInstance quest)
         {
