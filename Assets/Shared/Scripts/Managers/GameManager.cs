@@ -35,17 +35,7 @@ namespace Crunchies.Managers
         public void TogglePause()
         {
             IsPaused = !IsPaused;
-
-            if (IsPaused)
-            {
-                Log.Info("Paused");
-                // Time.timeScale = 0;
-            }
-            else
-            {
-                Log.Info("Unpaused");
-                // Time.timeScale = 1;
-            }
+            Time.timeScale = IsPaused ? 0 : 1;
 
             OnPauseStateChange?.Invoke();
         }

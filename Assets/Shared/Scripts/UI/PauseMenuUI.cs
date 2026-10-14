@@ -13,6 +13,10 @@ namespace Crunchies.UI
         [SerializeField] private Button controlsButton;
         [SerializeField] private Button optionsButton;
 
+        [Space]
+        [SerializeField] private ControlsUI controlsUI;
+        [SerializeField] private OptionsUI optionsUI;
+
         protected override void Awake()
         {
             base.Awake();
@@ -39,20 +43,32 @@ namespace Crunchies.UI
 
         private void OnResumeButtonPressed()
         {
-            Log.Info("Resume Pressed");
-
             GameManager.Instance.TogglePause();
             ClosePanel();
         }
 
         private void OnControlsButtonPressed()
         {
-            Log.Info("Controls Panel Pressed");
+            if (controlsUI.IsOpen)
+            {
+                controlsUI.ClosePanel();
+            }
+            else
+            {
+                controlsUI.OpenPanel();
+            }
         }
 
         private void OnOptionsButtonPressed()
         {
-            Log.Info("Options Panel Pressed");
+            if (optionsUI.IsOpen)
+            {
+                optionsUI.ClosePanel();
+            }
+            else
+            {
+                optionsUI.OpenPanel();
+            }
         }
     }
 }
