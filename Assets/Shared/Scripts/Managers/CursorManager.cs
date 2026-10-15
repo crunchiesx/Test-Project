@@ -28,13 +28,13 @@ namespace Crunchies.Managers
 
         private void OnEnable()
         {
-            UIPanel.OnPanelChange += SetCursorState;
+            UIPanel.OnPanelListUpdate += SetCursorState;
             GameManager.Instance.OnPauseStateChange += SetCursorState;
         }
 
         private void OnDisable()
         {
-            UIPanel.OnPanelChange -= SetCursorState;
+            UIPanel.OnPanelListUpdate -= SetCursorState;
             GameManager.Instance.OnPauseStateChange -= SetCursorState;
         }
 

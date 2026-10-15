@@ -26,10 +26,33 @@ namespace Crunchies.UI
             optionsButton.onClick.AddListener(OnOptionsButtonPressed);
         }
 
-        private void OnEnable() => GameManager.Instance.OnPauseStateChange += OnPauseStateChange;
-        private void OnDisable() => GameManager.Instance.OnPauseStateChange -= OnPauseStateChange;
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            GameManager.Instance.OnPauseStateChange += HandlePauseStateChange;
+        }
 
-        private void OnPauseStateChange()
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            GameManager.Instance.OnPauseStateChange -= HandlePauseStateChange;
+        }
+
+        protected override void HandlePanelListUpdate()
+        {
+            if (!GameManager.Instance.IsPaused) return;
+
+            if (IsAnyPanelActive && IsOpen)
+            {
+                ClosePanel();
+            }
+            else if (!IsAnyPanelActive && !IsOpen)
+            {
+                OpenPanel();
+            }
+        }
+
+        private void HandlePauseStateChange()
         {
             if (GameManager.Instance.IsPaused)
             {

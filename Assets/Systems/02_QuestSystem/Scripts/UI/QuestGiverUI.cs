@@ -27,8 +27,8 @@ namespace Crunchies.QuestSystem
             closeButton.onClick.AddListener(OnCloseButtonPressed);
         }
 
-        private void OnEnable() => QuestEvents.OnQuestOffered += OnQuestOffered;
-        private void OnDisable() => QuestEvents.OnQuestOffered -= OnQuestOffered;
+        protected override void OnEnable() => QuestEvents.OnQuestOffered += OnQuestOffered;
+        protected override void OnDisable() => QuestEvents.OnQuestOffered -= OnQuestOffered;
 
         private void OnAcceptButtonPressed()
         {

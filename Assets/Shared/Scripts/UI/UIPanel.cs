@@ -11,7 +11,7 @@ namespace Crunchies.UI
     {
         private static readonly List<UIPanel> ActivePanels = new();
 
-        public static event Action OnPanelChange;
+        public static event Action OnPanelListUpdate;
         public static bool IsAnyPanelActive => ActivePanels.Count > 0;
 
         [Header("Base UI")]
@@ -29,6 +29,18 @@ namespace Crunchies.UI
                 ClosePanel();
             }
         }
+
+        protected virtual void OnEnable()
+        {
+            OnPanelListUpdate += HandlePanelListUpdate;
+        }
+
+        protected virtual void OnDisable()
+        {
+            OnPanelListUpdate -= HandlePanelListUpdate;
+        }
+
+        protected virtual void HandlePanelListUpdate() { }
 
         public static bool CloseRecentActivePanel()
         {
@@ -60,7 +72,7 @@ namespace Crunchies.UI
 
                 Log.Info("Panel Added!", this);
                 ActivePanels.Add(this);
-                OnPanelChange?.Invoke();
+                OnPanelListUpdate?.Invoke();
             }
 
             panel.SetActive(true);
@@ -74,7 +86,7 @@ namespace Crunchies.UI
                 {
                     Log.Info("Panel Removed!", this);
                     ActivePanels.Remove(this);
-                    OnPanelChange?.Invoke();
+                    OnPanelListUpdate?.Invoke();
                 }
 
                 ActivePanels.RemoveAll(panel => panel == null);

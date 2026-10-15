@@ -33,7 +33,7 @@ namespace Crunchies.QuestSystem
             closeButton.onClick.AddListener(OnCloseButtonPressed);
         }
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
             QuestEvents.OnQuestStarted += OnQuestStarted;
             QuestEvents.OnQuestCompleted += OnQuestChanged;
@@ -41,7 +41,7 @@ namespace Crunchies.QuestSystem
             QuestEvents.OnObjectiveUpdated += OnObjectiveUpdated;
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
             QuestEvents.OnQuestStarted -= OnQuestStarted;
             QuestEvents.OnQuestCompleted -= OnQuestChanged;

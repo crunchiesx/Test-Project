@@ -16,18 +16,18 @@ namespace Crunchies.UI
 
         private bool interactionState = false;
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
-            OnPanelChange += PanelChange;
+            base.OnEnable();
             PlayerInteraction.OnInteractionUpdate += InteractionUpdate;
         }
-        private void OnDisable()
+        protected override void OnDisable()
         {
-            OnPanelChange -= PanelChange;
+            base.OnDisable();
             PlayerInteraction.OnInteractionUpdate -= InteractionUpdate;
         }
 
-        private void PanelChange()
+        protected override void HandlePanelListUpdate()
         {
             bool shouldBeOpen = interactionState && !IsAnyPanelActive;
 

@@ -49,13 +49,13 @@ namespace Crunchies.PlayerSystem
 
         private void OnEnable()
         {
-            UIPanel.OnPanelChange += RefreshCameraInput;
+            UIPanel.OnPanelListUpdate += RefreshCameraInput;
             GameManager.Instance.OnPauseStateChange += RefreshCameraInput;
         }
 
         private void OnDisable()
         {
-            UIPanel.OnPanelChange -= RefreshCameraInput;
+            UIPanel.OnPanelListUpdate -= RefreshCameraInput;
             GameManager.Instance.OnPauseStateChange -= RefreshCameraInput;
         }
 
