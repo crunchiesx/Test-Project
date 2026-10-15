@@ -1,6 +1,8 @@
+using System;
 using Crunchies.Components;
 using Crunchies.InputActions;
 using Crunchies.Interfaces;
+using Crunchies.Managers;
 using Crunchies.PlayerSystem;
 using Crunchies.Utility;
 using TMPro;
@@ -20,6 +22,7 @@ namespace Crunchies.UI
         {
             base.OnEnable();
             PlayerInteraction.OnInteractionUpdate += InteractionUpdate;
+
         }
         protected override void OnDisable()
         {
@@ -36,6 +39,20 @@ namespace Crunchies.UI
                 OpenPanel();
             }
             else if (!shouldBeOpen && IsOpen)
+            {
+                ClosePanel();
+            }
+        }
+
+        protected override void HandlePauseStateChange()
+        {
+            bool shouldBeOpen = interactionState && !IsAnyPanelActive;
+
+            if (!GameManager.Instance.IsPaused && shouldBeOpen)
+            {
+                OpenPanel();
+            }
+            else
             {
                 ClosePanel();
             }

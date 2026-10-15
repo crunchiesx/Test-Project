@@ -29,13 +29,11 @@ namespace Crunchies.UI
         protected override void OnEnable()
         {
             base.OnEnable();
-            GameManager.Instance.OnPauseStateChange += HandlePauseStateChange;
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
-            GameManager.Instance.OnPauseStateChange -= HandlePauseStateChange;
         }
 
         protected override void HandlePanelListUpdate()
@@ -52,7 +50,7 @@ namespace Crunchies.UI
             }
         }
 
-        private void HandlePauseStateChange()
+        protected override void HandlePauseStateChange()
         {
             if (GameManager.Instance.IsPaused)
             {

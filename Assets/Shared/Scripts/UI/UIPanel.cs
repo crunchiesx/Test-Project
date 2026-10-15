@@ -33,14 +33,18 @@ namespace Crunchies.UI
         protected virtual void OnEnable()
         {
             OnPanelListUpdate += HandlePanelListUpdate;
+            GameManager.Instance.OnPauseStateChange += HandlePauseStateChange;
         }
 
         protected virtual void OnDisable()
         {
             OnPanelListUpdate -= HandlePanelListUpdate;
+            GameManager.Instance.OnPauseStateChange -= HandlePauseStateChange;
         }
 
         protected virtual void HandlePanelListUpdate() { }
+
+        protected virtual void HandlePauseStateChange() { }
 
         public static bool CloseRecentActivePanel()
         {
