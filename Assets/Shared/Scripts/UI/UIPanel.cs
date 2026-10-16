@@ -43,7 +43,6 @@ namespace Crunchies.UI
         }
 
         protected virtual void HandlePanelListUpdate() { }
-
         protected virtual void HandlePauseStateChange() { }
 
         public static bool CloseRecentActivePanel()
