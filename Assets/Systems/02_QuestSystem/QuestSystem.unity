@@ -13815,27 +13815,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1400736879024997855, guid: b4cedc3a3874c184db5e21a4a8945fd4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.5
+      value: 2.503529
       objectReference: {fileID: 0}
     - target: {fileID: 1400736879024997855, guid: b4cedc3a3874c184db5e21a4a8945fd4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5
+      value: -4.7685847
       objectReference: {fileID: 0}
     - target: {fileID: 1400736879024997855, guid: b4cedc3a3874c184db5e21a4a8945fd4, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9894004
+      value: 0.98836154
       objectReference: {fileID: 0}
     - target: {fileID: 1400736879024997855, guid: b4cedc3a3874c184db5e21a4a8945fd4, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.14521313
+      value: 0.15212339
       objectReference: {fileID: 0}
     - target: {fileID: 1400736879024997855, guid: b4cedc3a3874c184db5e21a4a8945fd4, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1.1073477e-15
+      value: 0.000000029455473
       objectReference: {fileID: 0}
     - target: {fileID: 1400736879024997855, guid: b4cedc3a3874c184db5e21a4a8945fd4, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 8.788599e-17
+      value: -0.000000004533631
       objectReference: {fileID: 0}
     - target: {fileID: 1400736879024997855, guid: b4cedc3a3874c184db5e21a4a8945fd4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -13852,6 +13852,26 @@ PrefabInstance:
     - target: {fileID: 2858849591923187499, guid: b4cedc3a3874c184db5e21a4a8945fd4, type: 3}
       propertyPath: m_Name
       value: CinemachineCamera
+      objectReference: {fileID: 0}
+    - target: {fileID: 3086125779836844212, guid: b4cedc3a3874c184db5e21a4a8945fd4, type: 3}
+      propertyPath: maxCameraZoom
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4054396527005911811, guid: b4cedc3a3874c184db5e21a4a8945fd4, type: 3}
+      propertyPath: OrbitStyle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6907347883050273367, guid: b4cedc3a3874c184db5e21a4a8945fd4, type: 3}
+      propertyPath: m_ControllerManager.Controllers.Array.data[0].Input.InputAction
+      value: 
+      objectReference: {fileID: -8210082404492645818, guid: d2b7d0e012301b74ab5dd4a97b844f9c, type: 3}
+    - target: {fileID: 6907347883050273367, guid: b4cedc3a3874c184db5e21a4a8945fd4, type: 3}
+      propertyPath: m_ControllerManager.Controllers.Array.data[1].Input.InputAction
+      value: 
+      objectReference: {fileID: -8210082404492645818, guid: d2b7d0e012301b74ab5dd4a97b844f9c, type: 3}
+    - target: {fileID: 6907347883050273367, guid: b4cedc3a3874c184db5e21a4a8945fd4, type: 3}
+      propertyPath: m_ControllerManager.Controllers.Array.data[2].Input.InputAction
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6924589883687333280, guid: b4cedc3a3874c184db5e21a4a8945fd4, type: 3}
       propertyPath: Target.TrackingTarget

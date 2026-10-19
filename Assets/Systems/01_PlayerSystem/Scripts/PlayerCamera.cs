@@ -1,4 +1,5 @@
 using System;
+using Crunchies.InputActions;
 using Crunchies.Managers;
 using Crunchies.UI;
 using Crunchies.Utility;
@@ -18,9 +19,20 @@ namespace Crunchies.PlayerSystem
         [Header("Camera Settings")]
         [SerializeField] private float cameraSensitivity = 5f;
 
-        private float _currentCameraSensitivity;
+        [Header("Camera Zoom Settings")]
+        [SerializeField] private float maxCameraZoom = 5f;
+        [SerializeField] private float minCameraZoom = 2f;
 
-        private CinemachineInputAxisController _cineAxisController;
+        [Space]
+
+        [SerializeField] private float zoomSensitivity = 1f;
+        [SerializeField] private float zoomSpeed = 5f;
+
+        private float _currentCameraSensitivity;
+        private float _targetRadius;
+
+        private CinemachineInputAxisController _cinemachineAxisController;
+        private CinemachineOrbitalFollow _cinemachineOrbitalFollow;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetInstance()
@@ -38,9 +50,14 @@ namespace Crunchies.PlayerSystem
 
             Instance = this;
 
-            if (!TryGetComponent(out _cineAxisController))
+            if (!TryGetComponent(out _cinemachineAxisController))
             {
                 Log.MissingComponent<CinemachineInputAxisController>(this);
+            }
+
+            if (!TryGetComponent(out _cinemachineOrbitalFollow))
+            {
+                Log.MissingComponent<CinemachineOrbitalFollow>(this);
             }
 
             _currentCameraSensitivity = cameraSensitivity;
@@ -51,16 +68,22 @@ namespace Crunchies.PlayerSystem
         {
             UIPanel.OnPanelListUpdate += RefreshCameraInput;
             GameManager.Instance.OnPauseStateChange += RefreshCameraInput;
+            PlayerInputHandler.Instance.OnCameraZoomAction += SetCameraZoom;
         }
 
         private void OnDisable()
         {
             UIPanel.OnPanelListUpdate -= RefreshCameraInput;
             GameManager.Instance.OnPauseStateChange -= RefreshCameraInput;
+            PlayerInputHandler.Instance.OnCameraZoomAction -= SetCameraZoom;
         }
 
-        private void Start() => RefreshCameraInput();
+        private void Start()
+        {
+            RefreshCameraInput();
 
+            _targetRadius = _cinemachineOrbitalFollow.Radius;
+        }
         private void Update()
         {
             if (_currentCameraSensitivity != cameraSensitivity)
@@ -68,6 +91,13 @@ namespace Crunchies.PlayerSystem
                 _currentCameraSensitivity = cameraSensitivity;
                 SetCameraSensitivity(_currentCameraSensitivity);
             }
+
+            _cinemachineOrbitalFollow.Radius = Mathf.Lerp
+            (
+                _cinemachineOrbitalFollow.Radius,
+                _targetRadius,
+                Time.deltaTime * zoomSpeed
+            );
         }
 
         private void RefreshCameraInput()
@@ -98,16 +128,27 @@ namespace Crunchies.PlayerSystem
             lookOrbitY.Enabled = enable;
         }
 
+        private void SetCameraZoom(float zoomInput)
+        {
+            if (_cinemachineOrbitalFollow == null || GameManager.Instance.IsPaused || UIPanel.IsAnyPanelActive)
+            {
+                return;
+            }
+
+            _targetRadius -= zoomInput * zoomSensitivity;
+            _targetRadius = Mathf.Clamp(_targetRadius, minCameraZoom, maxCameraZoom);
+        }
+
         private bool TryGetController(string controllerName, out CinemachineInputAxisController.Controller controller)
         {
             controller = default;
 
-            if (_cineAxisController == null)
+            if (_cinemachineAxisController == null)
             {
                 return false;
             }
 
-            foreach (var candidate in _cineAxisController.Controllers)
+            foreach (var candidate in _cinemachineAxisController.Controllers)
             {
                 if (candidate.Name == controllerName)
                 {

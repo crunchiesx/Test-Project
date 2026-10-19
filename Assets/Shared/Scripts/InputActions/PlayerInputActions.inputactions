@@ -17,26 +17,6 @@
                     "priority": 0
                 },
                 {
-                    "name": "Look",
-                    "type": "Value",
-                    "id": "cd2e2600-648a-4647-af1c-d13a2c579a5f",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true,
-                    "priority": 0
-                },
-                {
-                    "name": "Zoom",
-                    "type": "Value",
-                    "id": "ed7f87f5-3d22-48af-822e-64efd69ec2e8",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true,
-                    "priority": 0
-                },
-                {
                     "name": "Jump",
                     "type": "Button",
                     "id": "3dc3fad5-eb62-40f2-824f-e052af3dae82",
@@ -135,17 +115,6 @@
                 },
                 {
                     "name": "",
-                    "id": "5b08e1cc-1580-4442-ac44-09acd9aff909",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Mouse",
-                    "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "a8ec8944-4a9b-40f2-bf52-286e7f05d323",
                     "path": "<Keyboard>/space",
                     "interactions": "",
@@ -163,17 +132,6 @@
                     "processors": "",
                     "groups": ";Keyboard",
                     "action": "Sprint",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e12f1d03-5257-4a54-9c00-27c877476ea8",
-                    "path": "<Mouse>/scroll",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Mouse",
-                    "action": "Zoom",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -246,6 +204,56 @@
                     "processors": "",
                     "groups": ";Keyboard",
                     "action": "Escape",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Camera",
+            "id": "4e3f1a48-49df-47e0-b779-4f67a77a0258",
+            "actions": [
+                {
+                    "name": "Look",
+                    "type": "Value",
+                    "id": "4c735f2f-b5b7-4e86-aefd-ea1bdae73a25",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true,
+                    "priority": 0
+                },
+                {
+                    "name": "Zoom",
+                    "type": "Value",
+                    "id": "5c57da37-b6f7-477a-b26c-8148bef4f7ec",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true,
+                    "priority": 0
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "26bc76b5-937d-4865-8c37-abd1919f1131",
+                    "path": "<Mouse>/scroll/y",
+                    "interactions": "",
+                    "processors": "Clamp(min=-1,max=1)",
+                    "groups": ";Mouse",
+                    "action": "Zoom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1e6d4273-271e-4e62-90f4-b15ccd1430e1",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Mouse",
+                    "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

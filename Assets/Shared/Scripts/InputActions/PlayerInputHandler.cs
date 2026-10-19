@@ -9,25 +9,25 @@ namespace Crunchies.InputActions
     {
         public static PlayerInputHandler Instance { get; private set; }
 
+        // Player Actions
         public event Action OnPlayerInteractAction;
-
         public event Action<Vector2> OnPlayerMovementAction;
-        public event Action<Vector2> OnPlayerLookAction;
-
         public event Action<bool> OnPlayerJumpAction;
         public event Action<bool> OnPlayerSprintAction;
         public event Action<bool> OnPlayerAttackAction;
 
         public Vector2 MoveInput { get; private set; }
-        public Vector2 LookInput { get; private set; }
         public bool JumpInput { get; private set; }
         public bool SprintInput { get; private set; }
-        public bool InteractInput { get; private set; }
         public bool AttackInput { get; private set; }
 
         // UI Actions
         public event Action OnUIQuestAction;
         public event Action OnUIEscapeAction;
+
+        // Camera Actions
+        public event Action<float> OnCameraZoomAction;
+        public float CameraZoomInput { get; private set; }
 
 #if UNITY_EDITOR
         // Debug Actions
@@ -55,6 +55,7 @@ namespace Crunchies.InputActions
             _playerInputActions = new PlayerInputActions();
             SubscribePlayerEventActions();
             SubscribeUIEventActions();
+            SubscribeCameraEventActions();
 
 #if UNITY_EDITOR
             SubscribeDebugEventActions();
@@ -72,6 +73,7 @@ namespace Crunchies.InputActions
             {
                 UnsubscribePlayerEventActions();
                 UnsubscribeUIEventActions();
+                UnsubscribeCameraEventActions();
 
 #if UNITY_EDITOR
                 UnSubscribeDebugEventActions();
@@ -85,9 +87,6 @@ namespace Crunchies.InputActions
         {
             _playerInputActions.Player.Move.performed += HandlePlayerMovement;
             _playerInputActions.Player.Move.canceled += HandlePlayerMovement;
-
-            _playerInputActions.Player.Look.performed += HandlePlayerLook;
-            _playerInputActions.Player.Look.canceled += HandlePlayerLook;
 
             _playerInputActions.Player.Jump.performed += HandlePlayerJump;
             _playerInputActions.Player.Jump.canceled += HandlePlayerJump;
@@ -107,9 +106,6 @@ namespace Crunchies.InputActions
             _playerInputActions.Player.Move.performed -= HandlePlayerMovement;
             _playerInputActions.Player.Move.canceled -= HandlePlayerMovement;
 
-            _playerInputActions.Player.Look.performed -= HandlePlayerLook;
-            _playerInputActions.Player.Look.canceled -= HandlePlayerLook;
-
             _playerInputActions.Player.Jump.performed -= HandlePlayerJump;
             _playerInputActions.Player.Jump.canceled -= HandlePlayerJump;
 
@@ -127,12 +123,6 @@ namespace Crunchies.InputActions
         {
             MoveInput = ctx.ReadValue<Vector2>();
             OnPlayerMovementAction?.Invoke(MoveInput);
-        }
-
-        private void HandlePlayerLook(InputAction.CallbackContext ctx)
-        {
-            LookInput = ctx.ReadValue<Vector2>();
-            OnPlayerLookAction?.Invoke(LookInput);
         }
 
         private void HandlePlayerJump(InputAction.CallbackContext ctx)
@@ -175,6 +165,28 @@ namespace Crunchies.InputActions
 
         private void HandleUIQuest(InputAction.CallbackContext _) => OnUIQuestAction?.Invoke();
         private void HandleUIEscape(InputAction.CallbackContext _) => OnUIEscapeAction?.Invoke();
+
+        #endregion
+
+        #region CAMERA EVENTS
+
+        private void SubscribeCameraEventActions()
+        {
+            _playerInputActions.Camera.Zoom.performed += HandleCameraZoom;
+            _playerInputActions.Camera.Zoom.canceled += HandleCameraZoom;
+        }
+
+        private void UnsubscribeCameraEventActions()
+        {
+            _playerInputActions.Camera.Zoom.performed -= HandleCameraZoom;
+            _playerInputActions.Camera.Zoom.canceled -= HandleCameraZoom;
+        }
+
+        private void HandleCameraZoom(InputAction.CallbackContext ctx)
+        {
+            CameraZoomInput = ctx.ReadValue<float>();
+            OnCameraZoomAction?.Invoke(CameraZoomInput);
+        }
 
         #endregion
 
