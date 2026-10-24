@@ -1,11 +1,14 @@
 using Crunchies.Components;
 using Crunchies.InputActions;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Crunchies.PlayerSystem
 {
     public class PlayerCombat : MonoBehaviour
     {
+        public UnityEvent OnAttackEvent;
+
         [Header("Reference")]
         [SerializeField] private Transform attackTransform;
 
@@ -51,6 +54,7 @@ namespace Crunchies.PlayerSystem
 
         private void HandleAttack()
         {
+            OnAttackEvent?.Invoke();
             int hits = Physics.OverlapSphereNonAlloc(attackTransform.position, attackRange, resultsBuffer, attackLayer);
 
             for (int i = 0; i < hits; i++)
