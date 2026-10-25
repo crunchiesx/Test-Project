@@ -103,6 +103,7 @@ GameObject:
   - component: {fileID: 1398822998589282170}
   - component: {fileID: 6313819049926438097}
   - component: {fileID: 1239468816998927177}
+  - component: {fileID: 6435906618300662103}
   - component: {fileID: 6760999409445718379}
   - component: {fileID: 3803365785702510484}
   m_Layer: 0
@@ -187,6 +188,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddbb6d3bfee74da4a9b10bc8971c92a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Crunchies.Components.ItemPickup
+--- !u!114 &6435906618300662103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9097064997501257528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 488994ef7d5551645b85236e8814c957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoverObject
 --- !u!208 &6760999409445718379
 NavMeshObstacle:
   m_ObjectHideFlags: 0
