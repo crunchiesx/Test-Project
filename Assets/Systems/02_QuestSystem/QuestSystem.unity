@@ -13456,6 +13456,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5114888089476507110, guid: 90fca6b0c566146418d069a25dba77ee, type: 3}
+      propertyPath: attackRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5114888089476507110, guid: 90fca6b0c566146418d069a25dba77ee, type: 3}
       propertyPath: attackRange
       value: 0.75
       objectReference: {fileID: 0}

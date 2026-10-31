@@ -47,12 +47,12 @@ namespace Crunchies.PlayerSystem
 
             if (currentRate >= attackRate && isAttacking)
             {
-                HandleAttack();
-                currentRate = 0f;
+                TriggerAttack();
+                currentRate -= attackRate;
             }
         }
 
-        private void HandleAttack()
+        private void TriggerAttack()
         {
             OnAttackEvent?.Invoke();
             int hits = Physics.OverlapSphereNonAlloc(attackTransform.position, attackRange, resultsBuffer, attackLayer);
@@ -64,6 +64,11 @@ namespace Crunchies.PlayerSystem
                     health.TakeDamage(damage);
                 }
             }
+        }
+
+        private void PerformSweepDetection()
+        {
+
         }
 
 #if UNITY_EDITOR
