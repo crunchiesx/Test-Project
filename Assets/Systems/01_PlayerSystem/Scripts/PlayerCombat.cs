@@ -1,5 +1,6 @@
 using Crunchies.Components;
 using Crunchies.InputActions;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,7 +22,12 @@ namespace Crunchies.PlayerSystem
         private bool isAttacking = false;
         private float currentRate = 0f;
 
-        private readonly Collider[] resultsBuffer = new Collider[32];
+        private bool isHitWindowActive = false;
+        private Vector3 previousAttackPosition;
+        private readonly HashSet<Collider> hitTargetsThisSwing = new();
+
+        private readonly RaycastHit[] castBuffer = new RaycastHit[32];
+        private readonly Collider[] overlapBuffer = new Collider[32];
 
         private void OnEnable()
         {
@@ -48,39 +54,110 @@ namespace Crunchies.PlayerSystem
             if (currentRate >= attackRate && isAttacking)
             {
                 TriggerAttack();
-                currentRate -= attackRate;
+                currentRate = 0f;
+            }
+
+            if (isHitWindowActive)
+            {
+                PerformSweepDetection();
             }
         }
 
         private void TriggerAttack()
         {
             OnAttackEvent?.Invoke();
-            int hits = Physics.OverlapSphereNonAlloc(attackTransform.position, attackRange, resultsBuffer, attackLayer);
-
-            for (int i = 0; i < hits; i++)
-            {
-                if (resultsBuffer[i].transform.TryGetComponent(out CharacterHealth health))
-                {
-                    health.TakeDamage(damage);
-                }
-            }
         }
 
         private void PerformSweepDetection()
         {
+            Vector3 currentPos = attackTransform.position;
+            Vector3 direction = currentPos - previousAttackPosition;
+            float distance = direction.magnitude;
 
+            if (distance > 0.001f)
+            {
+                int hitCount = Physics.SphereCastNonAlloc
+                (
+                    previousAttackPosition,
+                    attackRange,
+                    direction.normalized,
+                    castBuffer,
+                    distance,
+                    attackLayer
+                );
+
+                for (int i = 0; i < hitCount; i++)
+                {
+                    Collider col = castBuffer[i].collider;
+                    ProcessHit(col);
+                }
+            }
+            else
+            {
+                int hitCount = Physics.OverlapSphereNonAlloc
+                (
+                    currentPos,
+                    attackRange,
+                    overlapBuffer,
+                    attackLayer
+                );
+
+                for (int i = 0; i < hitCount; i++)
+                {
+                    ProcessHit(overlapBuffer[i]);
+                }
+            }
+
+            previousAttackPosition = currentPos;
+        }
+
+        private void ProcessHit(Collider col)
+        {
+            if (col == null) return;
+            if (hitTargetsThisSwing.Contains(col)) return;
+
+            if (col.TryGetComponent(out CharacterHealth health))
+            {
+                hitTargetsThisSwing.Add(col);
+                health.TakeDamage(damage);
+            }
+        }
+
+        public void OnAttackSwingStart()
+        {
+            isHitWindowActive = true;
+            hitTargetsThisSwing.Clear();
+            previousAttackPosition = attackTransform.position;
+        }
+
+        public void OnAttackSwingEnd()
+        {
+            isHitWindowActive = false;
         }
 
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
+            if (attackTransform == null) return;
+
             GameObject selected = UnityEditor.Selection.activeGameObject;
 
             if (selected != null)
             {
                 if (selected == gameObject || selected.transform.IsChildOf(transform))
                 {
-                    Gizmos.color = Color.red;
+                    if (Application.isPlaying && isHitWindowActive)
+                    {
+                        Gizmos.color = Color.yellow;
+                        Gizmos.DrawWireSphere(previousAttackPosition, attackRange);
+                        Gizmos.DrawLine(previousAttackPosition, attackTransform.position);
+                        Gizmos.color = Color.green;
+                    }
+                    else
+                    {
+                        Gizmos.color = Color.red;
+                    }
+
                     Gizmos.DrawWireSphere(attackTransform.position, attackRange);
                 }
             }
