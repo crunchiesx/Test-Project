@@ -365,12 +365,13 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   attackTransform: {fileID: 7470500222274515666}
+  playerAnimator: {fileID: 5046525661460782490}
   damage: 20
   attackRange: 0.75
-  attackRate: 1
   attackLayer:
     serializedVersion: 2
     m_Bits: 128
+  debugAttackSpeed: 1.5
 --- !u!114 &944439595137532262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -546,6 +547,7 @@ GameObject:
   - component: {fileID: 7459253361287274402}
   - component: {fileID: 6118314876151865196}
   - component: {fileID: 5046525661460782490}
+  - component: {fileID: 1950656048855656512}
   m_Layer: 6
   m_Name: Visual
   m_TagString: Untagged
@@ -649,6 +651,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1950656048855656512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5425020419128523967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ea34a28b37b240488366e45d3264183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Crunchies.PlayerSystem.PlayerAttackAnimationEventRelay
 --- !u!1 &6314440257968714187
 GameObject:
   m_ObjectHideFlags: 0

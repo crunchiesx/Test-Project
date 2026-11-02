@@ -8,19 +8,21 @@ namespace Crunchies.PlayerSystem
 {
     public class PlayerCombat : MonoBehaviour
     {
+        private static readonly int AttackSpeedHash = Animator.StringToHash("AttackSpeed");
+
         public UnityEvent OnAttackEvent;
 
         [Header("Reference")]
         [SerializeField] private Transform attackTransform;
+        [SerializeField] private Animator playerAnimator;
 
         [Header("Settings")]
         [SerializeField] private float damage = 20f;
         [SerializeField] private float attackRange = 1f;
-        [SerializeField] private float attackRate = 1f;
         [SerializeField] private LayerMask attackLayer;
 
         private bool isAttacking = false;
-        private float currentRate = 0f;
+        private bool canAttack = true;
 
         private bool isHitWindowActive = false;
         private Vector3 previousAttackPosition;
@@ -49,14 +51,10 @@ namespace Crunchies.PlayerSystem
 
         private void Update()
         {
-            currentRate += Time.deltaTime;
-
-            if (currentRate >= attackRate && isAttacking)
+            if (canAttack && isAttacking)
             {
                 TriggerAttack();
-                currentRate = 0f;
             }
-
             if (isHitWindowActive)
             {
                 PerformSweepDetection();
@@ -65,6 +63,7 @@ namespace Crunchies.PlayerSystem
 
         private void TriggerAttack()
         {
+            canAttack = false;
             OnAttackEvent?.Invoke();
         }
 
@@ -133,6 +132,17 @@ namespace Crunchies.PlayerSystem
         public void OnAttackSwingEnd()
         {
             isHitWindowActive = false;
+        }
+
+        public void OnAttackFinished()
+        {
+            canAttack = true;
+        }
+
+        public void SetAttackSpeed(float multiplier)
+        {
+            multiplier = Mathf.Clamp(multiplier, 0.5f, 3f);
+            playerAnimator.SetFloat(AttackSpeedHash, multiplier);
         }
 
 #if UNITY_EDITOR

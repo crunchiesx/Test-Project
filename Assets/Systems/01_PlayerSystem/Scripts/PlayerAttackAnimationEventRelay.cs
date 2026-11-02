@@ -32,5 +32,13 @@ namespace Crunchies.PlayerSystem
                 playerCombat.OnAttackSwingEnd();
             }
         }
+
+        public void OnAttackFinished()
+        {
+            if (playerCombat != null)
+            {
+                playerCombat.OnAttackFinished();
+            }
+        }
     }
 }
