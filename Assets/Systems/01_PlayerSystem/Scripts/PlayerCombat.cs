@@ -21,15 +21,22 @@ namespace Crunchies.PlayerSystem
         [SerializeField] private float attackRange = 1f;
         [SerializeField] private LayerMask attackLayer;
 
-        private bool isAttacking = false;
-        private bool canAttack = true;
+        private bool _isAttacking = false;
+        private bool _canAttack = true;
 
-        private bool isHitWindowActive = false;
-        private Vector3 previousAttackPosition;
-        private readonly HashSet<Collider> hitTargetsThisSwing = new();
+        private bool _isHitWindowActive = false;
+        private Vector3 _previousAttackPosition;
+        private readonly HashSet<Collider> _hitTargetsThisSwing = new();
 
-        private readonly RaycastHit[] castBuffer = new RaycastHit[32];
-        private readonly Collider[] overlapBuffer = new Collider[32];
+        private readonly RaycastHit[] _castBuffer = new RaycastHit[32];
+        private readonly Collider[] _overlapBuffer = new Collider[32];
+
+        private PlayerMovement _playerMovement;
+
+        private void Awake()
+        {
+            _playerMovement = GetComponent<PlayerMovement>();
+        }
 
         private void OnEnable()
         {
@@ -47,47 +54,41 @@ namespace Crunchies.PlayerSystem
             }
         }
 
-        private void HandleAttack(bool value) => isAttacking = value;
+        private void HandleAttack(bool value) => _isAttacking = value;
 
         private void Update()
         {
-            if (canAttack && isAttacking)
+            if (_canAttack && _isAttacking)
             {
                 TriggerAttack();
             }
-            if (isHitWindowActive)
+            if (_isHitWindowActive)
             {
                 PerformSweepDetection();
             }
         }
 
-        private void TriggerAttack()
-        {
-            canAttack = false;
-            OnAttackEvent?.Invoke();
-        }
-
         private void PerformSweepDetection()
         {
             Vector3 currentPos = attackTransform.position;
-            Vector3 direction = currentPos - previousAttackPosition;
+            Vector3 direction = currentPos - _previousAttackPosition;
             float distance = direction.magnitude;
 
             if (distance > 0.001f)
             {
                 int hitCount = Physics.SphereCastNonAlloc
                 (
-                    previousAttackPosition,
+                    _previousAttackPosition,
                     attackRange,
                     direction.normalized,
-                    castBuffer,
+                    _castBuffer,
                     distance,
                     attackLayer
                 );
 
                 for (int i = 0; i < hitCount; i++)
                 {
-                    Collider col = castBuffer[i].collider;
+                    Collider col = _castBuffer[i].collider;
                     ProcessHit(col);
                 }
             }
@@ -97,46 +98,54 @@ namespace Crunchies.PlayerSystem
                 (
                     currentPos,
                     attackRange,
-                    overlapBuffer,
+                    _overlapBuffer,
                     attackLayer
                 );
 
                 for (int i = 0; i < hitCount; i++)
                 {
-                    ProcessHit(overlapBuffer[i]);
+                    ProcessHit(_overlapBuffer[i]);
                 }
             }
 
-            previousAttackPosition = currentPos;
+            _previousAttackPosition = currentPos;
         }
 
         private void ProcessHit(Collider col)
         {
             if (col == null) return;
-            if (hitTargetsThisSwing.Contains(col)) return;
+            if (_hitTargetsThisSwing.Contains(col)) return;
 
             if (col.TryGetComponent(out CharacterHealth health))
             {
-                hitTargetsThisSwing.Add(col);
+                _hitTargetsThisSwing.Add(col);
                 health.TakeDamage(damage);
             }
         }
 
+        private void TriggerAttack()
+        {
+            _canAttack = false;
+            _playerMovement.SetCameraRotationOverride(true);
+            OnAttackEvent?.Invoke();
+        }
+
         public void OnAttackSwingStart()
         {
-            isHitWindowActive = true;
-            hitTargetsThisSwing.Clear();
-            previousAttackPosition = attackTransform.position;
+            _isHitWindowActive = true;
+            _hitTargetsThisSwing.Clear();
+            _previousAttackPosition = attackTransform.position;
         }
 
         public void OnAttackSwingEnd()
         {
-            isHitWindowActive = false;
+            _isHitWindowActive = false;
         }
 
         public void OnAttackFinished()
         {
-            canAttack = true;
+            _canAttack = true;
+            _playerMovement.SetCameraRotationOverride(false);
         }
 
         public void SetAttackSpeed(float multiplier)
@@ -156,11 +165,11 @@ namespace Crunchies.PlayerSystem
             {
                 if (selected == gameObject || selected.transform.IsChildOf(transform))
                 {
-                    if (Application.isPlaying && isHitWindowActive)
+                    if (Application.isPlaying && _isHitWindowActive)
                     {
                         Gizmos.color = Color.yellow;
-                        Gizmos.DrawWireSphere(previousAttackPosition, attackRange);
-                        Gizmos.DrawLine(previousAttackPosition, attackTransform.position);
+                        Gizmos.DrawWireSphere(_previousAttackPosition, attackRange);
+                        Gizmos.DrawLine(_previousAttackPosition, attackTransform.position);
                         Gizmos.color = Color.green;
                     }
                     else

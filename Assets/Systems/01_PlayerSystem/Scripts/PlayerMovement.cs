@@ -33,7 +33,9 @@ namespace Crunchies.PlayerSystem
         private bool _isJumping;
         private bool _isSprinting;
 
-        private float turnSoothVelocity;
+        private bool _trackCameraRotation = false;
+
+        private float turnSmoothVelocity;
         private Vector2 _moveDirection;
 
         private Vector3 _velocity;
@@ -67,10 +69,6 @@ namespace Crunchies.PlayerSystem
             }
         }
 
-        private void HandleMovement(Vector2 value) => _moveDirection = value;
-        private void HandleJump(bool value) => _isJumping = value;
-        private void HandleSprint(bool value) => _isSprinting = value;
-
         private void Update()
         {
             _isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
@@ -80,12 +78,22 @@ namespace Crunchies.PlayerSystem
                 _velocity.y = -groundForce;
             }
 
+            if (_trackCameraRotation)
+            {
+                float targetAngle = PlayerCamera.Instance.transform.eulerAngles.y;
+                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+                transform.rotation = Quaternion.Euler(0f, angle, 0f);
+            }
+            else if (_moveDirection.magnitude >= 0.1f)
+            {
+                float targetAngle = Mathf.Atan2(_moveDirection.x, _moveDirection.y) * Mathf.Rad2Deg + PlayerCamera.Instance.transform.eulerAngles.y;
+                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+                transform.rotation = Quaternion.Euler(0f, angle, 0f);
+            }
+
             if (_moveDirection.magnitude >= 0.1f)
             {
                 float targetAngle = Mathf.Atan2(_moveDirection.x, _moveDirection.y) * Mathf.Rad2Deg + PlayerCamera.Instance.transform.eulerAngles.y;
-                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSoothVelocity, turnSmoothTime);
-                transform.rotation = Quaternion.Euler(0f, angle, 0f);
-
                 Vector3 direction = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
                 float currentSpeed = _isSprinting ? moveSpeed * sprintMultiplier : moveSpeed;
                 _characterController.Move(currentSpeed * Time.deltaTime * direction.normalized);
@@ -97,12 +105,17 @@ namespace Crunchies.PlayerSystem
             }
 
             _velocity.y += GRAVITY * weight * Time.deltaTime;
-
             _characterController.Move(_velocity * Time.deltaTime);
 
             _isMoving = _lastPosition != transform.position;
             _lastPosition = transform.position;
         }
+
+        private void HandleMovement(Vector2 value) => _moveDirection = value;
+        private void HandleJump(bool value) => _isJumping = value;
+        private void HandleSprint(bool value) => _isSprinting = value;
+
+        public void SetCameraRotationOverride(bool active) => _trackCameraRotation = active;
 
         private void OnDrawGizmosSelected()
         {
