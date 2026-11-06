@@ -371,7 +371,6 @@ MonoBehaviour:
   attackLayer:
     serializedVersion: 2
     m_Bits: 128
-  debugAttackSpeed: 1.5
 --- !u!114 &944439595137532262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -518,7 +517,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8760272025221623237
 Transform:
   m_ObjectHideFlags: 0
